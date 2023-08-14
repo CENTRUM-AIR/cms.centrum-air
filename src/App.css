@@ -1,5 +1,15 @@
 .App {
-  text-align: center;
+  display: flex;
+  /* text-align: center; */
+}
+
+body {
+  background-color: rgba(243, 246, 252, 1);
+}
+
+p {
+  margin: 0;
+  padding: 0;
 }
 
 .App-logo {
