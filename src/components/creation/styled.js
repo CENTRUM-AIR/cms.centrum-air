@@ -8,6 +8,16 @@ const SidePopUp = keyframes`
     width: 630px;
   }
 `;
+
+export const MainWrapper = styled.div`
+  position: fixed;
+  top: 0;
+  right: 0;
+  z-index: 15;
+  height: 100%;
+  overflow-y: scroll;
+  background-color: #fff;
+`;
 export const ModalBackdrop = styled.div`
   position: fixed;
   top: 0;
@@ -15,18 +25,14 @@ export const ModalBackdrop = styled.div`
   width: 100%;
   height: 100%;
   background: rgba(0, 0, 0, 0.2);
-  z-index: 10;
+  z-index: ${({ zIndex }) => zIndex || 10};
   touch-action: none;
   -ms-touch-action: none;
 `;
 
 export const Wrapper = styled.div`
-  position: fixed;
-  right: 0;
-  top: 0;
   background-color: #fff;
   z-index: 11;
-  height: 100%;
   animation: ${SidePopUp} 0.2s ease-in-out;
   width: 630px;
   padding: 35px;
@@ -69,6 +75,7 @@ export const MainTitle = styled.h1`
   display: flex;
   align-items: center;
   justify-content: space-between;
+  margin: 0;
 `;
 
 export const ButtonHolder = styled.div`

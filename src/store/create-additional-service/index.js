@@ -9,7 +9,7 @@ const initialState = {
   small_description_en: "",
   small_description_uz: "",
   small_description_ru: "",
-  icon: "",
+  photo: "",
 };
 
 const createAdditionalServiceSlice = createSlice({
@@ -39,7 +39,7 @@ const createAdditionalServiceSlice = createSlice({
     },
 
     setServiceIcon: (state, action) => {
-      state.icon = action.payload;
+      state.photo = action.payload;
     },
   },
 });

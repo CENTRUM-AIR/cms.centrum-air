@@ -7,6 +7,8 @@ export const Wrapper = styled.div`
   top: 0;
   min-width: 272px;
   height: 100vh;
+  display: flex;
+  flex-direction: column;
 `;
 
 export const Logo = styled.div`
@@ -21,6 +23,8 @@ export const MenuWrapper = styled.div`
   display: flex;
   flex-direction: column;
   padding: 25px 20px;
+  height: 100%;
+  justify-content: space-between;
 `;
 
 export const MenuItem = styled.div`
@@ -35,4 +39,12 @@ export const MenuItem = styled.div`
   &:hover {
     background-color: rgba(243, 246, 252, 1);
   }
+`;
+
+export const LogOut = styled.div`
+  /* flex: 1; */
+`;
+
+export const MenuItemWrapper = styled.div`
+  /* flex: 3; */
 `;
