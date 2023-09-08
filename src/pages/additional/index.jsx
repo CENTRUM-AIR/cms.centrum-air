@@ -58,15 +58,9 @@ export const Additional = () => {
         services.length === 0) &&
       authLogin
     ) {
-      api.get(`/mainpage`).then((res) => {
-        res.json().then((data) => setMainPage(data));
-      });
-      api.get(`/offers`).then((res) => {
-        res.json().then((data) => setSpecialOffers(data));
-      });
-      api.get(`/services`).then((res) => {
-        res.json().then((data) => setServices(data));
-      });
+      api.get(`/mainpage`).then((res) => setMainPage(res.data));
+      api.get(`/offers`).then((res) => setSpecialOffers(res.data));
+      api.get(`/services`).then((res) => setServices(res.data));
     }
   }, [authLogin]);
 
