@@ -13,7 +13,7 @@ import { ReactComponent as PlusSign } from "../../icons/plus-sign.svg";
 import { ReactComponent as Edit } from "../../icons/edit.svg";
 import { ReactComponent as Delete } from "../../icons/delete.svg";
 import { Creation } from "../../components/creation";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   setTitleEnglish,
   setPhoto,
@@ -36,80 +36,53 @@ import {
 } from "../../store/create-destinations";
 import { Modal } from "../../components/Modal";
 import { StyledButton } from "../../shared_styled";
-import { SERVER } from "../../constants";
+import { getUser } from "../../store";
+import api from "../../utils/api";
 
 export const Additional = () => {
+  const { login: authLogin } = useSelector(getUser);
   const dispatch = useDispatch();
   const [mainPage, setMainPage] = useState([]);
   const [specialOffers, setSpecialOffers] = useState([]);
   const [services, setServices] = useState([]);
-  const [openModal, setOpenModal] = useState("");
-  const [isEdition, setIsEdition] = useState(false);
+  const [openModal, setOpenModal] = useState({
+    actionType: "",
+    id: "",
+  });
   const [toDelete, setToDelete] = useState("");
   useEffect(() => {
-    fetch(`${SERVER}/mainpage`).then((res) => {
-      res.json().then((data) => setMainPage(data));
-    });
-    fetch(`${SERVER}/offers`).then((res) => {
-      res.json().then((data) => setSpecialOffers(data));
-    });
-    fetch(`${SERVER}/services`).then((res) => {
-      res.json().then((data) => setServices(data));
-    });
-  }, []);
+    console.log(authLogin);
+    if (
+      (mainPage.length === 0 ||
+        specialOffers.length === 0 ||
+        services.length === 0) &&
+      authLogin
+    ) {
+      api.get(`/mainpage`).then((res) => {
+        res.json().then((data) => setMainPage(data));
+      });
+      api.get(`/offers`).then((res) => {
+        res.json().then((data) => setSpecialOffers(data));
+      });
+      api.get(`/services`).then((res) => {
+        res.json().then((data) => setServices(data));
+      });
+    }
+  }, [authLogin]);
 
   const handleDelete = async (id, type) => {
-    await fetch(`${SERVER}/${type}/${id}`, {
-      method: "DELETE",
-    });
+    await api.delete(`/${type}/${id}`);
     window.location.reload();
   };
 
-  const handleOpenDeleteModal = (id) => {
-    setToDelete(id);
+  const handleOpenDeleteModal = (id, type) => {
+    setToDelete({
+      id,
+      actionType: type,
+    });
   };
 
-  const handleCreate = (type) => {
-    let empty;
-    switch (type) {
-      case "mainpage":
-        dispatch(setTitleEnglish({ title: "" }));
-        dispatch(setTitleRussian({ title: "" }));
-        dispatch(setTitleUzbek({ title: "" }));
-        dispatch(setPhoto({ photo: "" }));
-        setOpenModal("mainpage");
-        break;
-      case "offers":
-        empty = {
-          title: "",
-          description: "",
-          destination: "",
-        };
-        dispatch(setDestinationEnglish(empty));
-        dispatch(setDestinationRussian(empty));
-        dispatch(setDestinationUzbek(empty));
-        dispatch(setDestinationPhoto({ photo: "" }));
-        dispatch(setPrice({ price: "" }));
-        setOpenModal("offers");
-        break;
-      case "services":
-        empty = {
-          title: "",
-          description: "",
-          small_description: "",
-        };
-        dispatch(setServiceEnglish(empty));
-        dispatch(setServiceRussian(empty));
-        dispatch(setServiceUzbek(empty));
-        dispatch(setServiceIcon({ photo: "" }));
-        setOpenModal("services");
-        break;
-
-      default:
-        break;
-    }
-  };
-  const AdditionalSection = [
+  const additionalSection = [
     {
       title: "Main Page",
       type: "mainpage",
@@ -119,13 +92,13 @@ export const Additional = () => {
       smallDesc: false,
       desc: false,
       setEnglish: (title) => {
-        dispatch(setTitleEnglish({ title }));
+        dispatch(setTitleEnglish(title));
       },
       setRussian: (title) => {
-        dispatch(setTitleRussian({ title }));
+        dispatch(setTitleRussian(title));
       },
       setUzbek: (title) => {
-        dispatch(setTitleUzbek({ title }));
+        dispatch(setTitleUzbek(title));
       },
       setPhoto: (photo) => {
         dispatch(setPhoto(photo));
@@ -213,85 +186,85 @@ export const Additional = () => {
     },
   ];
 
-  const handleEdit = (id, type) => {
-    let itemInfo;
-    switch (type) {
-      case "mainpage":
-        itemInfo = mainPage.find((item) => item.id === id);
-        dispatch(setTitleEnglish({ title: itemInfo?.en }));
-        dispatch(setTitleRussian({ title: itemInfo?.ru }));
-        dispatch(setTitleUzbek({ title: itemInfo?.uz }));
-        dispatch(setPhoto({ photo: itemInfo?.photo_url }));
-        setIsEdition(true);
-        setOpenModal(id);
-        break;
-      case "offers":
-        itemInfo = specialOffers.find((item) => item.id === id);
-        dispatch(
-          setDestinationEnglish({
-            title: itemInfo?.title_en,
-            description: itemInfo?.description_en,
-            destination: itemInfo?.destination_en,
-          })
-        );
-        dispatch(
-          setDestinationRussian({
-            title: itemInfo?.title_ru,
-            description: itemInfo?.description_ru,
-            destination: itemInfo?.destination_ru,
-          })
-        );
-        dispatch(
-          setDestinationUzbek({
-            title: itemInfo?.title_uz,
-            description: itemInfo?.description_uz,
-            destination: itemInfo?.destination_uz,
-          })
-        );
-        dispatch(setDestinationPhoto({ photo: itemInfo?.photo_url }));
-        dispatch(setPrice({ price: itemInfo?.price }));
-        setIsEdition(true);
-        setOpenModal(id);
-        break;
-      case "services":
-        itemInfo = services.find((item) => item.id === id);
-        dispatch(
-          setServiceEnglish({
-            title: itemInfo?.title_en,
-            description: itemInfo?.description_en,
-            small_description: itemInfo?.small_description_en,
-          })
-        );
-        dispatch(
-          setServiceRussian({
-            title: itemInfo?.title_ru,
-            description: itemInfo?.description_ru,
-            small_description: itemInfo?.small_description_ru,
-          })
-        );
-        dispatch(
-          setServiceUzbek({
-            title: itemInfo?.title_uz,
-            description: itemInfo?.description_uz,
-            small_description: itemInfo?.small_description_uz,
-          })
-        );
-        dispatch(setServiceIcon({ photo: itemInfo?.icon }));
-        break;
-      default:
-        break;
-    }
+  const handleOpenModal = ({ type, isCreation, id }) => {
+    const getCorrectInfo = (language) => {
+      switch (type) {
+        case "mainpage":
+          const mainPageDetails = mainPage.find((item) => item.id === id);
+          return isCreation
+            ? {
+                title: "",
+                photo: "",
+              }
+            : {
+                title: mainPageDetails?.[language],
+                photo: mainPageDetails?.photo_url,
+              };
+        case "offers":
+          const offersDetails = specialOffers.find((item) => item.id === id);
+          return isCreation
+            ? {
+                title: "",
+                description: "",
+                destination: "",
+                photo: "",
+                price: "",
+              }
+            : {
+                title: offersDetails?.[`title_${language}`],
+                description: offersDetails?.[`description_${language}`],
+                destination: offersDetails?.[`destination_${language}`],
+                photo: offersDetails?.photo_url,
+                price: offersDetails?.price,
+              };
+        case "services":
+          const servicesDetails = services.find((item) => item.id === id);
+          return isCreation
+            ? {
+                title: "",
+                description: "",
+                small_description: "",
+                photo: "",
+              }
+            : {
+                title: servicesDetails?.[`title_${language}`],
+                description: servicesDetails?.[`description_${language}`],
+                small_description:
+                  servicesDetails?.[`small_description_${language}`],
+                photo: servicesDetails?.icon,
+              };
+        default:
+          break;
+      }
+    };
+    const { setEnglish, setRussian, setUzbek, setPhoto, setPrice } =
+      additionalSection.find((item) => item.type === type);
+    setEnglish(getCorrectInfo("en"));
+    setRussian(getCorrectInfo("ru"));
+    setUzbek(getCorrectInfo("uz"));
+    setPhoto && setPhoto(getCorrectInfo("en")?.photo);
+    setPrice && setPrice(getCorrectInfo("en")?.price);
+    isCreation
+      ? setOpenModal({ actionType: type })
+      : setOpenModal({ actionType: type, id });
   };
 
   return (
     <>
       <Wrapper>
-        {AdditionalSection.map((item) => (
+        {additionalSection.map((item) => (
           <div key={item.id}>
             <ItemWrapper>
               <IconWrapper>
                 <p>{item.title}</p>
-                <AddText onClick={() => handleCreate(item.type)}>
+                <AddText
+                  onClick={() =>
+                    handleOpenModal({
+                      isCreation: true,
+                      type: item.type,
+                    })
+                  }
+                >
                   <PlusSign /> Cоздать
                 </AddText>
               </IconWrapper>
@@ -300,7 +273,9 @@ export const Additional = () => {
                   <div key={value.id}>
                     <ItemTextWrapper>
                       <ItemText>{value?.title_ru || value?.ru}</ItemText>
-                      <ItemText desc="true">{value?.description_ru}</ItemText>
+                      {value?.description_ru && (
+                        <ItemText desc="true">{value?.description_ru}</ItemText>
+                      )}
                       {value?.photo_url ? (
                         <img
                           src={value?.photo_url}
@@ -312,66 +287,69 @@ export const Additional = () => {
                       )}
                       <ItemActions>
                         <Edit
-                          onClick={() => handleEdit(value?.id, item?.type)}
+                          onClick={() =>
+                            handleOpenModal({
+                              id: value?.id,
+                              type: item?.type,
+                              isCreation: false,
+                            })
+                          }
                         />
                         <Delete
-                          onClick={() => handleOpenDeleteModal(value?.id)}
+                          onClick={() =>
+                            handleOpenDeleteModal(value?.id, item?.type)
+                          }
                         />
                       </ItemActions>
                     </ItemTextWrapper>
-                    {toDelete === value?.id && (
-                      <Modal>
-                        <p>Вы уверены что хотите удалить?</p>
-                        <ButtonsWrapper>
-                          <StyledButton
-                            onClick={() => handleDelete(value?.id, item?.type)}
-                          >
-                            Да
-                          </StyledButton>
-                          <StyledButton onClick={() => setToDelete(false)}>
-                            Нет
-                          </StyledButton>
-                        </ButtonsWrapper>
-                      </Modal>
-                    )}
-                    {openModal === value?.id && (
-                      <Creation
-                        actionType={item.type}
-                        isTextArea={item.desc}
-                        smallDesc={item?.smallDesc}
-                        onClose={item.onClick}
-                        title="Изменить"
-                        setEnglish={item?.setEnglish}
-                        setRussian={item?.setRussian}
-                        setUzbek={item?.setUzbek}
-                        setFile={item?.setPhoto}
-                        isEdition={isEdition}
-                        id={value?.id}
-                        showPrice={item?.price}
-                        showDestination={item?.destination}
-                        setPrice={item?.setPrice}
-                      />
-                    )}
+                    {toDelete.id === value?.id &&
+                      toDelete.actionType === item.type && (
+                        <Modal>
+                          <p>Вы уверены что хотите удалить?</p>
+                          <ButtonsWrapper>
+                            <StyledButton
+                              onClick={() =>
+                                handleDelete(value?.id, item?.type)
+                              }
+                            >
+                              Да
+                            </StyledButton>
+                            <StyledButton onClick={() => setToDelete(false)}>
+                              Нет
+                            </StyledButton>
+                          </ButtonsWrapper>
+                        </Modal>
+                      )}
+                    {openModal.id === value?.id &&
+                      openModal.actionType === item.type && (
+                        <Creation
+                          actionType={item.type}
+                          onClose={item.onClick}
+                          title="Изменить"
+                          setEnglish={item?.setEnglish}
+                          setRussian={item?.setRussian}
+                          setUzbek={item?.setUzbek}
+                          setFile={item?.setPhoto}
+                          setPrice={item?.setPrice}
+                          isEdition={true}
+                        />
+                      )}
                   </div>
                 ))
               ) : (
                 <ItemText>У вас нет информации для главной страницы</ItemText>
               )}
-              {openModal === item?.type && (
+              {openModal.actionType === item?.type && (
                 <Creation
                   actionType={item.type}
-                  isTextArea={item.desc}
-                  smallDesc={item?.smallDesc}
                   onClose={item.onClick}
                   title="Создать"
                   setEnglish={item?.setEnglish}
                   setRussian={item?.setRussian}
                   setUzbek={item?.setUzbek}
                   setFile={item?.setPhoto}
-                  showPrice={item?.price}
-                  showDestination={item?.destination}
                   setPrice={item?.setPrice}
-                  fileType={item?.fileType}
+                  isEdition={false}
                 />
               )}
             </ItemWrapper>

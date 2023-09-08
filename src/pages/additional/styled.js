@@ -67,6 +67,7 @@ export const ItemText = styled.div`
 
 export const ItemActions = styled.div`
   display: flex;
+  flex: 1;
   gap: 10px;
   align-items: center;
   justify-content: flex-end;

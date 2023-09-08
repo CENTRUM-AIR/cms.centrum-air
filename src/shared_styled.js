@@ -13,7 +13,7 @@ export const StyledInput = styled.input`
 `;
 
 export const StyledTextArea = styled.textarea`
-  min-height: 100px;
+  min-height: 61px;
   outline: none;
   border: none;
   background-color: #f3f6fc;

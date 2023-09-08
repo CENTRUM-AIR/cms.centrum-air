@@ -15,64 +15,48 @@ import { ReactComponent as Done } from "../../icons/done.svg";
 import { ReactComponent as InProgress } from "../../icons/in-progress.svg";
 import { StyledButton, StyledInput, StyledTextArea } from "../../shared_styled";
 import { Dropzone } from "../dropzone";
-import { getServices, getDestinations, getMainPage } from "../../store";
 import { useSelector } from "react-redux";
 import { Modal } from "../Modal";
-import { setServiceIcon } from "../../store/create-additional-service";
-import { SERVER } from "../../constants";
-import { usePublishInfo } from "../../utils/create-correct-data";
-import api from "../../utils/api";
+import api, { formDataApi } from "../../utils/api";
+import { creationConfig } from "../../utils/creation-config";
+import SVG from "react-inlinesvg";
 
 export const Creation = ({
-  title,
   actionType,
   onClose,
-  isTextArea,
-  smallDesc,
   setEnglish,
   setRussian,
   setUzbek,
   setFile,
-  isEdition,
-  id,
-  showPrice,
-  showDestination,
   setPrice,
-  fileType,
+  isEdition,
 }) => {
   const {
-    title_uz: title_uz_service,
-    title_ru: title_ru_service,
-    title_en: title_en_service,
-    description_uz: description_uz_service,
-    description_ru: description_ru_service,
-    description_en: description_en_service,
-    small_description_uz: small_description_uz_service,
-    small_description_ru: small_description_ru_service,
-    small_description_en: small_description_en_service,
-    icon: icon_service,
-  } = useSelector(getServices);
+    title,
+    selector,
+    smallDesc,
+    destination: showDestination,
+    price,
+    isTextArea,
+    fileType,
+  } = creationConfig(actionType);
   const {
-    title_uz: title_uz_dest,
-    title_ru: title_ru_dest,
-    title_en: title_en_dest,
-    description_uz: description_uz_dest,
-    description_ru: description_ru_dest,
-    description_en: description_en_dest,
+    title_uz,
+    title_ru,
+    title_en,
+    description_uz,
+    description_ru,
+    description_en,
+    small_description_uz,
+    small_description_ru,
+    small_description_en,
     destination_uz,
     destination_ru,
     destination_en,
-    price: price_dest,
-    photo: photo_dest,
-  } = useSelector(getDestinations);
-  const {
-    title_uz: title_uz_main,
-    title_ru: title_ru_main,
-    title_en: title_en_main,
+    price: selectorPrice,
     photo,
-  } = useSelector(getMainPage);
+  } = useSelector(selector);
 
-  const [icon, setIcon] = useState("");
   const [type, setType] = useState("ru");
   const [inputTitle, setInputTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -80,21 +64,175 @@ export const Creation = ({
   const [image, setImage] = useState("");
   const [inputPrice, setInputPrice] = useState("");
   const [destination, setDestination] = useState("");
-  const [canPublish, setCanPublish] = useState(false);
   const [openDropzone, setOpenDropzone] = useState(false);
   const [error, setError] = useState(false);
+
+  const getCorrectData = () => {
+    let mainInfo;
+    let isObj;
+    switch (actionType) {
+      case "mainpage":
+        const formDataMainPage = new FormData();
+        if (type === "ru") {
+          formDataMainPage.append("ru", inputTitle);
+          formDataMainPage.append("en", title_en);
+          formDataMainPage.append("uz", title_uz);
+        } else if (type === "en") {
+          formDataMainPage.append("ru", title_ru);
+          formDataMainPage.append("en", inputTitle);
+          formDataMainPage.append("uz", title_uz);
+        } else if (type === "uz") {
+          formDataMainPage.append("ru", title_ru);
+          formDataMainPage.append("en", title_en);
+          formDataMainPage.append("uz", inputTitle);
+        }
+        console.log(image);
+        if (image?.photo?.preview) {
+          formDataMainPage.append("file", image.photo);
+        }
+        mainInfo = formDataMainPage;
+        isObj = false;
+        break;
+      case "offers":
+        const formDataDest = new FormData();
+        if (type === "ru") {
+          formDataDest.append("title_ru", inputTitle);
+          formDataDest.append("title_en", title_en);
+          formDataDest.append("title_uz", title_uz);
+
+          formDataDest.append("description_ru", description);
+          formDataDest.append("description_en", description_en);
+          formDataDest.append("description_uz", description_uz);
+
+          formDataDest.append("destination_ru", destination);
+          formDataDest.append("destination_en", destination_en);
+          formDataDest.append("destination_uz", destination_uz);
+        } else if (type === "en") {
+          formDataDest.append("title_ru", title_ru);
+          formDataDest.append("title_en", inputTitle);
+          formDataDest.append("title_uz", title_uz);
+
+          formDataDest.append("description__ru", description_ru);
+          formDataDest.append("description_en", description);
+          formDataDest.append("description_uz", description_uz);
+
+          formDataDest.append("destination__ru", destination_ru);
+          formDataDest.append("destination_en", destination);
+          formDataDest.append("destination_uz", destination_uz);
+        } else if (type === "uz") {
+          formDataDest.append("title_ru", title_ru);
+          formDataDest.append("title_en", title_en);
+          formDataDest.append("title_uz", inputTitle);
+
+          formDataDest.append("description_ru", description_ru);
+          formDataDest.append("description_en", description_en);
+          formDataDest.append("description_uz", description);
+
+          formDataDest.append("destination_ru", destination_ru);
+          formDataDest.append("destination_en", destination_en);
+          formDataDest.append("destination_uz", destination);
+        }
+        if (image?.photo?.preview) {
+          formDataDest.append("file", image?.photo);
+        }
+        if (inputPrice) {
+          formDataDest.append(
+            "price",
+            selectorPrice?.price || inputPrice?.price
+          );
+        }
+        mainInfo = formDataDest;
+        isObj = false;
+        break;
+      case "services":
+        let requestBody = {};
+        if (type === "ru") {
+          requestBody = {
+            title_ru: inputTitle,
+            title_en: title_en,
+            title_uz: title_uz,
+            description_ru: description,
+            description_en: description_en,
+            description_uz: description_uz,
+            small_description_ru: shortDescription,
+            small_description_en: small_description_en,
+            small_description_uz: small_description_uz,
+          };
+        } else if (type === "en") {
+          requestBody = {
+            title_ru: title_ru,
+            title_en: inputTitle,
+            title_uz: title_uz,
+            description_ru: description_ru,
+            description_en: description,
+
+            description_uz: description_uz,
+            small_description_ru: small_description_ru,
+            small_description_en: shortDescription,
+            small_description_uz: small_description_uz,
+          };
+        } else if (type === "uz") {
+          requestBody = {
+            title_ru: title_ru,
+            title_en: title_en,
+            title_uz: inputTitle,
+            description_ru: description_ru,
+            description_en: description_en,
+
+            description_uz: description,
+            small_description_ru: small_description_ru,
+            small_description_en: small_description_en,
+            small_description_uz: shortDescription,
+          };
+        }
+        if (image?.photo) {
+          requestBody.icon = image.photo;
+        }
+        mainInfo = requestBody;
+        isObj = true;
+        break;
+      default:
+        break;
+    }
+    return { formData: mainInfo, isObj };
+  };
+
+  useEffect(() => {
+    if (type === "ru") {
+      setInputTitle(title_ru || "");
+      setDescription(description_ru || "");
+      setShortDescription(small_description_ru || "");
+      setDestination(destination_ru || "");
+    } else if (type === "en") {
+      setInputTitle(title_en || "");
+      setDescription(description_en || "");
+      setShortDescription(small_description_en || "");
+      setDestination(destination_en || "");
+    } else if (type === "uz") {
+      setInputTitle(title_uz || "");
+      setDescription(description_uz || "");
+      setShortDescription(small_description_uz || "");
+      setDestination(destination_uz || "");
+    }
+    if (photo) {
+      setImage(photo);
+    }
+    if (selectorPrice) {
+      setInputPrice(selectorPrice);
+    }
+  }, [type]);
 
   const collectData = () => {
     switch (actionType) {
       case "mainpage":
         if (type === "ru") {
-          setRussian(inputTitle);
+          setRussian({ title: inputTitle });
         }
         if (type === "en") {
-          setEnglish(inputTitle);
+          setEnglish({ title: inputTitle });
         }
         if (type === "uz") {
-          setUzbek(inputTitle);
+          setUzbek({ title: inputTitle });
         }
         setFile(image);
         break;
@@ -167,142 +305,48 @@ export const Creation = ({
     }
   };
 
-  const sendInfo = async (formData, method, isObj) => {
-    const reqInside = () => {
+  const sendInfo = async (method) => {
+    const { formData, isObj } = getCorrectData();
+    console.log(formData, isObj);
+    if (method === "POST") {
       if (isObj) {
-        return {
-          method: method,
-          body: JSON.stringify(formData),
-          headers: {
-            "Content-Type": "application/json",
-          },
-        };
+        await api
+          .post(`/${actionType}`, formData)
+          .catch((err) => window.alert("Что-то пошло не так! \n" + err));
+      } else {
+        formDataApi
+          .post(`/${actionType}`, formData)
+          .catch((err) => window.alert("Что-то пошло не так! \n" + err));
       }
-      return {
-        method: method,
-        body: formData,
-      };
-    };
-
-    await fetch(`${SERVER}/${actionType}`, reqInside())
-      .then((res) => {
-        if (res.status === 500) {
-          setError("Ошибка сервера");
-        } else if (res.status === 400) {
-          setError("Ошибка валидации. \nПроверьте пустые поля");
-        } else if (res.status === 200 || 201) {
-          onClose();
-          // window.location.reload();
-        }
-      })
-      .catch((err) => {
-        setError(err);
-        console.log("err", err);
-      });
+    } else if (method === "PATCH") {
+      if (isObj) {
+        await api
+          .patch(`/${actionType}`, formData)
+          .catch((err) => window.alert("Что-то пошло не так! \n" + err));
+      } else {
+        formDataApi
+          .patch(`/${actionType}`, formData)
+          .catch((err) => window.alert("Что-то пошло не так! \n" + err));
+      }
+    }
+    onClose();
   };
-  const requestBody = usePublishInfo({
-    actionType,
-    inputTitle,
-    description,
-    destination,
-    shortDescription,
-    image,
-    inputPrice,
-    type,
-    icon,
-  });
+
+  const isSvg = () => {
+    if (typeof image?.photo === "string") {
+      return image?.photo?.includes("svg") ? true : false;
+    }
+    return false;
+  };
 
   const publishInfo = async () => {
     collectData();
-    console.log(requestBody);
-    // if (isEdition) {
-    //   await sendInfo(JSON.stringify(requestBody), "PATCH", true);
-    // } else {
-    //   await sendInfo(JSON.stringify(requestBody), "POST", true);
-    // }
+    if (isEdition) {
+      await sendInfo("PATCH");
+    } else {
+      await sendInfo("POST");
+    }
   };
-
-  useEffect(() => {
-    if (actionType === "mainpage") {
-      if (type === "ru") {
-        setInputTitle(title_ru_main);
-      }
-      if (type === "en") {
-        setInputTitle(title_en_main);
-      }
-      if (type === "uz") {
-        setInputTitle(title_uz_main);
-      }
-      setImage(photo);
-    }
-  }, [actionType, title_en_main, title_ru_main, title_uz_main, photo, type]);
-
-  useEffect(() => {
-    if (actionType === "offers") {
-      if (type === "ru") {
-        setInputTitle(title_ru_dest);
-        setDescription(description_ru_dest);
-        setDestination(destination_ru);
-      } else if (type === "en") {
-        setInputTitle(title_en_dest);
-        setDescription(description_en_dest);
-        setDestination(destination_en);
-      } else if (type === "uz") {
-        setInputTitle(title_uz_dest);
-        setDescription(description_uz_dest);
-        setDestination(destination_uz);
-      }
-      setInputPrice(price_dest);
-      setImage(photo_dest);
-    }
-  }, [
-    actionType,
-    title_en_dest,
-    title_ru_dest,
-    title_uz_dest,
-    photo,
-    type,
-    description_ru_dest,
-    description_en_dest,
-    description_uz_dest,
-    destination_ru,
-    destination_en,
-    destination_uz,
-    price_dest,
-    photo_dest,
-  ]);
-  useEffect(() => {
-    if (actionType === "services") {
-      if (type === "ru") {
-        setInputTitle(title_ru_service);
-        setDescription(description_ru_service);
-        setShortDescription(small_description_ru_service);
-      } else if (type === "en") {
-        setInputTitle(title_en_service);
-        setDescription(description_en_service);
-        setShortDescription(small_description_en_service);
-      } else if (type === "uz") {
-        setInputTitle(title_uz_service);
-        setDescription(description_uz_service);
-        setShortDescription(small_description_uz_service);
-      }
-      setServiceIcon(icon_service);
-    }
-  }, [
-    actionType,
-    title_en_service,
-    title_ru_service,
-    title_uz_service,
-    photo,
-    type,
-    description_ru_service,
-    description_en_service,
-    description_uz_service,
-    small_description_ru_service,
-    small_description_en_service,
-    small_description_uz_service,
-    icon_service,
-  ]);
 
   return (
     <>
@@ -331,11 +375,7 @@ export const Creation = ({
             </CloseText>
           </Progression>
           <span>Заголовок</span>
-          <WarningText>
-            *Чтобы перенести текст на новую строку пропишите \n (e.g: новая
-            \nстрока)
-          </WarningText>
-          <StyledInput
+          <StyledTextArea
             value={inputTitle}
             onChange={(e) => setInputTitle(e.target.value)}
             placeholder="Введите заголовок"
@@ -343,17 +383,17 @@ export const Creation = ({
           {smallDesc && (
             <>
               <span>Краткое описание</span>
-              <StyledInput
+              <StyledTextArea
                 value={shortDescription}
                 onChange={(e) => setShortDescription(e.target.value)}
                 placeholder="Введите краткое описание"
               />
             </>
           )}
-          {showPrice && (
+          {price && (
             <>
               <span>Цена</span>
-              <StyledInput
+              <StyledTextArea
                 value={inputPrice?.price}
                 onChange={(e) => setInputPrice({ price: e.target.value })}
                 placeholder="Введите цену"
@@ -364,7 +404,7 @@ export const Creation = ({
             <>
               <span>Направление</span>
               <WarningText>*e.g.: Из Ташкента и обратно</WarningText>
-              <StyledInput
+              <StyledTextArea
                 placeholder="Введите направление"
                 value={destination}
                 onChange={(e) => setDestination(e.target.value)}
@@ -383,11 +423,15 @@ export const Creation = ({
           )}
           {image?.photo && (
             <>
-              <img
-                width="200px"
-                src={image?.photo?.preview || image?.photo}
-                alt="expected"
-              />
+              {isSvg() ? (
+                <SVG src={image.photo} width="100px" />
+              ) : (
+                <img
+                  width="200px"
+                  src={image.photo?.preview || image.photo}
+                  alt="expected"
+                />
+              )}
             </>
           )}
           <StyledButton onClick={() => setOpenDropzone(true)}>
@@ -409,7 +453,6 @@ export const Creation = ({
         <Dropzone
           fileType={fileType}
           setImage={setImage}
-          setIcon={setIcon}
           onClose={() => setOpenDropzone(false)}
         />
       )}

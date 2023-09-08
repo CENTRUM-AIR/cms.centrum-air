@@ -10,4 +10,9 @@ const api = axios.create({
   },
 });
 
+export const formDataApi = axios.create({
+  baseURL: "https://node.centrum-air.com",
+  // baseURL: "http://localhost:13000",
+  withCredentials: true,
+});
 export default api;

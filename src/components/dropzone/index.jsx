@@ -3,7 +3,7 @@ import { ModalBackdrop } from "../creation/styled";
 import { MainWrapper, Wrapper } from "./styled";
 import { useDropzone } from "react-dropzone";
 
-export const Dropzone = ({ onClose, setIcon, setImage, fileType }) => {
+export const Dropzone = ({ onClose, setImage, fileType }) => {
   const [fileError, setFileError] = useState(false);
 
   const onDrop = useCallback((acceptedFiles) => {
@@ -19,17 +19,18 @@ export const Dropzone = ({ onClose, setIcon, setImage, fileType }) => {
       reader.onloadend = async () => {
         const svgString = reader.result;
         const newIcon = svgString.replace(/"/g, "'").replace(/\n/g, "");
-        setIcon({
+        setImage({
           photo: newIcon,
         });
       };
       reader.readAsText(acceptedFiles[0]);
+    } else {
+      setImage({
+        photo: Object.assign(acceptedFiles[0], {
+          preview: URL.createObjectURL(acceptedFiles[0]),
+        }),
+      });
     }
-    setImage({
-      photo: Object.assign(acceptedFiles[0], {
-        preview: URL.createObjectURL(acceptedFiles[0]),
-      }),
-    });
     onClose();
   }, []);
 

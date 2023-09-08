@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Global,
   Holder,
@@ -25,8 +25,6 @@ export const LoginPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  console.log(authLogin);
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -50,9 +48,12 @@ export const LoginPage = () => {
       setError(true);
     }
   };
-  if (authLogin) {
-    navigate("/");
-  }
+  useEffect(() => {
+    console.log(authLogin);
+    if (authLogin) {
+      navigate("/");
+    }
+  }, []);
   return (
     <Global>
       <CentrumLogo width="137px" height="44px" />

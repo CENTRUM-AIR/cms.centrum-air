@@ -2,7 +2,7 @@ import { useCallback } from "react";
 import { getServices, getDestinations, getMainPage } from "../store";
 import { useSelector } from "react-redux";
 
-export const usePublishInfo = async ({
+export const usePublishInfo = ({
   actionType,
   inputTitle,
   description,
@@ -23,7 +23,6 @@ export const usePublishInfo = async ({
     small_description_uz: small_description_uz_service,
     small_description_ru: small_description_ru_service,
     small_description_en: small_description_en_service,
-    icon: icon_service,
   } = useSelector(getServices);
   const {
     title_uz: title_uz_dest,
@@ -36,15 +35,14 @@ export const usePublishInfo = async ({
     destination_ru,
     destination_en,
     price: price_dest,
-    photo: photo_dest,
   } = useSelector(getDestinations);
   const {
     title_uz: title_uz_main,
     title_ru: title_ru_main,
     title_en: title_en_main,
-    photo,
   } = useSelector(getMainPage);
-  const getCorrectData = useCallback(() => {
+  const getCorrectData = () => {
+    let mainInfo;
     switch (actionType) {
       case "mainpage":
         const formData = new FormData();
@@ -64,7 +62,8 @@ export const usePublishInfo = async ({
         if (image?.photo?.preview) {
           formData.append("file", image?.photo);
         }
-        return formData;
+        mainInfo = formData;
+        break;
       case "offers":
         const formDataDest = new FormData();
         if (type === "ru") {
@@ -110,7 +109,8 @@ export const usePublishInfo = async ({
         if (inputPrice) {
           formDataDest.append("price", price_dest?.price || inputPrice?.price);
         }
-        return formDataDest;
+        mainInfo = formDataDest;
+        break;
       case "services":
         let requestBody = {};
         if (type === "ru") {
@@ -155,10 +155,14 @@ export const usePublishInfo = async ({
         if (image?.photo?.preview) {
           requestBody.icon = icon.photo;
         }
-        return requestBody;
+        mainInfo = requestBody;
+        break;
       default:
         break;
     }
-  }, []);
-  return getCorrectData;
+    return mainInfo;
+  };
+  const info = getCorrectData();
+  // console.log(info);
+  return info;
 };
