@@ -49,7 +49,6 @@ export const LoginPage = () => {
     }
   };
   useEffect(() => {
-    console.log(authLogin);
     if (authLogin) {
       navigate("/");
     }
@@ -76,6 +75,7 @@ export const LoginPage = () => {
             <InputWrapper>
               <StyledLabel>Пароль</StyledLabel>
               <StyledInput
+                type="password"
                 value={password}
                 onChange={(e) => {
                   setError(false);

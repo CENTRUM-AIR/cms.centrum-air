@@ -11,10 +11,19 @@ import { ReactComponent as CentrumLogo } from "../../icons/centrum.svg";
 import api from "../../utils/api";
 import { useNavigate } from "react-router-dom";
 import { sideBarItems } from "./sideBar";
+import { useDispatch } from "react-redux";
+import { setUser } from "../../store/auth";
 
 export const SideBar = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const logOut = () => {
+    dispatch(
+      setUser({
+        login: "",
+        role: "",
+      })
+    );
     api.post("/users/logout");
     navigate("/login");
   };
