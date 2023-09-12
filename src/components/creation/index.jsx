@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import {
   ButtonHolder,
   CloseText,
+  FlexContainer,
   MainTitle,
   MainWrapper,
   ModalBackdrop,
@@ -30,6 +31,8 @@ export const Creation = ({
   setFile,
   setPrice,
   isEdition,
+  setCode,
+  setPhoneNumber,
 }) => {
   const {
     title,
@@ -39,6 +42,13 @@ export const Creation = ({
     price,
     isTextArea,
     fileType,
+    cityCode,
+    countryName,
+    cityName,
+    mainText,
+    isFileNeeded,
+    isPhoneNumber,
+    fromCityName,
   } = creationConfig(actionType);
   const {
     title_uz,
@@ -55,38 +65,42 @@ export const Creation = ({
     destination_en,
     price: selectorPrice,
     photo,
+    country_en,
+    country_ru,
+    country_uz,
+    city_en,
+    city_ru,
+    city_uz,
+    city_code: selectorCityCode,
+    phone_number: selectorPhoneNumber,
+    from_city_en,
+    from_city_ru,
+    from_city_uz,
+    to_city_en,
+    to_city_ru,
+    to_city_uz,
   } = useSelector(selector);
 
-  const [type, setType] = useState("ru");
-  const [inputTitle, setInputTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [shortDescription, setShortDescription] = useState("");
+  const [language, setLanguage] = useState("ru");
+  const [inputTitle, setInputTitle] = useState(""); // used as country name
+  const [description, setDescription] = useState(""); // used as city (& to_city) name
+  const [shortDescription, setShortDescription] = useState(""); // used as from_city name
   const [image, setImage] = useState("");
   const [inputPrice, setInputPrice] = useState("");
   const [destination, setDestination] = useState("");
+  const [code, setCityCode] = useState("");
+  const [phoneNumber, setNewPhoneNumber] = useState("");
   const [openDropzone, setOpenDropzone] = useState(false);
   const [error, setError] = useState(false);
-
   const getCorrectData = () => {
     let mainInfo;
     let isObj;
     switch (actionType) {
       case "mainpage":
         const formDataMainPage = new FormData();
-        if (type === "ru") {
-          formDataMainPage.append("ru", inputTitle);
-          formDataMainPage.append("en", title_en);
-          formDataMainPage.append("uz", title_uz);
-        } else if (type === "en") {
-          formDataMainPage.append("ru", title_ru);
-          formDataMainPage.append("en", inputTitle);
-          formDataMainPage.append("uz", title_uz);
-        } else if (type === "uz") {
-          formDataMainPage.append("ru", title_ru);
-          formDataMainPage.append("en", title_en);
-          formDataMainPage.append("uz", inputTitle);
-        }
-        console.log(image);
+        formDataMainPage.append("title_ru", title_ru || inputTitle);
+        formDataMainPage.append("title_en", title_en || inputTitle);
+        formDataMainPage.append("title_uz", title_uz || inputTitle);
         if (image?.photo?.preview) {
           formDataMainPage.append("file", image.photo);
         }
@@ -95,43 +109,17 @@ export const Creation = ({
         break;
       case "offers":
         const formDataDest = new FormData();
-        if (type === "ru") {
-          formDataDest.append("title_ru", inputTitle);
-          formDataDest.append("title_en", title_en);
-          formDataDest.append("title_uz", title_uz);
+        formDataDest.append("title_ru", title_ru || inputTitle);
+        formDataDest.append("title_en", title_en || inputTitle);
+        formDataDest.append("title_uz", title_uz || inputTitle);
 
-          formDataDest.append("description_ru", description);
-          formDataDest.append("description_en", description_en);
-          formDataDest.append("description_uz", description_uz);
+        formDataDest.append("description_ru", description_ru || description);
+        formDataDest.append("description_en", description_en || description);
+        formDataDest.append("description_uz", description_uz || description);
 
-          formDataDest.append("destination_ru", destination);
-          formDataDest.append("destination_en", destination_en);
-          formDataDest.append("destination_uz", destination_uz);
-        } else if (type === "en") {
-          formDataDest.append("title_ru", title_ru);
-          formDataDest.append("title_en", inputTitle);
-          formDataDest.append("title_uz", title_uz);
-
-          formDataDest.append("description__ru", description_ru);
-          formDataDest.append("description_en", description);
-          formDataDest.append("description_uz", description_uz);
-
-          formDataDest.append("destination__ru", destination_ru);
-          formDataDest.append("destination_en", destination);
-          formDataDest.append("destination_uz", destination_uz);
-        } else if (type === "uz") {
-          formDataDest.append("title_ru", title_ru);
-          formDataDest.append("title_en", title_en);
-          formDataDest.append("title_uz", inputTitle);
-
-          formDataDest.append("description_ru", description_ru);
-          formDataDest.append("description_en", description_en);
-          formDataDest.append("description_uz", description);
-
-          formDataDest.append("destination_ru", destination_ru);
-          formDataDest.append("destination_en", destination_en);
-          formDataDest.append("destination_uz", destination);
-        }
+        formDataDest.append("destination_ru", destination_ru || destination);
+        formDataDest.append("destination_en", destination_en || destination);
+        formDataDest.append("destination_uz", destination_uz || destination);
         if (image?.photo?.preview) {
           formDataDest.append("file", image?.photo);
         }
@@ -145,50 +133,47 @@ export const Creation = ({
         isObj = false;
         break;
       case "services":
-        let requestBody = {};
-        if (type === "ru") {
-          requestBody = {
-            title_ru: inputTitle,
-            title_en: title_en,
-            title_uz: title_uz,
-            description_ru: description,
-            description_en: description_en,
-            description_uz: description_uz,
-            small_description_ru: shortDescription,
-            small_description_en: small_description_en,
-            small_description_uz: small_description_uz,
-          };
-        } else if (type === "en") {
-          requestBody = {
-            title_ru: title_ru,
-            title_en: inputTitle,
-            title_uz: title_uz,
-            description_ru: description_ru,
-            description_en: description,
-
-            description_uz: description_uz,
-            small_description_ru: small_description_ru,
-            small_description_en: shortDescription,
-            small_description_uz: small_description_uz,
-          };
-        } else if (type === "uz") {
-          requestBody = {
-            title_ru: title_ru,
-            title_en: title_en,
-            title_uz: inputTitle,
-            description_ru: description_ru,
-            description_en: description_en,
-
-            description_uz: description,
-            small_description_ru: small_description_ru,
-            small_description_en: small_description_en,
-            small_description_uz: shortDescription,
-          };
-        }
+        const requestBody = {
+          title_ru: title_ru || inputTitle,
+          title_en: title_en || inputTitle,
+          title_uz: title_uz || inputTitle,
+          description_ru: description_ru || description,
+          description_en: description_en || description,
+          description_uz: description_uz || description,
+          small_description_ru: small_description_ru || shortDescription,
+          small_description_en: small_description_en || shortDescription,
+          small_description_uz: small_description_uz || shortDescription,
+        };
         if (image?.photo) {
           requestBody.icon = image.photo;
         }
         mainInfo = requestBody;
+        isObj = true;
+        break;
+      case "countries":
+        const requestBodyCountries = {
+          country_ru: country_ru || inputTitle,
+          country_en: country_en || inputTitle,
+          country_uz: country_uz || inputTitle,
+          city_ru: city_ru || description,
+          city_en: city_en || description,
+          city_uz: city_uz || description,
+          city_code: selectorCityCode || code,
+        };
+        mainInfo = requestBodyCountries;
+        isObj = true;
+        break;
+      case "charters":
+        const requestBodyCharters = {
+          to_city_ru: to_city_ru || description,
+          to_city_en: to_city_en || description,
+          to_city_uz: to_city_uz || description,
+          from_city_ru: from_city_ru || shortDescription,
+          from_city_en: from_city_en || shortDescription,
+          from_city_uz: from_city_uz || shortDescription,
+          phone_number: selectorPhoneNumber || phoneNumber,
+        };
+        mainInfo = requestBodyCharters;
         isObj = true;
         break;
       default:
@@ -198,21 +183,45 @@ export const Creation = ({
   };
 
   useEffect(() => {
-    if (type === "ru") {
+    if (language === "ru") {
       setInputTitle(title_ru || "");
       setDescription(description_ru || "");
       setShortDescription(small_description_ru || "");
       setDestination(destination_ru || "");
-    } else if (type === "en") {
+      if (country_ru || city_ru) {
+        setInputTitle(country_ru || "");
+        setDescription(city_ru || "");
+      }
+      if (from_city_ru || to_city_ru) {
+        setDescription(to_city_ru || "");
+        setShortDescription(from_city_ru || "");
+      }
+    } else if (language === "en") {
       setInputTitle(title_en || "");
       setDescription(description_en || "");
       setShortDescription(small_description_en || "");
       setDestination(destination_en || "");
-    } else if (type === "uz") {
+      if (country_en || city_en) {
+        setInputTitle(country_en || "");
+        setDescription(city_en || "");
+      }
+      if (from_city_en || to_city_en) {
+        setDescription(to_city_en || "");
+        setShortDescription(from_city_en || "");
+      }
+    } else if (language === "uz") {
       setInputTitle(title_uz || "");
       setDescription(description_uz || "");
       setShortDescription(small_description_uz || "");
       setDestination(destination_uz || "");
+      if (country_uz || city_uz) {
+        setInputTitle(country_uz || "");
+        setDescription(city_uz || "");
+      }
+      if (from_city_uz || to_city_uz) {
+        setDescription(to_city_uz || "");
+        setShortDescription(from_city_uz || "");
+      }
     }
     if (photo) {
       setImage(photo);
@@ -220,94 +229,48 @@ export const Creation = ({
     if (selectorPrice) {
       setInputPrice(selectorPrice);
     }
-  }, [type]);
+    if (selectorCityCode) {
+      setCityCode(selectorCityCode);
+    }
+
+    if (selectorPhoneNumber) {
+      setNewPhoneNumber(selectorPhoneNumber);
+    }
+  }, [language]);
 
   const collectData = () => {
-    switch (actionType) {
-      case "mainpage":
-        if (type === "ru") {
-          setRussian({ title: inputTitle });
-        }
-        if (type === "en") {
-          setEnglish({ title: inputTitle });
-        }
-        if (type === "uz") {
-          setUzbek({ title: inputTitle });
-        }
-        setFile(image);
-        break;
-      case "offers":
-        if (type === "ru") {
-          setRussian({
-            title: inputTitle,
-            description: description,
-            destination: destination,
-          });
-        }
-        if (type === "en") {
-          setEnglish({
-            title: inputTitle,
-            description: description,
-            destination: destination,
-          });
-        }
-        if (type === "uz") {
-          setUzbek({
-            title: inputTitle,
-            description: description,
-            destination: destination,
-          });
-        }
-        setPrice(inputPrice);
-        setFile(image);
-        break;
-      case "services":
-        if (type === "ru") {
-          setRussian({
-            title: inputTitle,
-            description: description,
-            small_description: shortDescription,
-          });
-        }
-        if (type === "en") {
-          setEnglish({
-            title: inputTitle,
-            description: description,
-            small_description: shortDescription,
-          });
-        }
-        if (type === "uz") {
-          setUzbek({
-            title: inputTitle,
-            description: description,
-            small_description: shortDescription,
-          });
-        }
-        setFile(image);
-        break;
-      default:
-        break;
-    }
+    const readyData = {
+      title: inputTitle,
+      description,
+      small_description: shortDescription,
+      destination,
+      country: inputTitle,
+      city: description,
+      to_city: description,
+      from_city: shortDescription,
+    };
+    if (language === "ru") setRussian(readyData);
+    if (language === "en") setEnglish(readyData);
+    if (language === "uz") setUzbek(readyData);
+    setPrice && setPrice(inputPrice);
+    setFile && setFile(image);
+    setCode && setCode(code);
+    setPhoneNumber && setPhoneNumber(phoneNumber);
   };
 
   const nextLanguage = (newType, goNext) => {
     collectData();
     if (goNext) {
-      if (type === "ru") {
-        setType("en");
-      } else if (type === "en") {
-        setType("uz");
-      } else if (type === "uz") {
-        setType("ru");
-      }
+      if (language === "ru") setLanguage("en");
+      else if (language === "en") setLanguage("uz");
+      else if (language === "uz") setLanguage("ru");
     } else {
-      setType(newType);
+      setLanguage(newType);
     }
   };
 
   const sendInfo = async (method) => {
     const { formData, isObj } = getCorrectData();
-    console.log(formData, isObj);
     if (method === "POST") {
       if (isObj) {
         await api
@@ -333,9 +296,8 @@ export const Creation = ({
   };
 
   const isSvg = () => {
-    if (typeof image?.photo === "string") {
+    if (typeof image?.photo === "string")
       return image?.photo?.includes("svg") ? true : false;
-    }
     return false;
   };
 
@@ -346,6 +308,7 @@ export const Creation = ({
     } else {
       await sendInfo("POST");
     }
+    window.location.reload();
   };
 
   return (
@@ -359,27 +322,40 @@ export const Creation = ({
             </CloseText>
           </MainTitle>
           <Progression>
-            <CloseText done={type === "ru"} onClick={() => nextLanguage("ru")}>
-              {type === "ru" ? <Done /> : <InProgress />}
+            <CloseText
+              done={language === "ru"}
+              onClick={() => nextLanguage("ru")}
+            >
+              {language === "ru" ? <Done /> : <InProgress />}
               Русский
             </CloseText>
             <ProgressionDash />
-            <CloseText done={type === "en"} onClick={() => nextLanguage("en")}>
-              {type === "en" ? <Done /> : <InProgress />}
+            <CloseText
+              done={language === "en"}
+              onClick={() => nextLanguage("en")}
+            >
+              {language === "en" ? <Done /> : <InProgress />}
               English
             </CloseText>
             <ProgressionDash />
-            <CloseText done={type === "uz"} onClick={() => nextLanguage("uz")}>
-              {type === "uz" ? <Done /> : <InProgress />}
+            <CloseText
+              done={language === "uz"}
+              onClick={() => nextLanguage("uz")}
+            >
+              {language === "uz" ? <Done /> : <InProgress />}
               Uzbek
             </CloseText>
           </Progression>
-          <span>Заголовок</span>
-          <StyledTextArea
-            value={inputTitle}
-            onChange={(e) => setInputTitle(e.target.value)}
-            placeholder="Введите заголовок"
-          />
+          {mainText && (
+            <>
+              <span>Заголовок</span>
+              <StyledTextArea
+                value={inputTitle}
+                onChange={(e) => setInputTitle(e.target.value)}
+                placeholder="Введите заголовок"
+              />
+            </>
+          )}
           {smallDesc && (
             <>
               <span>Краткое описание</span>
@@ -393,7 +369,7 @@ export const Creation = ({
           {price && (
             <>
               <span>Цена</span>
-              <StyledTextArea
+              <StyledInput
                 value={inputPrice?.price}
                 onChange={(e) => setInputPrice({ price: e.target.value })}
                 placeholder="Введите цену"
@@ -401,15 +377,15 @@ export const Creation = ({
             </>
           )}
           {showDestination && (
-            <>
+            <FlexContainer>
               <span>Направление</span>
               <WarningText>*e.g.: Из Ташкента и обратно</WarningText>
-              <StyledTextArea
+              <StyledInput
                 placeholder="Введите направление"
                 value={destination}
                 onChange={(e) => setDestination(e.target.value)}
               />
-            </>
+            </FlexContainer>
           )}
           {isTextArea && (
             <>
@@ -434,9 +410,61 @@ export const Creation = ({
               )}
             </>
           )}
-          <StyledButton onClick={() => setOpenDropzone(true)}>
-            Загрузить файл обложки или иконку
-          </StyledButton>
+          {fromCityName && (
+            <>
+              <span>С Какого Города</span>
+              <StyledInput
+                value={shortDescription}
+                onChange={(e) => setShortDescription(e.target.value)}
+                placeholder="Введите имя Города"
+              />
+            </>
+          )}
+          {cityName && (
+            <>
+              <span>Город</span>
+              <StyledInput
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                placeholder="Введите имя Города"
+              />
+            </>
+          )}
+          {countryName && (
+            <>
+              <span>Страна</span>
+              <StyledInput
+                value={inputTitle}
+                onChange={(e) => setInputTitle(e.target.value)}
+                placeholder="Введите имя Страны"
+              />
+            </>
+          )}
+          {cityCode && (
+            <>
+              <span>Код Города</span>
+              <StyledInput
+                value={code}
+                onChange={(e) => setCityCode(e.target.value.toUpperCase())}
+                placeholder="Введите код Города"
+              />
+            </>
+          )}
+          {isPhoneNumber && (
+            <>
+              <span>Номер Телефона</span>
+              <StyledInput
+                value={phoneNumber}
+                onChange={(e) => setNewPhoneNumber(e.target.value)}
+                placeholder="Введите номер телефона Города"
+              />
+            </>
+          )}
+          {isFileNeeded && (
+            <StyledButton onClick={() => setOpenDropzone(true)}>
+              Загрузить файл обложки или иконку
+            </StyledButton>
+          )}
           <ButtonHolder>
             {/* disabled={!canPublish} */}
             <StyledButton width="138px" onClick={publishInfo}>

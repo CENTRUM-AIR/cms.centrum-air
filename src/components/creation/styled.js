@@ -90,3 +90,10 @@ export const WarningText = styled.p`
   font-weight: 500;
   color: #727d97;
 `;
+
+export const FlexContainer = styled.div`
+  display: flex;
+  gap: 5px;
+  flex-direction: column;
+  width: 100%;
+`;

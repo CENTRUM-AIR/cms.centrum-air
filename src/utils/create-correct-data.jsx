@@ -10,7 +10,7 @@ export const usePublishInfo = ({
   shortDescription,
   image,
   inputPrice,
-  type,
+  language,
   icon,
 }) => {
   const {
@@ -46,15 +46,15 @@ export const usePublishInfo = ({
     switch (actionType) {
       case "mainpage":
         const formData = new FormData();
-        if (type === "ru") {
+        if (language === "ru") {
           formData.append("ru", inputTitle);
           formData.append("en", title_en_main);
           formData.append("uz", title_uz_main);
-        } else if (type === "en") {
+        } else if (language === "en") {
           formData.append("ru", title_ru_main);
           formData.append("en", inputTitle);
           formData.append("uz", title_uz_main);
-        } else if (type === "uz") {
+        } else if (language === "uz") {
           formData.append("ru", title_ru_main);
           formData.append("en", title_en_main);
           formData.append("uz", inputTitle);
@@ -66,7 +66,7 @@ export const usePublishInfo = ({
         break;
       case "offers":
         const formDataDest = new FormData();
-        if (type === "ru") {
+        if (language === "ru") {
           formDataDest.append("title_ru", inputTitle);
           formDataDest.append("title_en", title_en_dest);
           formDataDest.append("title_uz", title_uz_dest);
@@ -78,7 +78,7 @@ export const usePublishInfo = ({
           formDataDest.append("destination_ru", destination);
           formDataDest.append("destination_en", destination_en);
           formDataDest.append("destination_uz", destination_uz);
-        } else if (type === "en") {
+        } else if (language === "en") {
           formDataDest.append("title_ru", title_ru_dest);
           formDataDest.append("title_en", inputTitle);
           formDataDest.append("title_uz", title_uz_dest);
@@ -90,7 +90,7 @@ export const usePublishInfo = ({
           formDataDest.append("destination__ru", destination_ru);
           formDataDest.append("destination_en", destination);
           formDataDest.append("destination_uz", destination_uz);
-        } else if (type === "uz") {
+        } else if (language === "uz") {
           formDataDest.append("title_ru", title_ru_dest);
           formDataDest.append("title_en", title_en_dest);
           formDataDest.append("title_uz", inputTitle);
@@ -113,7 +113,7 @@ export const usePublishInfo = ({
         break;
       case "services":
         let requestBody = {};
-        if (type === "ru") {
+        if (language === "ru") {
           requestBody = {
             title_ru: inputTitle,
             title_en: title_en_service,
@@ -125,7 +125,7 @@ export const usePublishInfo = ({
             small_description_en: small_description_en_service,
             small_description_uz: small_description_uz_service,
           };
-        } else if (type === "en") {
+        } else if (language === "en") {
           requestBody = {
             title_ru: title_ru_service,
             title_en: inputTitle,
@@ -138,7 +138,7 @@ export const usePublishInfo = ({
             small_description_en: shortDescription,
             small_description_uz: small_description_uz_service,
           };
-        } else if (type === "uz") {
+        } else if (language === "uz") {
           requestBody = {
             title_ru: title_ru_service,
             title_en: title_en_service,
@@ -163,6 +163,5 @@ export const usePublishInfo = ({
     return mainInfo;
   };
   const info = getCorrectData();
-  // console.log(info);
   return info;
 };

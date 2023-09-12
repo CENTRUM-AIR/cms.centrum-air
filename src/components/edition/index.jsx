@@ -33,10 +33,12 @@ export const Edition = ({
   defaultShortDescription = "",
   defaultImage = "",
 }) => {
-  const [type, setType] = useState("ru");
+  const [language, setLanguage] = useState("ru");
   const [inputTitle, setInputTitle] = useState(defaulTitle);
   const [description, setDescription] = useState(defaultDescription);
-  const [shortDescription, setShortDescription] = useState(defaultShortDescription);
+  const [shortDescription, setShortDescription] = useState(
+    defaultShortDescription
+  );
   const [image, setImage] = useState(defaultImage);
   const [canPublish, setCanPublish] = useState(false);
   const [openDropzone, setOpenDropzone] = useState(false);
@@ -45,13 +47,13 @@ export const Edition = ({
   const collectData = () => {
     switch (actionType) {
       case "mainpage":
-        if (type === "ru") {
+        if (language === "ru") {
           setRussian(inputTitle);
         }
-        if (type === "en") {
+        if (language === "en") {
           setEnglish(inputTitle);
         }
-        if (type === "uz") {
+        if (language === "uz") {
           setUzbek(inputTitle);
         }
         setFile(image);
@@ -64,15 +66,15 @@ export const Edition = ({
   const nextLanguage = (newType, goNext) => {
     collectData();
     if (goNext) {
-      if (type === "ru") {
-        setType("en");
-      } else if (type === "en") {
-        setType("uz");
-      } else if (type === "uz") {
-        setType("ru");
+      if (language === "ru") {
+        setLanguage("en");
+      } else if (language === "en") {
+        setLanguage("uz");
+      } else if (language === "uz") {
+        setLanguage("ru");
       }
     } else {
-      setType(newType);
+      setLanguage(newType);
     }
   };
 
@@ -90,26 +92,26 @@ export const Edition = ({
             </MainTitle>
             <Progression>
               <CloseText
-                done={type === "ru"}
+                done={language === "ru"}
                 onClick={() => nextLanguage("ru")}
               >
-                {type === "ru" ? <Done /> : <InProgress />}
+                {language === "ru" ? <Done /> : <InProgress />}
                 Русский
               </CloseText>
               <ProgressionDash />
               <CloseText
-                done={type === "en"}
+                done={language === "en"}
                 onClick={() => nextLanguage("en")}
               >
-                {type === "en" ? <Done /> : <InProgress />}
+                {language === "en" ? <Done /> : <InProgress />}
                 English
               </CloseText>
               <ProgressionDash />
               <CloseText
-                done={type === "uz"}
+                done={language === "uz"}
                 onClick={() => nextLanguage("uz")}
               >
-                {type === "uz" ? <Done /> : <InProgress />}
+                {language === "uz" ? <Done /> : <InProgress />}
                 Uzbek
               </CloseText>
             </Progression>

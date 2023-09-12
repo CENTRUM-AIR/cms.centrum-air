@@ -49,10 +49,11 @@ export const ItemWrapper = styled.div`
 
 export const ItemText = styled.div`
   font-size: 16px;
+  flex: 1;
   font-style: normal;
   font-weight: 500;
   color: #000;
-  min-width: 200px;
+  min-width: 100px;
   padding: 5px;
   display: flex;
   align-items: center;
@@ -62,12 +63,10 @@ export const ItemText = styled.div`
   text-overflow: ellipsis;
   -webkit-box-orient: vertical;
   height: 16px;
-  width: ${({ desc }) => (desc ? "100%" : "auto")};
 `;
 
 export const ItemActions = styled.div`
   display: flex;
-  flex: 1;
   gap: 10px;
   align-items: center;
   justify-content: flex-end;
@@ -79,13 +78,13 @@ export const ItemActions = styled.div`
 export const ItemTextWrapper = styled.div`
   display: flex;
   width: 100%;
-  gap: 30px;
+  gap: 20px;
+  justify-content: space-between;
 `;
-
 
 export const ButtonsWrapper = styled.div`
   display: flex;
   gap: 10px;
   margin-top: 20px;
-  width:100%;
+  width: 100%;
 `;
