@@ -1,3 +1,4 @@
+import { CHARTERS, COUNTRIES, MAINPAGE, OFFERS, SERVICES } from "../constants";
 import {
   getCharters,
   getCountries,
@@ -8,7 +9,7 @@ import {
 
 export const creationConfig = (type) => {
   switch (type) {
-    case "mainpage":
+    case MAINPAGE:
       return {
         selector: getMainPage,
         smallDesc: false,
@@ -16,7 +17,7 @@ export const creationConfig = (type) => {
         mainText: true,
         isFileNeeded: true,
       };
-    case "offers":
+    case OFFERS:
       return {
         selector: getDestinations,
         smallDesc: false,
@@ -27,7 +28,7 @@ export const creationConfig = (type) => {
         mainText: true,
         isFileNeeded: true,
       };
-    case "services":
+    case SERVICES:
       return {
         selector: getServices,
         smallDesc: true,
@@ -37,7 +38,7 @@ export const creationConfig = (type) => {
         mainText: true,
         isFileNeeded: true,
       };
-    case "countries":
+    case COUNTRIES:
       return {
         selector: getCountries,
         title: "Список Стран и Городов",
@@ -45,7 +46,7 @@ export const creationConfig = (type) => {
         countryName: true,
         cityName: true,
       };
-    case "charters":
+    case CHARTERS:
       return {
         selector: getCharters,
         title: "Чартерные рейсы",

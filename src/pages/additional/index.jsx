@@ -14,48 +14,27 @@ import { ReactComponent as Edit } from "../../icons/edit.svg";
 import { ReactComponent as Delete } from "../../icons/delete.svg";
 import { Creation } from "../../components/creation";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  setTitleEnglish,
-  setPhoto,
-  setTitleRussian,
-  setTitleUzbek,
-} from "../../store/create-main-page";
-import SVG from "react-inlinesvg";
-import {
-  setServiceEnglish,
-  setServiceIcon,
-  setServiceRussian,
-  setServiceUzbek,
-} from "../../store/create-additional-service";
-import {
-  setDestinationEnglish,
-  setPhoto as setDestinationPhoto,
-  setDestinationRussian,
-  setDestinationUzbek,
-  setPrice,
-} from "../../store/create-destinations";
-import {
-  setCountriesEnglish,
-  setCountriesRussian,
-  setCountriesUzbek,
-  setCountriesCode,
-} from "../../store/create-countries";
-import {
-  setChartersEnglish,
-  setChartersRussian,
-  setChartersUzbek,
-  setPhoneNumber,
-} from "../../store/create-charter";
 import { Modal } from "../../components/Modal";
 import { StyledButton } from "../../shared_styled";
 import { getAllInfo } from "../../store";
 import api from "../../utils/api";
 import { deleteInfo } from "../../store/get-api-info";
+import SVG from "react-inlinesvg";
+import Edition from "../../components/creation/edition";
+import { useAdditionalInfo } from "./addtionalInfo";
+import {
+  CHARTERS,
+  COUNTRIES,
+  MAINPAGE,
+  OFFERS,
+  SERVICES,
+} from "../../constants";
 
 export const Additional = () => {
   const { mainpage, offers, countries, services, charters } =
     useSelector(getAllInfo);
   const dispatch = useDispatch();
+  const additionalInfo = useAdditionalInfo();
   const [openModal, setOpenModal] = useState({
     actionType: "",
     id: "",
@@ -75,105 +54,10 @@ export const Additional = () => {
     });
   };
 
-  const additionalSection = [
-    {
-      title: "Main Page",
-      type: "mainpage",
-      id: 1,
-      data: mainpage,
-      setEnglish: (title) => {
-        dispatch(setTitleEnglish(title));
-      },
-      setRussian: (title) => {
-        dispatch(setTitleRussian(title));
-      },
-      setUzbek: (title) => {
-        dispatch(setTitleUzbek(title));
-      },
-      setPhoto: (photo) => {
-        dispatch(setPhoto(photo));
-      },
-    },
-    {
-      title: "Список Стран и Городов",
-      type: "countries",
-      id: 2,
-      data: countries,
-      setEnglish: (info) => dispatch(setCountriesEnglish(info)),
-      setRussian: (info) => dispatch(setCountriesRussian(info)),
-      setUzbek: (info) => dispatch(setCountriesUzbek(info)),
-      setCode: (info) => dispatch(setCountriesCode(info)),
-    },
-    {
-      title: "Чартерные рейсы",
-      type: "charters",
-      id: 8,
-      data: charters,
-      setEnglish: (info) => dispatch(setChartersEnglish(info)),
-      setRussian: (info) => dispatch(setChartersRussian(info)),
-      setUzbek: (info) => dispatch(setChartersUzbek(info)),
-      setPhoneNumber: (info) => dispatch(setPhoneNumber(info)),
-    },
-    {
-      title: "Актуальные направления",
-      id: 3,
-      type: "offers",
-      data: offers,
-      setEnglish: (info) => {
-        dispatch(setDestinationEnglish(info));
-      },
-      setRussian: (info) => {
-        dispatch(setDestinationRussian(info));
-      },
-      setUzbek: (info) => {
-        dispatch(setDestinationUzbek(info));
-      },
-      setPrice: (price) => {
-        dispatch(setPrice(price));
-      },
-      setPhoto: (photo) => {
-        dispatch(setDestinationPhoto(photo));
-      },
-    },
-    {
-      title: "Правила и условия",
-      id: 4,
-      type: "simple",
-      data: [],
-    },
-    {
-      title: "Контакты",
-      id: 5,
-      type: "simple",
-      data: [],
-    },
-    {
-      title: "Доп услуги",
-      id: 7,
-      type: "services",
-      data: services,
-      setEnglish: (info) => {
-        dispatch(setServiceEnglish(info));
-      },
-      setRussian: (info) => {
-        dispatch(setServiceRussian(info));
-      },
-      setUzbek: (info) => {
-        dispatch(setServiceUzbek(info));
-      },
-      setPrice: (price) => {
-        dispatch(setPrice(price));
-      },
-      setPhoto: (photo) => {
-        dispatch(setServiceIcon(photo));
-      },
-    },
-  ];
-
   const handleOpenModal = ({ type, isCreation, id }) => {
     const getCorrectInfo = (language) => {
       switch (type) {
-        case "mainpage":
+        case MAINPAGE:
           const mainPageDetails = mainpage.find((item) => item.id === id);
           return isCreation
             ? {
@@ -184,7 +68,7 @@ export const Additional = () => {
                 title: mainPageDetails?.[`title_${language}`],
                 photo: mainPageDetails?.photo_url,
               };
-        case "offers":
+        case OFFERS:
           const offersDetails = offers.find((item) => item.id === id);
           return isCreation
             ? {
@@ -201,7 +85,7 @@ export const Additional = () => {
                 photo: offersDetails?.photo_url,
                 price: offersDetails?.price,
               };
-        case "services":
+        case SERVICES:
           const servicesDetails = services.find((item) => item.id === id);
           return isCreation
             ? {
@@ -217,7 +101,7 @@ export const Additional = () => {
                   servicesDetails?.[`small_description_${language}`],
                 photo: servicesDetails?.icon,
               };
-        case "countries":
+        case COUNTRIES:
           const countriesDetails = countries.find((item) => item.id === id);
           return isCreation
             ? {
@@ -230,7 +114,7 @@ export const Additional = () => {
                 city: countriesDetails?.[`city_${language}`],
                 city_code: countriesDetails?.city_code,
               };
-        case "charters":
+        case CHARTERS:
           const chartersDetails = charters.find((item) => item.id === id);
           return isCreation
             ? {
@@ -255,14 +139,15 @@ export const Additional = () => {
       setPrice,
       setCode,
       setPhoneNumber,
-    } = additionalSection.find((item) => item.type === type);
+    } = additionalInfo.find((item) => item.type === type);
     setEnglish(getCorrectInfo("en"));
     setRussian(getCorrectInfo("ru"));
     setUzbek(getCorrectInfo("uz"));
-    setPhoto && setPhoto(getCorrectInfo("en")?.photo);
-    setPrice && setPrice(getCorrectInfo("en")?.price);
-    setCode && setCode(getCorrectInfo("en")?.city_code);
-    setPhoneNumber && setPhoneNumber(getCorrectInfo("en")?.phone_number);
+    setPhoto && setPhoto({ photo: getCorrectInfo()?.photo });
+    setPrice && setPrice({ price: getCorrectInfo()?.price });
+    setCode && setCode({ city_code: getCorrectInfo()?.city_code });
+    setPhoneNumber &&
+      setPhoneNumber({ phone_number: getCorrectInfo()?.phone_number });
     isCreation
       ? setOpenModal({ actionType: type })
       : setOpenModal({ actionType: type, id });
@@ -271,7 +156,7 @@ export const Additional = () => {
   return (
     <>
       <Wrapper>
-        {additionalSection.map((item) => (
+        {additionalInfo.map((item) => (
           <div key={item.id}>
             <ItemWrapper>
               <IconWrapper>
@@ -287,7 +172,7 @@ export const Additional = () => {
                   <PlusSign /> Cоздать
                 </AddText>
               </IconWrapper>
-              {item.data?.length !== 0 ? (
+              {item.data && item.data?.length !== 0 ? (
                 item.data?.map((value) => (
                   <div key={value.id}>
                     <ItemTextWrapper>
@@ -363,30 +248,27 @@ export const Additional = () => {
                       )}
                     {openModal.id === value?.id &&
                       openModal.actionType === item.type && (
-                        <Creation
+                        <Edition
                           actionType={item.type}
                           onClose={() => setOpenModal(false)}
-                          title="Изменить"
-                          setEnglish={item?.setEnglish}
-                          setRussian={item?.setRussian}
-                          setUzbek={item?.setUzbek}
-                          setFile={item?.setPhoto}
-                          setPrice={item?.setPrice}
+                          titleText="Изменить"
                           isEdition={true}
                           setCode={item?.setCode}
                           setPhoneNumber={item?.setPhoneNumber}
+                          itemId={value?.id}
+                          sendInfo={item?.updateInfo}
                         />
                       )}
                   </div>
                 ))
               ) : (
-                <ItemText>У вас нет информации для главной страницы</ItemText>
+                <ItemText>У вас нет информации для этого чаптера</ItemText>
               )}
-              {openModal.actionType === item?.type && (
+              {openModal.actionType === item?.type && !openModal.id && (
                 <Creation
                   actionType={item.type}
                   onClose={() => setOpenModal(false)}
-                  title="Создать"
+                  titleText="Создать"
                   setEnglish={item?.setEnglish}
                   setRussian={item?.setRussian}
                   setUzbek={item?.setUzbek}
@@ -394,7 +276,7 @@ export const Additional = () => {
                   setPrice={item?.setPrice}
                   setCode={item?.setCode}
                   setPhoneNumber={item?.setPhoneNumber}
-                  isEdition={false}
+                  sendInfo={item?.sendInfo}
                 />
               )}
             </ItemWrapper>

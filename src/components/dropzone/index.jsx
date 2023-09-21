@@ -9,7 +9,7 @@ export const Dropzone = ({ onClose, setImage, fileType }) => {
   const onDrop = useCallback((acceptedFiles) => {
     if (
       fileType &&
-      !acceptedFiles[0].type.includes(fileType.replace(".", ""))
+      !acceptedFiles[0]?.type?.includes(fileType.replace(".", ""))
     ) {
       setFileError(true);
       return;

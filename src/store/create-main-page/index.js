@@ -12,17 +12,14 @@ const createMainPageSlide = createSlice({
   reducers: {
     setTitleEnglish: (state, action) => {
       const { title } = action.payload;
-
       state.title_en = title;
     },
     setTitleRussian: (state, action) => {
       const { title } = action.payload;
-
       state.title_ru = title;
     },
     setTitleUzbek: (state, action) => {
       const { title } = action.payload;
-
       state.title_uz = title;
     },
 

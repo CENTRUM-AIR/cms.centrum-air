@@ -13,6 +13,7 @@ import {
   fetchMainPage,
   fetchOffers,
   fetchServices,
+  fetchUsers,
 } from "./store/get-api-info";
 
 function App() {
@@ -26,6 +27,7 @@ function App() {
       dispatch(fetchServices());
       dispatch(fetchCountries());
       dispatch(fetchCharters());
+      dispatch(fetchUsers());
     }
   }, [authLogin]);
 

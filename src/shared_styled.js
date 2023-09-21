@@ -4,7 +4,8 @@ export const StyledInput = styled.input`
   height: 56px;
   outline: none;
   border: none;
-  background-color: #f3f6fc;
+  /* background-color: #f3f6fc; */
+  background-color: ${({ bc }) => bc || "#f3f6fc"};
   border-radius: 12px;
   padding: 0 15px;
   font-size: 16px;
@@ -44,4 +45,18 @@ export const StyledButton = styled.button`
   font-weight: 500;
   cursor: pointer;
   width: ${({ width }) => width || "100%"};
+`;
+
+
+export const StyledSelect = styled.select`
+  height: 56px;
+  outline: none;
+  border: none;
+  /* background-color: #f3f6fc; */
+  background-color: ${({ bc }) => bc || "#f3f6fc"};
+  border-radius: 12px;
+  padding: 0 15px;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
 `;
