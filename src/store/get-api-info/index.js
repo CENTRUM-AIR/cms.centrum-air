@@ -4,6 +4,7 @@ import {
   CHARTERS,
   COUNTRIES,
   MAINPAGE,
+  NEWS,
   OFFERS,
   SERVICES,
   USERS,
@@ -16,12 +17,14 @@ const initialState = {
   countries: [],
   charters: [],
   users: [],
+  news: [],
   mainpageFetched: false,
   servicesFetched: false,
   offersFetched: false,
   countriesFetched: false,
   chartersFetched: false,
   usersFetched: false,
+  newsFetched: false,
 };
 
 export const fetchMainPage = createAsyncThunk(MAINPAGE, async () => {
@@ -46,6 +49,10 @@ export const fetchCharters = createAsyncThunk(CHARTERS, async () => {
 });
 export const fetchUsers = createAsyncThunk(USERS, async () => {
   const response = await api.get("/users/all");
+  return response.data;
+});
+export const fetchNews = createAsyncThunk(NEWS, async () => {
+  const response = await api.get("/news");
   return response.data;
 });
 
@@ -97,6 +104,12 @@ const infoSlice = createSlice({
       if (!state.usersFetched) {
         state.users = action.payload;
         state.usersFetched = true;
+      }
+    });
+    builder.addCase(fetchNews.fulfilled, (state, action) => {
+      if (!state.newsFetched) {
+        state.news = action.payload;
+        state.newsFetched = true;
       }
     });
   },

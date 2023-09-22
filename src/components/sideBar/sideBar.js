@@ -15,25 +15,25 @@ export const sideBarItems = [
   {
     id: 2,
     text: "Заявки",
-    href: "/offers",
+    href: "/applications",
     icon: <Offers />,
   },
   {
     id: 3,
     text: "Вакансии",
-    href: "/vacancy",
+    href: "/vacancies",
     icon: <Vacancy />,
   },
   {
     id: 4,
     text: "Справочный центр",
-    href: "/faq",
+    href: "/help-center",
     icon: <Faq />,
   },
   {
     id: 5,
     text: "Доп. Изменения",
-    href: "/additional",
+    href: "/",
     icon: <Additional />,
   },
   {

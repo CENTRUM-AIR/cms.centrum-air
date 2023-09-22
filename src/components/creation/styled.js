@@ -8,6 +8,19 @@ const SidePopUp = keyframes`
     width: 630px;
   }
 `;
+export const CloseText = styled.button`
+  outline: none;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  font-size: 16 px;
+  font-style: normal;
+  font-weight: 500;
+  color: ${({ done }) => (done ? "#000" : "#727D97")};
+  display: flex;
+  align-items: center;
+  gap: 5px;
+`;
 
 export const MainWrapper = styled.div`
   position: fixed;
@@ -41,32 +54,6 @@ export const Wrapper = styled.div`
   gap: 20px;
 `;
 
-export const Progression = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 5px;
-`;
-
-export const CloseText = styled.button`
-  outline: none;
-  border: none;
-  background-color: transparent;
-  cursor: pointer;
-  font-size: 16 px;
-  font-style: normal;
-  font-weight: 500;
-  color: ${({ done }) => (done ? "#000" : "#727D97")};
-  display: flex;
-  align-items: center;
-  gap: 5px;
-`;
-
-export const ProgressionDash = styled.div`
-  width: 100%;
-  height: 2px;
-  background-color: #727d97;
-  opacity: 0.2;
-`;
 
 export const MainTitle = styled.h1`
   font-size: 32px;

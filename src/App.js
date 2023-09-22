@@ -15,6 +15,10 @@ import {
   fetchServices,
   fetchUsers,
 } from "./store/get-api-info";
+import News from "./pages/news";
+import Vacancies from "./pages/vacancies";
+import HelpCenter from "./pages/help-center";
+import Applications from "./pages/applications";
 
 function App() {
   const { login: authLogin } = useSelector(getUser);
@@ -38,7 +42,7 @@ function App() {
           <Route
             path="/"
             element={
-              <IsAuth>
+              <IsAuth path='/'>
                 <Additional />
               </IsAuth>
             }
@@ -46,7 +50,7 @@ function App() {
           <Route
             path="/login"
             element={
-              <IsAuth>
+              <IsAuth path='/additional'>
                 <LoginPage />
               </IsAuth>
             }
@@ -54,8 +58,40 @@ function App() {
           <Route
             path="/management"
             element={
-              <IsAuth>
+              <IsAuth path='/management'>
                 <Management />
+              </IsAuth>
+            }
+          />
+          <Route
+            path="/news"
+            element={
+              <IsAuth path='/news'>
+                <News />
+              </IsAuth>
+            }
+          />
+          <Route
+            path="/vacancies"
+            element={
+              <IsAuth path='/vacancies'>
+                <Vacancies />
+              </IsAuth>
+            }
+          />
+          <Route
+            path="/help-center"
+            element={
+              <IsAuth path='/help-center'>
+                <HelpCenter />
+              </IsAuth>
+            }
+          />
+          <Route
+            path="/applications"
+            element={
+              <IsAuth path='/applications'>
+                <Applications />
               </IsAuth>
             }
           />

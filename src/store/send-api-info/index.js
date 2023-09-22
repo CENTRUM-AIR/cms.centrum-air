@@ -5,6 +5,7 @@ import {
   CHARTERS,
   COUNTRIES,
   MAINPAGE,
+  NEWS,
   OFFERS,
   SERVICES,
   USERS,
@@ -130,12 +131,21 @@ export const sendCharters = createAsyncThunk(
 );
 export const sendUsers = createAsyncThunk(USERS, async (data, apiThunk) => {
   // const { users } = data;
-  const id = await api.post("/users/create", data).then((res) => res.data);
-  const reduxPrepInfo = {
-    id,
-    ...data,
-  };
-  apiThunk.dispatch(addInfo({ type: USERS, data: reduxPrepInfo }));
+  // const id = await api.post("/users/create", data).then((res) => res.data);
+  // const reduxPrepInfo = {
+  //   id,
+  //   ...data,
+  // };
+  // apiThunk.dispatch(addInfo({ type: USERS, data: reduxPrepInfo }));
+});
+export const sendNews = createAsyncThunk(NEWS, async (data, apiThunk) => {
+  // const { news } = data;
+  // const id = await api.post("/news", data).then((res) => res.data);
+  // const reduxPrepInfo = {
+  //   id,
+  //   ...data,
+  // };
+  // apiThunk.dispatch(addInfo({ type: NEWS, data: reduxPrepInfo }));
 });
 
 const sendInfoSlice = createSlice({

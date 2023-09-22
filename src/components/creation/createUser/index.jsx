@@ -14,13 +14,13 @@ import {
 import { ReactComponent as CloseIcon } from "../../../icons/close.svg";
 import { ROLES } from "../../../constants";
 
-export const CreateUser = ({ onClose }) => {
+export const CreateUser = ({ onClose, userId, title }) => {
   return (
     <>
       <MainWrapper>
         <Wrapper>
           <MainTitle>
-            Создать пользователя
+            {title || "Создать пользователя"}
             <CloseText onClick={onClose}>
               <CloseIcon /> закрыть
             </CloseText>

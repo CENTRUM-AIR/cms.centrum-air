@@ -6,7 +6,7 @@ import { getUser } from "../../store";
 import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "../../store/auth";
 
-export const IsAuth = ({ children }) => {
+export const IsAuth = ({ children, path }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();
@@ -27,7 +27,7 @@ export const IsAuth = ({ children }) => {
                 role: "user",
               })
             );
-            navigate("/");
+            navigate(path);
           }
         })
         .catch((e) => {

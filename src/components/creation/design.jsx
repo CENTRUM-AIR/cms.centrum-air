@@ -7,17 +7,14 @@ import {
   MainTitle,
   MainWrapper,
   ModalBackdrop,
-  Progression,
-  ProgressionDash,
   WarningText,
   Wrapper,
 } from "./styled";
 import { ReactComponent as CloseIcon } from "../../icons/close.svg";
-import { ReactComponent as Done } from "../../icons/done.svg";
-import { ReactComponent as InProgress } from "../../icons/in-progress.svg";
 import { StyledButton, StyledInput, StyledTextArea } from "../../shared_styled";
 import { Dropzone } from "../dropzone";
 import SVG from "react-inlinesvg";
+import { LanguageChange } from "../changeLanguage";
 
 const Design = ({
   actionType,
@@ -73,31 +70,7 @@ const Design = ({
               <CloseIcon /> закрыть
             </CloseText>
           </MainTitle>
-          <Progression>
-            <CloseText
-              done={language === "ru" ? "true" : null}
-              onClick={() => nextLanguage("ru")}
-            >
-              {language === "ru" ? <Done /> : <InProgress />}
-              Русский
-            </CloseText>
-            <ProgressionDash />
-            <CloseText
-              done={language === "en" ? "true" : null}
-              onClick={() => nextLanguage("en")}
-            >
-              {language === "en" ? <Done /> : <InProgress />}
-              English
-            </CloseText>
-            <ProgressionDash />
-            <CloseText
-              done={language === "uz" ? "true" : null}
-              onClick={() => nextLanguage("uz")}
-            >
-              {language === "uz" ? <Done /> : <InProgress />}
-              Uzbek
-            </CloseText>
-          </Progression>
+          <LanguageChange language={language} changeLang={nextLanguage} />
           {mainText && (
             <>
               <span>Заголовок</span>
@@ -219,7 +192,6 @@ const Design = ({
             </StyledButton>
           )}
           <ButtonHolder>
-            {/* disabled={!canPublish} */}
             <StyledButton width="138px" onClick={publishInfo}>
               Опубликовать
             </StyledButton>
@@ -240,6 +212,5 @@ const Design = ({
     </>
   );
 };
-
 
 export default Design;
