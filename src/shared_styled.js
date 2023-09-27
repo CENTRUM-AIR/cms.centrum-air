@@ -70,7 +70,7 @@ export const TableWrapper = styled.table`
   th {
     border-bottom: 1px solid #dddddd;
     text-align: left;
-    padding: 12px;
+    padding: 15px 20px;
     height: 100%;
     word-wrap: break-word;
   }

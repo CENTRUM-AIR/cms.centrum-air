@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import { getAllInfo } from "../../store";
+import { getAllInfo, getUser } from "../../store";
 import {
   setTitleEnglish,
   setPhoto,
@@ -45,12 +45,68 @@ import {
   patchOffers,
   patchServices,
 } from "../../store/patch-api-info";
-import { CHARTERS, COUNTRIES, MAINPAGE, OFFERS, SERVICES } from "../../constants";
+import {
+  CHARTERS,
+  COUNTRIES,
+  MAINPAGE,
+  OFFERS,
+  SERVICES,
+} from "../../constants";
+import {
+  fetchCharters,
+  fetchCountries,
+  fetchMainPage,
+  fetchOffers,
+  fetchServices,
+} from "../../store/get-api-info";
+import { useEffect } from "react";
 
 export const useAdditionalInfo = () => {
-  const { mainpage, offers, countries, services, charters } =
-    useSelector(getAllInfo);
+  const { login: authLogin, role } = useSelector(getUser);
   const dispatch = useDispatch();
+
+  const {
+    mainpage,
+    offers,
+    countries,
+    services,
+    charters,
+    mainpageFetched,
+    servicesFetched,
+    offersFetched,
+    countriesFetched,
+    chartersFetched,
+    loading,
+  } = useSelector(getAllInfo);
+
+  useEffect(() => {
+    if (authLogin && role) {
+      if (
+        !servicesFetched &&
+        !offersFetched &&
+        !countriesFetched &&
+        !chartersFetched &&
+        !mainpageFetched &&
+        !loading
+      ) {
+        dispatch(fetchMainPage());
+        dispatch(fetchOffers());
+        dispatch(fetchServices());
+        dispatch(fetchCountries());
+        dispatch(fetchCharters());
+      }
+    }
+  }, [
+    authLogin,
+    role,
+    dispatch,
+    mainpageFetched,
+    servicesFetched,
+    offersFetched,
+    countriesFetched,
+    chartersFetched,
+    loading,
+  ]);
   return [
     {
       title: "Main Page",

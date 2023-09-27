@@ -130,13 +130,12 @@ export const sendCharters = createAsyncThunk(
   }
 );
 export const sendUsers = createAsyncThunk(USERS, async (data, apiThunk) => {
-  // const { users } = data;
-  // const id = await api.post("/users/create", data).then((res) => res.data);
-  // const reduxPrepInfo = {
-  //   id,
-  //   ...data,
-  // };
-  // apiThunk.dispatch(addInfo({ type: USERS, data: reduxPrepInfo }));
+  const id = await api.post("/users/create", data).then((res) => res.data);
+  const reduxPrepInfo = {
+    id,
+    ...data,
+  };
+  apiThunk.dispatch(addInfo({ type: USERS, data: reduxPrepInfo }));
 });
 export const sendNews = createAsyncThunk(NEWS, async (data, apiThunk) => {
   // const { news } = data;
@@ -190,6 +189,14 @@ const sendInfoSlice = createSlice({
       state.error = false;
     });
     builder.addCase(sendCharters.rejected, (state, action) => {
+      state.error = true;
+      state.sent = false;
+    });
+    builder.addCase(sendUsers.fulfilled, (state, action) => {
+      state.sent = true;
+      state.error = false;
+    });
+    builder.addCase(sendUsers.rejected, (state, action) => {
       state.error = true;
       state.sent = false;
     });

@@ -9,14 +9,19 @@ import {
 } from "./styled";
 import { ReactComponent as CentrumLogo } from "../../icons/centrum.svg";
 import api from "../../utils/api";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { sideBarItems } from "./sideBar";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "../../store/auth";
+import { getUser } from "../../store";
+//#174ABC
 
 export const SideBar = () => {
+  const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { role } = useSelector(getUser);
+  console.log(location.pathname);
   const logOut = () => {
     dispatch(
       setUser({
@@ -35,10 +40,18 @@ export const SideBar = () => {
       <MenuWrapper>
         <MenuItemWrapper>
           {sideBarItems.map((item) => (
-            <MenuItem key={item.id} onClick={() => navigate(item.href)}>
-              {item.icon}
-              <p>{item.text}</p>
-            </MenuItem>
+            <>
+              {item?.isCanSee.includes(role) ? (
+                <MenuItem
+                  isSelected={item?.href === location.pathname}
+                  key={item.id}
+                  onClick={() => navigate(item.href)}
+                >
+                  {item.icon}
+                  <p>{item.text}</p>
+                </MenuItem>
+              ) : null}
+            </>
           ))}
         </MenuItemWrapper>
         <LogOut>

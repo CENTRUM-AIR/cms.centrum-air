@@ -14,6 +14,15 @@ export const IconWrapper = styled.div`
   justify-content: space-between;
 `;
 
+export const SvgWrapper = styled.div`
+  cursor: pointer;
+  transform: ${({ deg }) => `rotate(${deg}deg)`};
+  transition: 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
 export const AddText = styled.button`
   outline: none;
   border: none;
@@ -80,11 +89,4 @@ export const ItemTextWrapper = styled.div`
   width: 100%;
   gap: 20px;
   justify-content: space-between;
-`;
-
-export const ButtonsWrapper = styled.div`
-  display: flex;
-  gap: 10px;
-  margin-top: 20px;
-  width: 100%;
 `;

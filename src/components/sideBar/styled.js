@@ -39,6 +39,13 @@ export const MenuItem = styled.div`
   &:hover {
     background-color: rgba(243, 246, 252, 1);
   }
+  svg {
+    path {
+      fill: ${({ isSelected }) => (isSelected ? "#174ABC" : null)};
+      stroke: ${({ isSelected }) => (isSelected ? "#fff" : "#727D97")};
+      stroke-width: ${({ isSelected }) => (isSelected ? "0.5" : "1.8")};
+    }
+  }
 `;
 
 export const LogOut = styled.div`

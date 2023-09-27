@@ -1,9 +1,20 @@
-import React from 'react'
+import React, { useEffect } from "react";
+import { HR, SUPERADMIN } from "../../constants";
+import { getUser } from "../../store";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+
+const CORRECT_ROLES = [SUPERADMIN, HR];
 
 const Applications = () => {
-  return (
-    <div>Applications</div>
-  )
-}
+  const navigate = useNavigate();
+  const { role } = useSelector(getUser);
+  useEffect(() => {
+    if (!CORRECT_ROLES.includes(role)) {
+      navigate("/not-found");
+    }
+  }, [role, navigate]);
+  return <div>Applications</div>;
+};
 
-export default Applications
+export default Applications;

@@ -9,6 +9,7 @@ import AllInfoReducer from "./get-api-info";
 import SendInfoReducer from "./send-api-info";
 import PatchInfoReducer from "./patch-api-info";
 import isAuthReducer from "./auth";
+import NewUserReducer from "./create-user";
 
 export const store = configureStore({
   reducer: {
@@ -22,6 +23,7 @@ export const store = configureStore({
     allInfo: AllInfoReducer,
     sendInfo: SendInfoReducer,
     patchInfo: PatchInfoReducer,
+    newUser: NewUserReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
@@ -39,3 +41,4 @@ export const getNews = (state) => state.createNews;
 export const getAllInfo = (state) => state.allInfo;
 export const sendAllInfo = (state) => state.sendInfo;
 export const patchAllInfo = (state) => state.patchInfo;
+export const getNewUser = (state) => state.newUser;

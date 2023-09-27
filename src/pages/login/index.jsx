@@ -35,11 +35,10 @@ export const LoginPage = () => {
 
       const data = await api.post("/users/login", { login, password });
       if (data.status === 201 || data.status === 200) {
-        // TODO: change later
         dispatch(
           setUser({
             login,
-            role: "superadmin",
+            role: data?.data,
           })
         );
         navigate("/");
@@ -60,7 +59,7 @@ export const LoginPage = () => {
         <Holder>
           <Title>Войти</Title>
           <Subtitle>Введите ваш логин и пароль чтобы войти</Subtitle>
-          <StyledForm error={error} onSubmit={handleSubmit}>
+          <StyledForm error={error ? error : undefined} onSubmit={handleSubmit}>
             <InputWrapper>
               <StyledLabel>Логин</StyledLabel>
               <StyledInput

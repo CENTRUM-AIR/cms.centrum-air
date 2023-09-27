@@ -10,21 +10,20 @@ export const IsAuth = ({ children, path }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();
-  const { login } = useSelector(getUser);
+  const { login, role } = useSelector(getUser);
   useEffect(() => {
     if (!login) {
       api
         .get("/users/isAuthorized")
         .then((res) => {
           if (res.status === 401) {
-            // TODO: change later
             navigate("/login");
           }
           if (res.status === 200 || res.status === 201) {
             dispatch(
               setUser({
                 login: "exists",
-                role: "user",
+                role: res.data,
               })
             );
             navigate(path);
@@ -39,7 +38,9 @@ export const IsAuth = ({ children, path }) => {
 
   return (
     <>
-      {location.pathname !== "/login" && <SideBar />}
+      {location.pathname !== "/login" && location.pathname !== "/not-found" && (
+        <SideBar />
+      )}
       {children}
     </>
   );

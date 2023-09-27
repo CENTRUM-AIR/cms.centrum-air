@@ -4,37 +4,13 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { LoginPage } from "./pages/login";
 import { IsAuth } from "./components/auth";
 import Management from "./pages/management";
-import { useEffect } from "react";
-import { getUser } from "./store";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  fetchCharters,
-  fetchCountries,
-  fetchMainPage,
-  fetchOffers,
-  fetchServices,
-  fetchUsers,
-} from "./store/get-api-info";
 import News from "./pages/news";
 import Vacancies from "./pages/vacancies";
 import HelpCenter from "./pages/help-center";
 import Applications from "./pages/applications";
+import NotFound from "./pages/notFoundPage";
 
 function App() {
-  const { login: authLogin } = useSelector(getUser);
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    if (authLogin) {
-      dispatch(fetchMainPage());
-      dispatch(fetchOffers());
-      dispatch(fetchServices());
-      dispatch(fetchCountries());
-      dispatch(fetchCharters());
-      dispatch(fetchUsers());
-    }
-  }, [authLogin]);
-
   return (
     <Router>
       <div className="App">
@@ -42,7 +18,7 @@ function App() {
           <Route
             path="/"
             element={
-              <IsAuth path='/'>
+              <IsAuth path="/">
                 <Additional />
               </IsAuth>
             }
@@ -50,7 +26,7 @@ function App() {
           <Route
             path="/login"
             element={
-              <IsAuth path='/additional'>
+              <IsAuth path="/additional">
                 <LoginPage />
               </IsAuth>
             }
@@ -58,7 +34,7 @@ function App() {
           <Route
             path="/management"
             element={
-              <IsAuth path='/management'>
+              <IsAuth path="/management">
                 <Management />
               </IsAuth>
             }
@@ -66,7 +42,7 @@ function App() {
           <Route
             path="/news"
             element={
-              <IsAuth path='/news'>
+              <IsAuth path="/news">
                 <News />
               </IsAuth>
             }
@@ -74,7 +50,7 @@ function App() {
           <Route
             path="/vacancies"
             element={
-              <IsAuth path='/vacancies'>
+              <IsAuth path="/vacancies">
                 <Vacancies />
               </IsAuth>
             }
@@ -82,7 +58,7 @@ function App() {
           <Route
             path="/help-center"
             element={
-              <IsAuth path='/help-center'>
+              <IsAuth path="/help-center">
                 <HelpCenter />
               </IsAuth>
             }
@@ -90,8 +66,16 @@ function App() {
           <Route
             path="/applications"
             element={
-              <IsAuth path='/applications'>
+              <IsAuth path="/applications">
                 <Applications />
+              </IsAuth>
+            }
+          />
+          <Route
+            path="*"
+            element={
+              <IsAuth path="/not-found">
+                <NotFound />
               </IsAuth>
             }
           />

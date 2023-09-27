@@ -6,4 +6,9 @@ export const MAINPAGE = "mainpage";
 export const USERS = "users";
 export const NEWS = "news";
 
-export const ROLES = ["presscenter", "superadmin", "hr", "contentmanager"];
+export const SUPERADMIN = "superAdmin";
+export const HR = "hr";
+export const CONTENTMANAGER = "contentManager";
+export const PRESSCENTER = "pressCenter";
+
+export const ROLES = ["pressCenter", "superAdmin", "hr", "contentManager"];

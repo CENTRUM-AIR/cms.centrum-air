@@ -1,22 +1,21 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   AddText,
-  ButtonsWrapper,
   IconWrapper,
   ItemActions,
   ItemText,
   ItemTextWrapper,
   ItemWrapper,
+  SvgWrapper,
   Wrapper,
 } from "./styled";
 import { ReactComponent as PlusSign } from "../../icons/plus-sign.svg";
 import { ReactComponent as Edit } from "../../icons/edit.svg";
 import { ReactComponent as Delete } from "../../icons/delete.svg";
+import { ReactComponent as Arrow } from "../../icons/arrow.svg";
 import { Creation } from "../../components/creation";
 import { useDispatch, useSelector } from "react-redux";
-import { Modal } from "../../components/Modal";
-import { StyledButton } from "../../shared_styled";
-import { getAllInfo } from "../../store";
+import { getAllInfo, getUser } from "../../store";
 import api from "../../utils/api";
 import { deleteInfo } from "../../store/get-api-info";
 import SVG from "react-inlinesvg";
@@ -24,17 +23,26 @@ import Edition from "../../components/creation/edition";
 import { useAdditionalInfo } from "./addtionalInfo";
 import {
   CHARTERS,
+  CONTENTMANAGER,
   COUNTRIES,
   MAINPAGE,
   OFFERS,
   SERVICES,
+  SUPERADMIN,
 } from "../../constants";
+import { DeletionModal } from "../../components/deletionModal";
+import { useNavigate } from "react-router-dom";
+
+const CORRECT_ROLES = [SUPERADMIN, CONTENTMANAGER];
 
 export const Additional = () => {
   const { mainpage, offers, countries, services, charters } =
     useSelector(getAllInfo);
+  const navigate = useNavigate();
+  const { role } = useSelector(getUser);
   const dispatch = useDispatch();
   const additionalInfo = useAdditionalInfo();
+  const [isFolderOpen, setIsFolderOpen] = useState(false);
   const [openModal, setOpenModal] = useState({
     actionType: "",
     id: "",
@@ -152,6 +160,15 @@ export const Additional = () => {
       ? setOpenModal({ actionType: type })
       : setOpenModal({ actionType: type, id });
   };
+  useEffect(() => {
+    if (!CORRECT_ROLES.includes(role)) {
+      navigate("/not-found");
+    }
+  }, [role, navigate]);
+
+  const handleOpenFolder = (id) => {
+    isFolderOpen === id ? setIsFolderOpen("") : setIsFolderOpen(id);
+  };
 
   return (
     <>
@@ -160,6 +177,12 @@ export const Additional = () => {
           <div key={item.id}>
             <ItemWrapper>
               <IconWrapper>
+                <SvgWrapper
+                  onClick={() => handleOpenFolder(item?.id)}
+                  deg={isFolderOpen === item?.id ? "90" : "0"}
+                >
+                  <Arrow />
+                </SvgWrapper>
                 <p>{item.title}</p>
                 <AddText
                   onClick={() =>
@@ -172,97 +195,96 @@ export const Additional = () => {
                   <PlusSign /> Cоздать
                 </AddText>
               </IconWrapper>
-              {item.data && item.data?.length !== 0 ? (
-                item.data?.map((value) => (
-                  <div key={value.id}>
-                    <ItemTextWrapper>
-                      {(value?.title_ru ||
-                        value?.country_ru ||
-                        value?.from_city_ru) && (
-                        <ItemText>
-                          {value?.title_ru ||
+              {isFolderOpen === item?.id && (
+                <>
+                  {item.data && item.data?.length !== 0 ? (
+                    item.data?.map((value) => (
+                      <div key={value.id}>
+                        <ItemTextWrapper>
+                          {(value?.title_ru ||
                             value?.country_ru ||
-                            value?.from_city_ru}
-                        </ItemText>
-                      )}
-                      {(value?.description_ru ||
-                        value?.city_ru ||
-                        value?.to_city_ru ||
-                        value?.price) && (
-                        <ItemText>
-                          {value?.description_ru ||
-                            value?.to_city_ru ||
+                            value?.from_city_ru) && (
+                            <ItemText>
+                              {value?.title_ru ||
+                                value?.country_ru ||
+                                value?.from_city_ru}
+                            </ItemText>
+                          )}
+                          {(value?.description_ru ||
                             value?.city_ru ||
-                            `${value?.price} so'm`}
-                        </ItemText>
-                      )}
-                      {(value?.phone_number || value?.city_code) && (
-                        <ItemText>
-                          {value?.phone_number || value?.city_code}
-                        </ItemText>
-                      )}
-                      {value?.photo_url ? (
-                        <img
-                          src={value?.photo_url}
-                          alt="wrapper"
-                          width="100px"
-                          height="50px"
-                        />
-                      ) : (
-                        <SVG src={value?.icon} width="100px" height="50px" />
-                      )}
-                      <ItemActions>
-                        <Edit
-                          onClick={() =>
-                            handleOpenModal({
-                              id: value?.id,
-                              type: item?.type,
-                              isCreation: false,
-                            })
-                          }
-                        />
-                        <Delete
-                          onClick={() =>
-                            handleOpenDeleteModal(value?.id, item?.type)
-                          }
-                        />
-                      </ItemActions>
-                    </ItemTextWrapper>
-                    {toDelete.id === value?.id &&
-                      toDelete.actionType === item.type && (
-                        <Modal>
-                          <p>Вы уверены что хотите удалить?</p>
-                          <ButtonsWrapper>
-                            <StyledButton
+                            value?.to_city_ru ||
+                            value?.price) && (
+                            <ItemText>
+                              {value?.description_ru ||
+                                value?.to_city_ru ||
+                                value?.city_ru ||
+                                `${value?.price} so'm`}
+                            </ItemText>
+                          )}
+                          {(value?.phone_number || value?.city_code) && (
+                            <ItemText>
+                              {value?.phone_number || value?.city_code}
+                            </ItemText>
+                          )}
+                          {value?.photo_url ? (
+                            <img
+                              src={value?.photo_url}
+                              alt="wrapper"
+                              width="100px"
+                              height="50px"
+                            />
+                          ) : (
+                            <SVG
+                              src={value?.icon}
+                              width="100px"
+                              height="50px"
+                            />
+                          )}
+                          <ItemActions>
+                            <Edit
                               onClick={() =>
+                                handleOpenModal({
+                                  id: value?.id,
+                                  type: item?.type,
+                                  isCreation: false,
+                                })
+                              }
+                            />
+                            <Delete
+                              onClick={() =>
+                                handleOpenDeleteModal(value?.id, item?.type)
+                              }
+                            />
+                          </ItemActions>
+                        </ItemTextWrapper>
+                        {toDelete.id === value?.id &&
+                          toDelete.actionType === item.type && (
+                            <DeletionModal
+                              handleDelete={() =>
                                 handleDelete(value?.id, item?.type)
                               }
-                            >
-                              Да
-                            </StyledButton>
-                            <StyledButton onClick={() => setToDelete(false)}>
-                              Нет
-                            </StyledButton>
-                          </ButtonsWrapper>
-                        </Modal>
-                      )}
-                    {openModal.id === value?.id &&
-                      openModal.actionType === item.type && (
-                        <Edition
-                          actionType={item.type}
-                          onClose={() => setOpenModal(false)}
-                          titleText="Изменить"
-                          isEdition={true}
-                          setCode={item?.setCode}
-                          setPhoneNumber={item?.setPhoneNumber}
-                          itemId={value?.id}
-                          sendInfo={item?.updateInfo}
-                        />
-                      )}
-                  </div>
-                ))
-              ) : (
-                <ItemText>У вас нет информации для этого чаптера</ItemText>
+                              removeDelete={() => setToDelete(false)}
+                            />
+                          )}
+                        {openModal.id === value?.id &&
+                          openModal.actionType === item.type && (
+                            <Edition
+                              actionType={item.type}
+                              onClose={() => setOpenModal(false)}
+                              titleText="Изменить"
+                              isEdition={true}
+                              setCode={item?.setCode}
+                              setPhoneNumber={item?.setPhoneNumber}
+                              itemId={value?.id}
+                              sendInfo={item?.updateInfo}
+                            />
+                          )}
+                      </div>
+                    ))
+                  ) : (
+                    <ItemText>У вас нет информации для этого чаптера</ItemText>
+                  )}
+                </>
               )}
               {openModal.actionType === item?.type && !openModal.id && (
                 <Creation
