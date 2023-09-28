@@ -5,6 +5,8 @@ export const CHARTERS = "charters";
 export const MAINPAGE = "mainpage";
 export const USERS = "users";
 export const NEWS = "news";
+export const RULES = "rules";
+export const CONTACTS = "contacts";
 
 export const SUPERADMIN = "superAdmin";
 export const HR = "hr";

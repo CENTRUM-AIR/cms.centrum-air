@@ -36,7 +36,7 @@ export const sendMainPage = createAsyncThunk(
       title_ru,
       title_en,
       title_uz,
-      photo: photo?.photo.preview,
+      photo_url: photo?.photo.preview,
     };
     apiThunk.dispatch(addInfo({ type: MAINPAGE, data: reduxPrepInfo }));
   }
@@ -82,7 +82,7 @@ export const sendOffers = createAsyncThunk(OFFERS, async (data, apiThunk) => {
     destination_ru,
     destination_en,
     destination_uz,
-    photo: photo?.photo.preview,
+    photo_url: photo?.photo.preview,
     price: price?.price,
   };
   apiThunk.dispatch(addInfo({ type: OFFERS, data: reduxPrepInfo }));

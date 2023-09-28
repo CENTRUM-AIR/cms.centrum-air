@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Fragment } from "react";
 import {
   LogOut,
   Logo,
@@ -14,7 +14,6 @@ import { sideBarItems } from "./sideBar";
 import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "../../store/auth";
 import { getUser } from "../../store";
-//#174ABC
 
 export const SideBar = () => {
   const location = useLocation();
@@ -40,18 +39,19 @@ export const SideBar = () => {
       <MenuWrapper>
         <MenuItemWrapper>
           {sideBarItems.map((item) => (
-            <>
+            <Fragment key={item.id}>
               {item?.isCanSee.includes(role) ? (
                 <MenuItem
-                  isSelected={item?.href === location.pathname}
-                  key={item.id}
+                  isselected={
+                    item?.href === location.pathname ? "true" : undefined
+                  }
                   onClick={() => navigate(item.href)}
                 >
                   {item.icon}
                   <p>{item.text}</p>
                 </MenuItem>
               ) : null}
-            </>
+            </Fragment>
           ))}
         </MenuItemWrapper>
         <LogOut>

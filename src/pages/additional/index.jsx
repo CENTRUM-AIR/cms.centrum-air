@@ -5,7 +5,9 @@ import {
   ItemActions,
   ItemText,
   ItemTextWrapper,
+  ItemTitle,
   ItemWrapper,
+  OpenerWrapper,
   SvgWrapper,
   Wrapper,
 } from "./styled";
@@ -42,7 +44,16 @@ export const Additional = () => {
   const { role } = useSelector(getUser);
   const dispatch = useDispatch();
   const additionalInfo = useAdditionalInfo();
-  const [isFolderOpen, setIsFolderOpen] = useState(false);
+  const [isFolderOpen, setIsFolderOpen] = useState({
+    offers: false,
+    services: false,
+    countries: false,
+    charters: false,
+    mainpage: false,
+    news: false,
+    rules: false,
+    contacts: false,
+  });
   const [openModal, setOpenModal] = useState({
     actionType: "",
     id: "",
@@ -166,9 +177,19 @@ export const Additional = () => {
     }
   }, [role, navigate]);
 
-  const handleOpenFolder = (id) => {
-    isFolderOpen === id ? setIsFolderOpen("") : setIsFolderOpen(id);
+  const handleOpenFolder = (type) => {
+    isFolderOpen[type]
+      ? setIsFolderOpen((prev) => ({
+          ...prev,
+          [type]: !prev[type],
+        }))
+      : setIsFolderOpen((prev) => ({
+          ...prev,
+          [type]: true,
+        }));
   };
+
+
 
   return (
     <>
@@ -177,13 +198,12 @@ export const Additional = () => {
           <div key={item.id}>
             <ItemWrapper>
               <IconWrapper>
-                <SvgWrapper
-                  onClick={() => handleOpenFolder(item?.id)}
-                  deg={isFolderOpen === item?.id ? "90" : "0"}
-                >
-                  <Arrow />
-                </SvgWrapper>
-                <p>{item.title}</p>
+                <OpenerWrapper onClick={() => handleOpenFolder(item?.type)}>
+                  <SvgWrapper deg={isFolderOpen[item?.type] ? "90" : "0"}>
+                    <Arrow />
+                  </SvgWrapper>
+                  <ItemTitle>{item.title}</ItemTitle>
+                </OpenerWrapper>
                 <AddText
                   onClick={() =>
                     handleOpenModal({
@@ -195,7 +215,7 @@ export const Additional = () => {
                   <PlusSign /> Cоздать
                 </AddText>
               </IconWrapper>
-              {isFolderOpen === item?.id && (
+              {isFolderOpen[item?.type] && (
                 <>
                   {item.data && item.data?.length !== 0 ? (
                     item.data?.map((value) => (

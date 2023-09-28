@@ -41,9 +41,9 @@ export const MenuItem = styled.div`
   }
   svg {
     path {
-      fill: ${({ isSelected }) => (isSelected ? "#174ABC" : null)};
-      stroke: ${({ isSelected }) => (isSelected ? "#fff" : "#727D97")};
-      stroke-width: ${({ isSelected }) => (isSelected ? "0.5" : "1.8")};
+      fill: ${({ isselected }) => (isselected ? "#174ABC" : null)};
+      stroke: ${({ isselected }) => (isselected ? "#fff" : "#727D97")};
+      stroke-width: ${({ isselected }) => (isselected ? "0.5" : "1.8")};
     }
   }
 `;

@@ -47,9 +47,11 @@ import {
 } from "../../store/patch-api-info";
 import {
   CHARTERS,
+  CONTACTS,
   COUNTRIES,
   MAINPAGE,
   OFFERS,
+  RULES,
   SERVICES,
 } from "../../constants";
 import {
@@ -177,14 +179,14 @@ export const useAdditionalInfo = () => {
     },
     {
       title: "Правила и условия",
+      type: RULES,
       id: 4,
-      type: "simple",
       data: [],
     },
     {
       title: "Контакты",
       id: 5,
-      type: "simple",
+      type: CONTACTS,
       data: [],
     },
     {

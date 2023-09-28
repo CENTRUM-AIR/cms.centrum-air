@@ -19,6 +19,8 @@ const Management = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { users, usersFetched } = useSelector(getAllInfo);
+  const [filteredUsers, setFilteredUsers] = useState(users);
+  const [search, setSearch] = useState("");
   const [deleteModal, setDeleteModal] = useState(false);
   const { role } = useSelector(getUser);
   const [openModal, setOpenModal] = useState(false);
@@ -48,10 +50,21 @@ const Management = () => {
   useEffect(() => {
     if (!usersFetched && role) dispatch(fetchUsers());
   }, [dispatch, usersFetched, role]);
+
+  useEffect(() => {
+    if (search) {
+      const filtered = users?.filter((user) =>
+        user?.login?.toLowerCase().includes(search.toLowerCase())
+      );
+      setFilteredUsers(filtered);
+    } else {
+      setFilteredUsers(users);
+    }
+  }, [search, users]);
   return (
     <MainWrapperPages>
-      <ManagementHeader />
-      {users && users?.length !== 0 ? (
+      <ManagementHeader setSearch={setSearch} search={search} />
+      {filteredUsers && filteredUsers?.length !== 0 ? (
         <TableWrapper>
           <thead>
             <tr>
@@ -61,7 +74,7 @@ const Management = () => {
             </tr>
           </thead>
           <tbody>
-            {users.map((user) => (
+            {filteredUsers.map((user) => (
               <Fragment key={user.id}>
                 <tr>
                   <td>{user.login}</td>

@@ -90,3 +90,15 @@ export const ItemTextWrapper = styled.div`
   gap: 20px;
   justify-content: space-between;
 `;
+
+export const OpenerWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  width: 100%;
+  cursor: pointer;
+`;
+
+export const ItemTitle = styled.p`
+  flex: 1;
+  text-align: center;
+`;
