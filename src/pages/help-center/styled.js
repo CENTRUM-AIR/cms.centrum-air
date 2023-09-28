@@ -31,10 +31,7 @@ export const ChapterText = styled.p`
   max-width: 240px;
   max-height: 40px;
   font-size: 14px;
-  cursor: pointer;
-  &:hover {
-    color: #727d97;
-  }
+  flex: 1;
 `;
 
 export const MainWrapper = styled.div`
@@ -43,4 +40,25 @@ export const MainWrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: 20px;
+`;
+
+export const ChapterWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: 15px;
+  padding: 0 5px;
+  margin: 5px 0;
+  cursor: pointer;
+  background-color: ${({ isselected }) =>
+    isselected ? "rgba(0, 0, 0, 0.05)" : "transparent"};
+  svg {
+    opacity: 0.5;
+    &:hover {
+      opacity: 1;
+    }
+  }
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.03);
+  }
 `;

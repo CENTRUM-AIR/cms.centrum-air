@@ -10,7 +10,7 @@ const initialState = {
 };
 
 const createChartersSlice = createSlice({
-  name: "charters",
+  name: "createCharters",
   initialState,
   reducers: {
     setChartersEnglish: (state, action) => {

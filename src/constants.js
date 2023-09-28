@@ -7,6 +7,7 @@ export const USERS = "users";
 export const NEWS = "news";
 export const RULES = "rules";
 export const CONTACTS = "contacts";
+export const FAQ = "faq";
 
 export const SUPERADMIN = "superAdmin";
 export const HR = "hr";

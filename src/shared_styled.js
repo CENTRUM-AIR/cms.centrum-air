@@ -68,11 +68,16 @@ export const TableWrapper = styled.table`
   border-collapse: collapse;
   td,
   th {
-    border-bottom: 1px solid #dddddd;
     text-align: left;
     padding: 15px 20px;
     height: 100%;
     word-wrap: break-word;
+  }
+  tr {
+    border-bottom: 1px solid #dddddd;
+    &:last-child {
+      border-bottom: none;
+    }
   }
   th {
     color: #727d97;
@@ -90,8 +95,10 @@ export const Option = styled.div`
   display: flex;
   align-items: center;
   min-width: 100px;
+  justify-content: center;
   gap: 10px;
   cursor: pointer;
+  min-width: 150px;
 `;
 
 export const MainWrapperPages = styled.div`

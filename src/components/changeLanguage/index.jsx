@@ -31,7 +31,7 @@ export const LanguageChange = ({ language, changeLang, nextButton }) => {
         {language === "uz" ? <Done /> : <InProgress />}
         Uzbek
       </CloseText>
-      {nextButton && <StyledButton width="400px">Далее</StyledButton>}
+      {nextButton && <StyledButton onClick={()=>changeLang(null, true)} width="400px">Далее</StyledButton>}
     </Progression>
   );
 };
