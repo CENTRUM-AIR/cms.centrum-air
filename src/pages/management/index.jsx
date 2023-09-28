@@ -36,9 +36,9 @@ const Management = () => {
     setOpenModal(user?.id);
   };
 
-  const handleDelete = async (id, type) => {
+  const handleDelete = async (id) => {
     await api.delete(`/users/delete/${id}`);
-    dispatch(deleteInfo({ id, type }));
+    dispatch(deleteInfo({ id, type: USERS }));
     setDeleteModal(false);
   };
 
@@ -94,7 +94,7 @@ const Management = () => {
                 )}
                 {deleteModal === user?.id && (
                   <DeletionModal
-                    handleDelete={() => handleDelete(user?.id, USERS)}
+                    handleDelete={() => handleDelete(user?.id)}
                     removeDelete={() => setDeleteModal(false)}
                   />
                 )}

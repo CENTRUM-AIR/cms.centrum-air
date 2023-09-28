@@ -19,7 +19,6 @@ export const ManagementHeader = ({ setSearch, search }) => {
   };
   return (
     <HeaderWrapper>
-      <Option>filters</Option>
       <Option onClick={handleOpenModal}>Создать Юзера</Option>
       <StyledInput
         width="100%"

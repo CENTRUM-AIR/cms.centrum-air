@@ -8,8 +8,7 @@ export const ButtonWrapper = styled.div`
 `;
 
 export const HeaderWrapper = styled.div`
-  padding: 25px;
-  width: 100%;
+  padding: 25px 0px;
 `;
 
 export const SubHeaderWrapper = styled.div`

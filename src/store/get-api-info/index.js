@@ -4,6 +4,7 @@ import {
   CHARTERS,
   CONTENTMANAGER,
   COUNTRIES,
+  FAQ,
   MAINPAGE,
   NEWS,
   OFFERS,
@@ -21,6 +22,8 @@ const initialState = {
   charters: [],
   users: [],
   news: [],
+  faq: [],
+  faqFetched: false,
   mainpageFetched: false,
   servicesFetched: false,
   offersFetched: false,
@@ -87,6 +90,14 @@ export const fetchNews = createAsyncThunk(NEWS, async (data, thunk) => {
   const { role } = thunk.getState().isAuth;
   if (role === SUPERADMIN || role === PRESSCENTER) {
     const response = await api.get("/news");
+    return response.data;
+  }
+  return [];
+});
+export const fetchFaq = createAsyncThunk(FAQ, async (data, thunk) => {
+  const { role } = thunk.getState().isAuth;
+  if (role === SUPERADMIN || role === PRESSCENTER) {
+    const response = await api.get("/faq");
     return response.data;
   }
   return [];
@@ -184,6 +195,16 @@ const infoSlice = createSlice({
     });
     builder.addCase(fetchNews.pending, (state, action) => {
       if (!state.newsFetched) state.loading = true;
+    });
+    builder.addCase(fetchFaq.fulfilled, (state, action) => {
+      state.loading = false;
+      if (!state.faqFetched) {
+        state.faq = action.payload;
+        state.faqFetched = true;
+      }
+    });
+    builder.addCase(fetchFaq.pending, (state, action) => {
+      if (!state.faqFetched) state.loading = true;
     });
   },
 });

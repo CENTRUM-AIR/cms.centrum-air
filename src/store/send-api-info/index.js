@@ -4,6 +4,7 @@ import { addInfo } from "../get-api-info";
 import {
   CHARTERS,
   COUNTRIES,
+  FAQ,
   MAINPAGE,
   NEWS,
   OFFERS,
@@ -147,6 +148,24 @@ export const sendNews = createAsyncThunk(NEWS, async (data, apiThunk) => {
   // apiThunk.dispatch(addInfo({ type: NEWS, data: reduxPrepInfo }));
 });
 
+export const sendFaq = createAsyncThunk(FAQ, async (data, apiThunk) => {
+  const { question, answer } = data;
+  const requestBody = {
+    question_uz: question.uz,
+    question_ru: question.ru,
+    question_en: question.en,
+    answer_uz: answer.uz,
+    answer_ru: answer.ru,
+    answer_en: answer.en,
+  }; 
+  const id = await api.post("/faq", requestBody).then((res) => res.data);
+  const reduxPrepInfo = {
+    id,
+    ...requestBody,
+  };
+  apiThunk.dispatch(addInfo({ type: FAQ, data: reduxPrepInfo }));
+});
+
 const sendInfoSlice = createSlice({
   name: "send-all-info",
   initialState,
@@ -197,6 +216,14 @@ const sendInfoSlice = createSlice({
       state.error = false;
     });
     builder.addCase(sendUsers.rejected, (state, action) => {
+      state.error = true;
+      state.sent = false;
+    });
+    builder.addCase(sendFaq.fulfilled, (state, action) => {
+      state.sent = true;
+      state.error = false;
+    });
+    builder.addCase(sendFaq.rejected, (state, action) => {
       state.error = true;
       state.sent = false;
     });

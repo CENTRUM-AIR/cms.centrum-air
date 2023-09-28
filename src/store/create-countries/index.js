@@ -10,7 +10,7 @@ const initialState = {
 };
 
 const createCountriesSlice = createSlice({
-  name: "countries",
+  name: "createCountries",
   initialState,
   reducers: {
     setCountriesEnglish: (state, action) => {

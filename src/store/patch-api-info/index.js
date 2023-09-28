@@ -3,6 +3,7 @@ import api, { formDataApi } from "../../utils/api";
 import {
   CHARTERS,
   COUNTRIES,
+  FAQ,
   MAINPAGE,
   OFFERS,
   SERVICES,
@@ -38,6 +39,10 @@ export const patchMainPage = createAsyncThunk(
     if (newPhoto?.photo !== createMainPage?.photo?.photo) {
       patchData.photo = newPhoto?.photo;
       formDataMainPage.append("file", newPhoto?.photo);
+    }
+    if (!Object.keys(patchData).length) {
+      window.alert("Ничего не было изменено");
+      return;
     }
     apiThunk.dispatch(updateInfo({ type: MAINPAGE, id, data: patchData }));
     await formDataApi.patch(`/mainpage/${id}`, formDataMainPage);
@@ -89,6 +94,10 @@ export const patchOffers = createAsyncThunk(OFFERS, async (data, apiThunk) => {
     patchData.photo = photo?.photo;
     formDataDest.append("file", photo?.photo);
   }
+  if (!Object.keys(patchData).length) {
+    window.alert("Ничего не было изменено");
+    return;
+  }
   apiThunk.dispatch(updateInfo({ type: OFFERS, id, data: patchData }));
   await formDataApi.patch(`/offers/${id}`, formDataDest);
 });
@@ -127,6 +136,10 @@ export const patchServices = createAsyncThunk(
     });
     requestBody.icon = photo?.photo;
     patchData.icon = photo?.photo;
+    if (!Object.keys(patchData).length) {
+      window.alert("Ничего не было изменено");
+      return;
+    }
     apiThunk.dispatch(updateInfo({ type: SERVICES, id, data: patchData }));
     await api.patch(`/services/${id}`, requestBody);
   }
@@ -134,30 +147,34 @@ export const patchServices = createAsyncThunk(
 export const patchCountries = createAsyncThunk(
   COUNTRIES,
   async (data, apiThunk) => {
-    const { countries } = apiThunk.getState();
+    const { createCountries } = apiThunk.getState();
     const { city_code, city, country, id } = data;
     const requestBody = {};
     const patchData = {};
 
     LANGUAGES.forEach((lang) => {
-      if (city[lang] !== countries?.[`city_${lang}`]) {
+      if (city[lang] !== createCountries?.[`city_${lang}`]) {
         requestBody[`city_${lang}`] = city[lang];
         patchData[`city_${lang}`] = city[lang];
       } else {
-        requestBody[`city_${lang}`] = countries?.[`city_${lang}`];
+        requestBody[`city_${lang}`] = createCountries?.[`city_${lang}`];
       }
-      if (country !== countries?.[`country_${lang}`]) {
+      if (country !== createCountries?.[`country_${lang}`]) {
         requestBody[`country_${lang}`] = country[lang];
         patchData[`country_${lang}`] = country[lang];
       } else {
-        requestBody[`country_${lang}`] = countries?.[`country_${lang}`];
+        requestBody[`country_${lang}`] = createCountries?.[`country_${lang}`];
       }
     });
-    if (city_code !== countries?.city_code) {
+    if (city_code !== createCountries?.city_code) {
       requestBody.city_code = city_code;
       patchData.city_code = city_code;
     } else {
-      requestBody.city_code = countries?.city_code;
+      requestBody.city_code = createCountries?.city_code;
+    }
+    if (!Object.keys(patchData).length) {
+      window.alert("Ничего не было изменено");
+      return;
     }
     apiThunk.dispatch(updateInfo({ type: COUNTRIES, id, data: patchData }));
     await api.patch(`/countries/${id}`, requestBody);
@@ -167,30 +184,35 @@ export const patchCountries = createAsyncThunk(
 export const patchCharters = createAsyncThunk(
   CHARTERS,
   async (data, apiThunk) => {
-    const { charters } = apiThunk.getState();
+    const { createCharters } = apiThunk.getState();
     const { from_city, to_city, phone_number, id } = data;
     const requestBody = {};
     const patchData = {};
 
     LANGUAGES.forEach((lang) => {
-      if (from_city[lang] !== charters?.[`from_city_${lang}`]) {
+      if (from_city[lang] !== createCharters?.[`from_city_${lang}`]) {
         requestBody[`from_city_${lang}`] = from_city[lang];
         patchData[`from_city_${lang}`] = from_city[lang];
       } else {
-        requestBody[`from_city_${lang}`] = charters?.[`from_city_${lang}`];
+        requestBody[`from_city_${lang}`] =
+          createCharters?.[`from_city_${lang}`];
       }
-      if (to_city[lang] !== charters?.[`to_city_${lang}`]) {
+      if (to_city[lang] !== createCharters?.[`to_city_${lang}`]) {
         requestBody[`to_city_${lang}`] = to_city[lang];
         patchData[`to_city_${lang}`] = to_city[lang];
       } else {
-        requestBody[`to_city_${lang}`] = charters?.[`to_city_${lang}`];
+        requestBody[`to_city_${lang}`] = createCharters?.[`to_city_${lang}`];
       }
     });
-    if (phone_number !== charters?.phone_number) {
+    if (phone_number !== createCharters?.phone_number) {
       requestBody.phone_number = phone_number;
       patchData.phone_number = phone_number;
     } else {
-      requestBody.phone_number = charters?.phone_number;
+      requestBody.phone_number = createCharters?.phone_number;
+    }
+    if (!Object.keys(patchData).length) {
+      window.alert("Ничего не было изменено");
+      return;
     }
     apiThunk.dispatch(updateInfo({ type: CHARTERS, id, data: patchData }));
     await api.patch(`/charters/${id}`, requestBody);
@@ -207,6 +229,34 @@ export const patchUser = createAsyncThunk(USERS, async (data, apiThunk) => {
   const { id, ...info } = data;
   apiThunk.dispatch(updateInfo({ type: USERS, id, data: info }));
   await api.patch(`/users/update/${id}`, info);
+});
+export const patchFaq = createAsyncThunk(FAQ, async (data, apiThunk) => {
+  const { question, answer } = data;
+  const { createFaq } = apiThunk.getState();
+  const requestBody = {};
+  const patchData = {};
+  LANGUAGES.forEach((lang) => {
+    if (question[lang] !== createFaq?.[`question_${lang}`]) {
+      requestBody[`question_${lang}`] = question[lang];
+      patchData[`question_${lang}`] = question[lang];
+    } else {
+      requestBody[`question_${lang}`] = createFaq?.[`question_${lang}`];
+    }
+    if (answer[lang] !== createFaq?.[`answer_${lang}`]) {
+      requestBody[`answer_${lang}`] = answer[lang];
+      patchData[`answer_${lang}`] = answer[lang];
+    } else {
+      requestBody[`answer_${lang}`] = createFaq?.[`answer_${lang}`];
+    }
+  });
+  if (!Object.keys(patchData).length) {
+    window.alert("Ничего не было изменено");
+    return null;
+  }
+  apiThunk.dispatch(
+    updateInfo({ type: FAQ, id: createFaq?.id, data: patchData })
+  );
+  await api.patch(`/faq/${createFaq?.id}`, requestBody);
 });
 
 const patchInfoSlice = createSlice({
@@ -259,6 +309,14 @@ const patchInfoSlice = createSlice({
       state.error = false;
     });
     builder.addCase(patchUser.rejected, (state, action) => {
+      state.error = true;
+      state.sent = false;
+    });
+    builder.addCase(patchFaq.fulfilled, (state, action) => {
+      state.sent = true;
+      state.error = false;
+    });
+    builder.addCase(patchFaq.rejected, (state, action) => {
       state.error = true;
       state.sent = false;
     });
