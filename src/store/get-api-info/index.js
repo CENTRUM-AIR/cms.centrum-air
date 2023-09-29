@@ -36,7 +36,6 @@ const initialState = {
 
 export const fetchMainPage = createAsyncThunk(MAINPAGE, async (data, thunk) => {
   const { role } = thunk.getState().isAuth;
-  console.log(role);
   if (role === SUPERADMIN || role === CONTENTMANAGER) {
     const response = await api.get("/mainpage");
     return response.data;

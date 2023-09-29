@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { creationConfig } from "../../utils/creation-config";
+import { useCreationConfig } from "../../utils/creation-config";
 import Design from "./design";
 import { sendAllInfo } from "../../store";
 
@@ -17,9 +17,8 @@ export const Creation = ({
   titleText,
   sendInfo,
 }) => {
-  const { selector } = creationConfig(actionType);
+  const { selector } = useCreationConfig(actionType);
   const selectorData = useSelector(selector);
-  const { error: apiError, sent } = useSelector(sendAllInfo);
   const [language, setLanguage] = useState("ru");
   const [inputTitle, setInputTitle] = useState(""); // used as country name
   const [description, setDescription] = useState(""); // used as city (& to_city) name
@@ -29,18 +28,6 @@ export const Creation = ({
   const [destination, setDestination] = useState("");
   const [code, setCityCode] = useState("");
   const [phoneNumber, setNewPhoneNumber] = useState("");
-  const [isDataSent, setIsDataSent] = useState(false);
-
-  useEffect(() => {
-    if (!apiError && sent && isDataSent) {
-      onClose();
-    } else if (apiError && isDataSent) {
-      window.alert(
-        "Что-то пошло не так! \nПроверьте все данные, у вас пустые поля"
-      );
-    }
-    setIsDataSent(false);
-  }, [apiError, sent, isDataSent]);
 
   useEffect(() => {
     setInputTitle(selectorData?.[`title_${language}`] || "");
@@ -115,7 +102,6 @@ export const Creation = ({
   const publishInfo = async () => {
     collectData();
     await sendInfo();
-    setIsDataSent(true);
   };
 
   return (

@@ -4,7 +4,7 @@ import MainPageReducer from "./create-main-page";
 import DestinationsReducer from "./create-destinations";
 import CountriesReducer from "./create-countries";
 import ChartersReducer from "./create-charter";
-import NewsReducer from "./create-charter";
+import NewsReducer from "./create-news";
 import AllInfoReducer from "./get-api-info";
 import SendInfoReducer from "./send-api-info";
 import PatchInfoReducer from "./patch-api-info";

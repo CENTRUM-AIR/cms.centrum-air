@@ -1,14 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Design from "./design";
-import { creationConfig } from "../../utils/creation-config";
+import { useCreationConfig } from "../../utils/creation-config";
 import { useSelector } from "react-redux";
-import { patchAllInfo } from "../../store";
 
 const Edition = ({ actionType, onClose, titleText, sendInfo, itemId }) => {
-  const { selector } = creationConfig(actionType);
+  const { selector } = useCreationConfig(actionType);
   const selectorData = useSelector(selector);
 
-  const { error: apiError, sent } = useSelector(patchAllInfo);
   const [language, setLanguage] = useState("ru");
   const [inputTitle, setInputTitle] = useState({
     ru: selectorData?.title_ru || selectorData?.country_ru || "",
@@ -50,7 +48,6 @@ const Edition = ({ actionType, onClose, titleText, sendInfo, itemId }) => {
   const [phoneNumber, setNewPhoneNumber] = useState(
     selectorData?.phone_number || ""
   );
-  const [isDataSent, setIsDataSent] = useState(false);
 
   const nextLanguage = (newType, goNext) => {
     if (goNext) {
@@ -94,19 +91,7 @@ const Edition = ({ actionType, onClose, titleText, sendInfo, itemId }) => {
       phone_number: phoneNumber,
       id: itemId,
     });
-    setIsDataSent(true);
   };
-
-  useEffect(() => {
-    if (!apiError && sent && isDataSent) {
-      onClose();
-    } else if (apiError && isDataSent) {
-      window.alert(
-        "Что-то пошло не так! \nПроверьте все данные, они либо совпадают с данными в датабазе, либо у вас пустые поля"
-      );
-    }
-    setIsDataSent(false);
-  }, [apiError, sent, isDataSent]);
 
   return (
     <Design

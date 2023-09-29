@@ -23,7 +23,6 @@ export const Edition = ({
   isTextArea,
   smallDesc,
   open,
-  onSubmit,
   setEnglish,
   setRussian,
   setUzbek,

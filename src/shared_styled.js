@@ -72,6 +72,10 @@ export const TableWrapper = styled.table`
     padding: 15px 20px;
     height: 100%;
     word-wrap: break-word;
+    max-width: 200px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
   tr {
     border-bottom: 1px solid #dddddd;
@@ -107,6 +111,9 @@ export const MainWrapperPages = styled.div`
   width: 100%;
   height: 100%;
   padding: 0 20px;
+  svg {
+    cursor: pointer;
+  }
 `;
 
 export const NoInfo = styled.p`

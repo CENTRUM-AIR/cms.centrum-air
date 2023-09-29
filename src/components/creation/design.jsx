@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { creationConfig } from "../../utils/creation-config";
+import { useCreationConfig } from "../../utils/creation-config";
 import {
   ButtonHolder,
   CloseText,
@@ -53,7 +53,7 @@ const Design = ({
     isFileNeeded,
     isPhoneNumber,
     fromCityName,
-  } = creationConfig(actionType);
+  } = useCreationConfig(actionType);
   const [openDropzone, setOpenDropzone] = useState(false);
   const isSvg = () => {
     if (typeof image?.photo === "string")
