@@ -177,18 +177,18 @@ export const useAdditionalInfo = () => {
       sendInfo: () => dispatch(sendOffers()),
       updateInfo: (data) => dispatch(patchOffers(data)),
     },
-    {
-      title: "Правила и условия",
-      type: RULES,
-      id: 4,
-      data: [],
-    },
-    {
-      title: "Контакты",
-      id: 5,
-      type: CONTACTS,
-      data: [],
-    },
+    // {
+    //   title: "Правила и условия",
+    //   type: RULES,
+    //   id: 4,
+    //   data: [],
+    // },
+    // {
+    //   title: "Контакты",
+    //   id: 5,
+    //   type: CONTACTS,
+    //   data: [],
+    // },
     {
       title: "Доп услуги",
       id: 7,
