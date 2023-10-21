@@ -3,6 +3,7 @@ const initialState = {
   login: "",
   password: "",
   role: "",
+  isDone: false,
 };
 
 const createUserSlide = createSlice({
@@ -15,9 +16,12 @@ const createUserSlide = createSlice({
       state.password = password;
       state.role = role;
     },
+    setIsDone: (state, action) => {
+      state.isDone = action.payload;
+    },
   },
 });
 
-export const { setNewUser } = createUserSlide.actions;
+export const { setNewUser, setIsDone } = createUserSlide.actions;
 
 export default createUserSlide.reducer;

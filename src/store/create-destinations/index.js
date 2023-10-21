@@ -11,6 +11,7 @@ const initialState = {
   destination_ru: "",
   price: "",
   photo: "",
+  isDone: false,
 };
 
 const createDestinationsSlice = createSlice({
@@ -45,6 +46,9 @@ const createDestinationsSlice = createSlice({
     setPhoto: (state, action) => {
       state.photo = action.payload;
     },
+    setIsDone: (state, action) => {
+      state.isDone = action.payload;
+    }
   },
 });
 
@@ -54,6 +58,7 @@ export const {
   setDestinationUzbek,
   setPrice,
   setPhoto,
+  setIsDone,
 } = createDestinationsSlice.actions;
 
 export default createDestinationsSlice.reducer;

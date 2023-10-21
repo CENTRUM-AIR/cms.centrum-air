@@ -7,6 +7,7 @@ const initialState = {
   city_uz: "",
   city_ru: "",
   city_code: "",
+  isDone: false,
 };
 
 const createCountriesSlice = createSlice({
@@ -35,6 +36,9 @@ const createCountriesSlice = createSlice({
       const { city_code } = action.payload;
       state.city_code = city_code;
     },
+    setIsDone: (state, action) => {
+      state.isDone = action.payload;
+    }
   },
 });
 
@@ -43,6 +47,7 @@ export const {
   setCountriesEnglish,
   setCountriesRussian,
   setCountriesUzbek,
+  setIsDone,
 } = createCountriesSlice.actions;
 
 export default createCountriesSlice.reducer;

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useCreationConfig } from "../../utils/creation-config";
 import Design from "./design";
-import { sendAllInfo } from "../../store";
 
 export const Creation = ({
   actionType,

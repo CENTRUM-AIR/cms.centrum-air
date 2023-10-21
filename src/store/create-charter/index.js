@@ -7,6 +7,7 @@ const initialState = {
   to_city_uz: "",
   to_city_ru: "",
   phone_number: "",
+  isDone: false,
 };
 
 const createChartersSlice = createSlice({
@@ -35,6 +36,9 @@ const createChartersSlice = createSlice({
       const { phone_number } = action.payload;
       state.phone_number = phone_number;
     },
+    setIsDone: (state, action) => {
+      state.isDone = action.payload;
+    },
   },
 });
 
@@ -43,6 +47,7 @@ export const {
   setChartersEnglish,
   setChartersRussian,
   setChartersUzbek,
+  setIsDone,
 } = createChartersSlice.actions;
 
 export default createChartersSlice.reducer;

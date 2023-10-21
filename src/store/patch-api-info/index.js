@@ -11,6 +11,14 @@ import {
   USERS,
 } from "../../constants";
 import { updateInfo } from "../get-api-info";
+import { setIsDone as setIsDoneMainpage } from "../create-main-page";
+import { setIsDone as setIsDoneAS } from "../create-additional-service";
+import { setIsDone as setIsDoneDestinations } from "../create-destinations";
+import { setIsDone as setIsDoneCountries } from "../create-countries";
+import { setIsDone as setIsDoneCharters } from "../create-charter";
+import { setIsDone as setIsDoneNews } from "../create-news";
+import { setIsDone as setIsDoneUser } from "../create-user";
+import { setIsDone as setIsDoneFaq } from "../create-faq";
 
 const initialState = {
   loading: false,
@@ -50,11 +58,14 @@ export const patchMainPage = createAsyncThunk(
       }
       if (!Object.keys(patchData).length) {
         window.alert("Ничего не было изменено");
+        apiThunk.dispatch(setIsDoneMainpage(false));
         return;
       }
       apiThunk.dispatch(updateInfo({ type: MAINPAGE, id, data: patchData }));
       await formDataApi.patch(`/mainpage/${id}`, formDataMainPage);
+      apiThunk.dispatch(setIsDoneMainpage(true));
     } catch (e) {
+      apiThunk.dispatch(setIsDoneMainpage(false));
       fireAlert();
     }
   }
@@ -108,11 +119,14 @@ export const patchOffers = createAsyncThunk(OFFERS, async (data, apiThunk) => {
     }
     if (!Object.keys(patchData).length) {
       window.alert("Ничего не было изменено");
+      apiThunk.dispatch(setIsDoneDestinations(false));
       return;
     }
     apiThunk.dispatch(updateInfo({ type: OFFERS, id, data: patchData }));
     await formDataApi.patch(`/offers/${id}`, formDataDest);
+    apiThunk.dispatch(setIsDoneDestinations(true));
   } catch (e) {
+    apiThunk.dispatch(setIsDoneDestinations(false));
     fireAlert();
   }
 });
@@ -155,11 +169,14 @@ export const patchServices = createAsyncThunk(
       patchData.icon = photo?.photo;
       if (!Object.keys(patchData).length) {
         window.alert("Ничего не было изменено");
+        apiThunk.dispatch(setIsDoneAS(false));
         return;
       }
       apiThunk.dispatch(updateInfo({ type: SERVICES, id, data: patchData }));
       await api.patch(`/services/${id}`, requestBody);
+      apiThunk.dispatch(setIsDoneAS(true));
     } catch (e) {
+      apiThunk.dispatch(setIsDoneAS(false));
       fireAlert();
     }
   }
@@ -195,11 +212,14 @@ export const patchCountries = createAsyncThunk(
       }
       if (!Object.keys(patchData).length) {
         window.alert("Ничего не было изменено");
+        apiThunk.dispatch(setIsDoneCountries(false));
         return;
       }
       apiThunk.dispatch(updateInfo({ type: COUNTRIES, id, data: patchData }));
       await api.patch(`/countries/${id}`, requestBody);
+      apiThunk.dispatch(setIsDoneCountries(true));
     } catch (e) {
+      apiThunk.dispatch(setIsDoneCountries(false));
       fireAlert();
     }
   }
@@ -237,11 +257,14 @@ export const patchCharters = createAsyncThunk(
       }
       if (!Object.keys(patchData).length) {
         window.alert("Ничего не было изменено");
+        apiThunk.dispatch(setIsDoneCharters(false));
         return;
       }
       apiThunk.dispatch(updateInfo({ type: CHARTERS, id, data: patchData }));
       await api.patch(`/charters/${id}`, requestBody);
+      apiThunk.dispatch(setIsDoneCharters(true));
     } catch (e) {
+      apiThunk.dispatch(setIsDoneCharters(false));
       fireAlert();
     }
   }
@@ -253,12 +276,15 @@ export const patchUser = createAsyncThunk(USERS, async (data, apiThunk) => {
     const { login, password, role } = data;
     if (!password && login === newUser?.login && role === newUser?.role) {
       window.alert("Ничего не было изменено");
+      apiThunk.dispatch(setIsDoneUser(false));
       return;
     }
     const { id, ...info } = data;
     apiThunk.dispatch(updateInfo({ type: USERS, id, data: info }));
     await api.patch(`/users/update/${id}`, info);
+    apiThunk.dispatch(setIsDoneUser(true));
   } catch (e) {
+    apiThunk.dispatch(setIsDoneUser(false));
     fireAlert();
   }
 });
@@ -284,13 +310,16 @@ export const patchFaq = createAsyncThunk(FAQ, async (data, apiThunk) => {
     });
     if (!Object.keys(patchData).length) {
       window.alert("Ничего не было изменено");
+      apiThunk.dispatch(setIsDoneFaq(false));
       return null;
     }
     apiThunk.dispatch(
       updateInfo({ type: FAQ, id: createFaq?.id, data: patchData })
     );
     await api.patch(`/faq/${createFaq?.id}`, requestBody);
+    apiThunk.dispatch(setIsDoneFaq(true));
   } catch (e) {
+    apiThunk.dispatch(setIsDoneFaq(false));
     fireAlert();
   }
 });
@@ -338,11 +367,14 @@ export const patchNews = createAsyncThunk(NEWS, async (data, apiThunk) => {
     }
     if (!Object.keys(patchData).length) {
       window.alert("Ничего не было изменено");
+      apiThunk.dispatch(setIsDoneNews(false));
       return;
     }
     await formDataApi.patch(`/news/${id}`, formDataNews);
     apiThunk.dispatch(updateInfo({ type: NEWS, id, data: patchData }));
+    apiThunk.dispatch(setIsDoneNews(true));
   } catch (e) {
+    apiThunk.dispatch(setIsDoneNews(false));
     fireAlert();
   }
 });

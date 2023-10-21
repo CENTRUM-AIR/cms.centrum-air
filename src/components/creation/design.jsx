@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useCreationConfig } from "../../utils/creation-config";
 import {
   ButtonHolder,
@@ -15,6 +15,15 @@ import { StyledButton, StyledInput, StyledTextArea } from "../../shared_styled";
 import { Dropzone } from "../dropzone";
 import SVG from "react-inlinesvg";
 import { LanguageChange } from "../changeLanguage";
+import { useDispatch, useSelector } from "react-redux";
+import { setIsDone as setIsDoneMainpage } from "../../store/create-main-page";
+import { setIsDone as setIsDoneAS } from "../../store/create-additional-service";
+import { setIsDone as setIsDoneDestinations } from "../../store/create-destinations";
+import { setIsDone as setIsDoneCountries } from "../../store/create-countries";
+import { setIsDone as setIsDoneCharters } from "../../store/create-charter";
+import { setIsDone as setIsDoneNews } from "../../store/create-news";
+import { setIsDone as setIsDoneUser } from "../../store/create-user";
+import { setIsDone as setIsDoneFaq } from "../../store/create-faq";
 
 const Design = ({
   actionType,
@@ -53,12 +62,38 @@ const Design = ({
     isFileNeeded,
     isPhoneNumber,
     fromCityName,
+    selector,
   } = useCreationConfig(actionType);
+  const dispatch = useDispatch();
+  const { isDone } = useSelector(selector);
   const [openDropzone, setOpenDropzone] = useState(false);
+  const [isPublishedPressed, setIsPublishedPressed] = useState(false);
+
+  const dispatchAllClosing = () => {
+    dispatch(setIsDoneMainpage(false));
+    dispatch(setIsDoneAS(false));
+    dispatch(setIsDoneDestinations(false));
+    dispatch(setIsDoneCountries(false));
+    dispatch(setIsDoneCharters(false));
+    dispatch(setIsDoneNews(false));
+    dispatch(setIsDoneUser(false));
+    dispatch(setIsDoneFaq(false));
+  };
   const isSvg = () => {
     if (typeof image?.photo === "string")
       return image?.photo?.includes("svg") ? true : false;
     return false;
+  };
+  useEffect(() => {
+    if (isPublishedPressed && isDone) {
+      dispatchAllClosing();
+      onClose();
+    }
+  }, [isDone, isPublishedPressed]);
+
+  const actualPublish = () => {
+    setIsPublishedPressed(true);
+    publishInfo();
   };
   return (
     <>
@@ -192,7 +227,7 @@ const Design = ({
             </StyledButton>
           )}
           <ButtonHolder>
-            <StyledButton width="138px" onClick={publishInfo}>
+            <StyledButton width="138px" onClick={actualPublish}>
               Опубликовать
             </StyledButton>
             <StyledButton width="80px" onClick={() => nextLanguage("", true)}>

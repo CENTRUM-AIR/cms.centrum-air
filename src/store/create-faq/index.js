@@ -7,6 +7,7 @@ const initialState = {
   question_en: "",
   answer_en: "",
   id: null,
+  isDone: false,
 };
 
 const createFaqSlide = createSlice({
@@ -32,10 +33,13 @@ const createFaqSlide = createSlice({
       const { id } = action.payload;
       state.id = id;
     },
+    setIsDone: (state, action) => {
+      state.isDone = action.payload;
+    }
   },
 });
 
-export const { setNewFaqEnglish, setNewFaqRussian, setNewFaqUzbek, setFaqId } =
+export const { setIsDone, setNewFaqEnglish, setNewFaqRussian, setNewFaqUzbek, setFaqId } =
   createFaqSlide.actions;
 
 export default createFaqSlide.reducer;

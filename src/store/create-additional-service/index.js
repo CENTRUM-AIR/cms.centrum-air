@@ -10,6 +10,7 @@ const initialState = {
   small_description_uz: "",
   small_description_ru: "",
   photo: "",
+  isDone: false,
 };
 
 const createAdditionalServiceSlice = createSlice({
@@ -41,6 +42,9 @@ const createAdditionalServiceSlice = createSlice({
     setServiceIcon: (state, action) => {
       state.photo = action.payload;
     },
+    setIsDone: (state, action) => {
+      state.isDone = action.payload;
+    },
   },
 });
 
@@ -49,6 +53,7 @@ export const {
   setServiceEnglish,
   setServiceRussian,
   setServiceUzbek,
+  setIsDone,
 } = createAdditionalServiceSlice.actions;
 
 export default createAdditionalServiceSlice.reducer;

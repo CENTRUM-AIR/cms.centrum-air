@@ -10,6 +10,7 @@ const initialState = {
   small_description_en: "",
   small_description_ru: "",
   photo: "",
+  isDone: false,
 };
 
 const createNewsSlide = createSlice({
@@ -38,10 +39,18 @@ const createNewsSlide = createSlice({
     setNewsPhoto: (state, action) => {
       state.photo = action.payload;
     },
+    setIsDone: (state, action) => {
+      state.isDone = action.payload;
+    },
   },
 });
 
-export const { setNewsPhoto, setNewsEnglish, setNewsRussian, setNewsUzbek } =
-  createNewsSlide.actions;
+export const {
+  setNewsPhoto,
+  setNewsEnglish,
+  setNewsRussian,
+  setNewsUzbek,
+  setIsDone,
+} = createNewsSlide.actions;
 
 export default createNewsSlide.reducer;
