@@ -82,10 +82,12 @@ export const Additional = () => {
             ? {
                 title: "",
                 photo: "",
+                color: "",
               }
             : {
                 title: mainPageDetails?.[`title_${language}`],
                 photo: mainPageDetails?.photo_url,
+                color: mainPageDetails?.color,
               };
         case OFFERS:
           const offersDetails = offers.find((item) => item.id === id);
@@ -157,6 +159,7 @@ export const Additional = () => {
       setPhoto,
       setPrice,
       setCode,
+      setColor,
       setPhoneNumber,
     } = additionalInfo.find((item) => item.type === type);
     setEnglish(getCorrectInfo("en"));
@@ -165,6 +168,7 @@ export const Additional = () => {
     setPhoto && setPhoto({ photo: getCorrectInfo()?.photo });
     setPrice && setPrice({ price: getCorrectInfo()?.price });
     setCode && setCode({ city_code: getCorrectInfo()?.city_code });
+    setColor && setColor(getCorrectInfo()?.color);
     setPhoneNumber &&
       setPhoneNumber({ phone_number: getCorrectInfo()?.phone_number });
     isCreation
@@ -188,8 +192,6 @@ export const Additional = () => {
           [type]: true,
         }));
   };
-
-
 
   return (
     <>

@@ -26,6 +26,7 @@ export const useCreationConfig = (type) => {
           title: "Main Page",
           mainText: true,
           isFileNeeded: true,
+          color: true,
         };
       case OFFERS:
         return {

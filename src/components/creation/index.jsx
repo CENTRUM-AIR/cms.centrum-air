@@ -12,6 +12,7 @@ export const Creation = ({
   setFile,
   setPrice,
   setCode,
+  setColor,
   setPhoneNumber,
   titleText,
   sendInfo,
@@ -27,6 +28,7 @@ export const Creation = ({
   const [destination, setDestination] = useState("");
   const [code, setCityCode] = useState("");
   const [phoneNumber, setNewPhoneNumber] = useState("");
+  const [inputColor, setInputColor] = useState("#fff");
 
   useEffect(() => {
     setInputTitle(selectorData?.[`title_${language}`] || "");
@@ -57,6 +59,9 @@ export const Creation = ({
     if (selectorData?.price?.price) {
       setInputPrice(selectorData?.price?.price);
     }
+    if (selectorData?.color) {
+      setInputPrice(selectorData?.color);
+    }
 
     if (selectorData?.city_code) {
       setCityCode(selectorData?.city_code);
@@ -85,6 +90,7 @@ export const Creation = ({
     setFile && setFile(image);
     setCode && setCode({ city_code: code });
     setPhoneNumber && setPhoneNumber({ phone_number: phoneNumber });
+    setColor && setColor(inputColor);
   };
 
   const nextLanguage = (newType, goNext) => {
@@ -127,6 +133,8 @@ export const Creation = ({
       phoneNumber={phoneNumber}
       setNewPhoneNumber={setNewPhoneNumber}
       publishInfo={publishInfo}
+      setColor={setInputColor}
+      inputColor={inputColor}
     />
   );
 };

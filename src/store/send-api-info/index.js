@@ -37,11 +37,12 @@ export const sendMainPage = createAsyncThunk(
   async (data, apiThunk) => {
     try {
       const { createMainPage } = apiThunk.getState();
-      const { photo, title_uz, title_ru, title_en } = createMainPage;
+      const { photo, title_uz, title_ru, title_en, color } = createMainPage;
       const formDataMainPage = new FormData();
       formDataMainPage.append("title_ru", title_ru);
       formDataMainPage.append("title_en", title_en);
       formDataMainPage.append("title_uz", title_uz);
+      formDataMainPage.append("color", color);
       formDataMainPage.append("file", photo?.photo);
 
       const id = await formDataApi
@@ -52,6 +53,7 @@ export const sendMainPage = createAsyncThunk(
         title_ru,
         title_en,
         title_uz,
+        color,
         photo_url: photo?.photo.preview,
       };
       apiThunk.dispatch(setIsDoneMainpage(true));

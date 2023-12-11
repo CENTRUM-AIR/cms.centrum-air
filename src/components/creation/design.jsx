@@ -36,6 +36,7 @@ const Design = ({
   shortDescription,
   setShortDescription,
   inputPrice,
+  inputColor,
   setInputPrice,
   destination,
   setDestination,
@@ -48,6 +49,7 @@ const Design = ({
   phoneNumber,
   setNewPhoneNumber,
   publishInfo,
+  setColor,
 }) => {
   const {
     smallDesc,
@@ -63,6 +65,7 @@ const Design = ({
     isPhoneNumber,
     fromCityName,
     selector,
+    color,
   } = useCreationConfig(actionType);
   const dispatch = useDispatch();
   const { isDone } = useSelector(selector);
@@ -133,6 +136,16 @@ const Design = ({
                 value={inputPrice}
                 onChange={(e) => setInputPrice(e.target.value)}
                 placeholder="Введите цену"
+              />
+            </>
+          )}
+          {color && (
+            <>
+              <span>Цвет</span>
+              <StyledInput
+                value={inputColor}
+                onChange={(e) => setColor(e.target.value)}
+                placeholder="Введите цвет"
               />
             </>
           )}

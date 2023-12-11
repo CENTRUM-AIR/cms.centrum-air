@@ -38,7 +38,7 @@ export const patchMainPage = createAsyncThunk(
   async (data, apiThunk) => {
     try {
       const { createMainPage } = apiThunk.getState();
-      const { title, photo: newPhoto, id } = data;
+      const { title, color, photo: newPhoto, id } = data;
       const formDataMainPage = new FormData();
       const patchData = {};
       LANGUAGES.forEach((lang) => {
@@ -55,6 +55,11 @@ export const patchMainPage = createAsyncThunk(
       if (newPhoto?.photo !== createMainPage?.photo?.photo) {
         patchData.photo = newPhoto?.photo;
         formDataMainPage.append("file", newPhoto?.photo);
+      }
+      console.log(color, createMainPage?.color);
+      if (color !== createMainPage?.color) {
+        patchData.color = color;
+        formDataMainPage.append("color", color);
       }
       if (!Object.keys(patchData).length) {
         window.alert("Ничего не было изменено");

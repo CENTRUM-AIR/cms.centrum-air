@@ -5,6 +5,7 @@ import {
   setPhoto,
   setTitleRussian,
   setTitleUzbek,
+  setColor,
 } from "../../store/create-main-page";
 import {
   setServiceEnglish,
@@ -126,6 +127,9 @@ export const useAdditionalInfo = () => {
       },
       setPhoto: (photo) => {
         dispatch(setPhoto(photo));
+      },
+      setColor: (color) => {
+        dispatch(setColor(color));
       },
       sendInfo: () => dispatch(sendMainPage()),
       updateInfo: (data) => dispatch(patchMainPage(data)),

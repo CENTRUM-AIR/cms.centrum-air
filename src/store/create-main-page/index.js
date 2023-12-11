@@ -4,6 +4,7 @@ const initialState = {
   title_uz: "",
   title_ru: "",
   photo: "",
+  color: "#fff",
   isDone: false,
 };
 
@@ -27,7 +28,9 @@ const createMainPageSlide = createSlice({
     setPhoto: (state, action) => {
       state.photo = action.payload;
     },
-
+    setColor: (state, action) => {
+      state.color = action.payload;
+    },
     setIsDone: (state, action) => {
       state.isDone = action.payload;
     },
@@ -40,6 +43,7 @@ export const {
   setTitleEnglish,
   setTitleRussian,
   setTitleUzbek,
+  setColor,
 } = createMainPageSlide.actions;
 
 export default createMainPageSlide.reducer;

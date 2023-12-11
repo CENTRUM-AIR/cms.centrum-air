@@ -8,6 +8,8 @@ const Edition = ({ actionType, onClose, titleText, sendInfo, itemId }) => {
   const selectorData = useSelector(selector);
 
   const [language, setLanguage] = useState("ru");
+  // console.log(selectorData?.color);
+  const [color, setColor] = useState(selectorData?.color || "#fff");
   const [inputTitle, setInputTitle] = useState({
     ru: selectorData?.title_ru || selectorData?.country_ru || "",
     en: selectorData?.title_en || selectorData?.country_en || "",
@@ -89,6 +91,7 @@ const Edition = ({ actionType, onClose, titleText, sendInfo, itemId }) => {
       price: inputPrice,
       city_code: code,
       phone_number: phoneNumber,
+      color,
       id: itemId,
     });
   };
@@ -117,6 +120,8 @@ const Edition = ({ actionType, onClose, titleText, sendInfo, itemId }) => {
       phoneNumber={phoneNumber}
       setNewPhoneNumber={changePhoneNumber}
       publishInfo={publishInfo}
+      inputColor={color}
+      setColor={setColor}
     />
   );
 };
