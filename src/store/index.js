@@ -5,27 +5,21 @@ import DestinationsReducer from "./create-destinations";
 import CountriesReducer from "./create-countries";
 import ChartersReducer from "./create-charter";
 import NewsReducer from "./create-news";
-import AllInfoReducer from "./get-api-info";
-import SendInfoReducer from "./send-api-info";
-import PatchInfoReducer from "./patch-api-info";
-import isAuthReducer from "./auth";
-import NewUserReducer from "./create-user";
+import usersReducer from "./create-user";
 import FaqReducer from "./create-faq";
+import StatusReducer from "./notifs";
 
 export const store = configureStore({
   reducer: {
     createService: AdditionalServiceReducer,
-    createMainPage: MainPageReducer,
+    mainpage: MainPageReducer,
     createDestinations: DestinationsReducer,
-    isAuth: isAuthReducer,
     createCountries: CountriesReducer,
-    createCharters: ChartersReducer,
+    charters: ChartersReducer,
     createNews: NewsReducer,
-    allInfo: AllInfoReducer,
-    sendInfo: SendInfoReducer,
-    patchInfo: PatchInfoReducer,
-    newUser: NewUserReducer,
+    users: usersReducer,
     createFaq: FaqReducer,
+    status: StatusReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
@@ -34,14 +28,13 @@ export const store = configureStore({
 });
 
 export const getServices = (state) => state.createService;
-export const getMainPage = (state) => state.createMainPage;
+export const getMainPage = (state) => state.mainpage;
 export const getDestinations = (state) => state.createDestinations;
-export const getUser = (state) => state.isAuth;
 export const getCountries = (state) => state.createCountries;
-export const getCharters = (state) => state.createCharters;
+export const getCharters = (state) => state.charters;
 export const getNews = (state) => state.createNews;
-export const getAllInfo = (state) => state.allInfo;
 export const sendAllInfo = (state) => state.sendInfo;
 export const patchAllInfo = (state) => state.patchInfo;
-export const getNewUser = (state) => state.newUser;
+export const getUsers = (state) => state.users;
 export const getFaq = (state) => state.createFaq;
+export const getStatus = (state) => state.status;

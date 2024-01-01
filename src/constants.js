@@ -9,9 +9,14 @@ export const RULES = "rules";
 export const CONTACTS = "contacts";
 export const FAQ = "faq";
 
-export const SUPERADMIN = "superAdmin";
+export const SUPERADMIN = "superadmin";
 export const HR = "hr";
-export const CONTENTMANAGER = "contentManager";
-export const PRESSCENTER = "pressCenter";
+export const CONTENTMANAGER = "contentmanager";
+export const PRESSCENTER = "presscenter";
 
-export const ROLES = ["pressCenter", "superAdmin", "hr", "contentManager"];
+export const ROLES = [
+  { label: "Press Center", value: "pressCenter" },
+  { label: "Super Admin", value: "superAdmin" },
+  { label: "HR", value: "hr" },
+  { label: "Content Manager", value: "contentManager" },
+];

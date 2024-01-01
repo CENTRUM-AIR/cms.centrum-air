@@ -8,6 +8,17 @@ const SidePopUp = keyframes`
     width: 630px;
   }
 `;
+
+export const FileHolder = styled.div`
+  width: 300px;
+  height: 200px;
+  border: 1px solid gray;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`;
 export const CloseText = styled.button`
   outline: none;
   border: none;
@@ -54,7 +65,6 @@ export const Wrapper = styled.div`
   gap: 20px;
 `;
 
-
 export const MainTitle = styled.h1`
   font-size: 32px;
   font-style: normal;
@@ -67,8 +77,7 @@ export const MainTitle = styled.h1`
 
 export const ButtonHolder = styled.div`
   display: flex;
-  /* gap: 15px; */
-  justify-content: space-between;
+  gap: 15px;
 `;
 
 export const WarningText = styled.p`

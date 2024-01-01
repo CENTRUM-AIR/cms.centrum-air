@@ -1,7 +1,7 @@
 import React from "react";
 import { Modal } from "../Modal";
-import { ButtonsWrapper } from "./styled";
-import { StyledButton } from "../../shared_styled";
+import { ButtonsWrapper, Title, Wrapper } from "./styled";
+import { StyledButton, StyledRedButton } from "../../shared_styled";
 
 export const DeletionModal = ({ handleDelete, removeDelete }) => {
   const handleActionDelete = () => {
@@ -13,11 +13,13 @@ export const DeletionModal = ({ handleDelete, removeDelete }) => {
   };
   return (
     <Modal>
-      <p>Вы уверены что хотите удалить?</p>
-      <ButtonsWrapper>
-        <StyledButton onClick={handleActionDelete}>Да</StyledButton>
-        <StyledButton onClick={removeDelete}>Нет</StyledButton>
-      </ButtonsWrapper>
+      <Wrapper>
+        <Title>Вы уверены что хотите удалить?</Title>
+        <ButtonsWrapper>
+          <StyledRedButton onClick={handleActionDelete}>Да</StyledRedButton>
+          <StyledButton onClick={removeDelete}>Нет</StyledButton>
+        </ButtonsWrapper>
+      </Wrapper>
     </Modal>
   );
 };
