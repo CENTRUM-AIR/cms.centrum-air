@@ -19,17 +19,15 @@ export const Dropzone = ({ onClose, setImage, fileType }) => {
       reader.onloadend = async () => {
         const svgString = reader.result;
         const newIcon = svgString.replace(/"/g, "'").replace(/\n/g, "");
-        setImage({
-          photo: newIcon,
-        });
+        setImage(newIcon);
       };
       reader.readAsText(acceptedFiles[0]);
     } else {
-      setImage({
-        photo: Object.assign(acceptedFiles[0], {
+      setImage(
+        Object.assign(acceptedFiles[0], {
           preview: URL.createObjectURL(acceptedFiles[0]),
-        }),
-      });
+        })
+      );
     }
     onClose();
   }, []);

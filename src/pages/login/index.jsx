@@ -13,17 +13,13 @@ import { ReactComponent as CentrumLogo } from "../../icons/centrum.svg";
 import { StyledButton, StyledInput } from "../../shared_styled";
 import api from "../../utils/api";
 import { useNavigate } from "react-router-dom";
-import { getUser } from "../../store";
-import { useSelector, useDispatch } from "react-redux";
-import { setUser } from "../../store/auth";
+import Cookie from "js-cookie";
 
 export const LoginPage = () => {
-  const { login: authLogin } = useSelector(getUser);
   const [login, setLogin] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [error, setError] = React.useState(null);
   const navigate = useNavigate();
-  const dispatch = useDispatch();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -32,26 +28,17 @@ export const LoginPage = () => {
         setError(true);
         return;
       }
-
       const data = await api.post("/users/login", { login, password });
       if (data.status === 201 || data.status === 200) {
-        dispatch(
-          setUser({
-            login,
-            role: data?.data,
-          })
-        );
+        Cookie.set("login", login);
+        Cookie.set("role", data?.data, { expires: 4 / 24 });
         navigate("/");
       }
     } catch (error) {
       setError(true);
     }
   };
-  useEffect(() => {
-    if (authLogin) {
-      navigate("/");
-    }
-  }, []);
+
   return (
     <Global>
       <CentrumLogo width="137px" height="44px" />

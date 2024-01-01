@@ -6,3 +6,16 @@ export const ButtonsWrapper = styled.div`
   margin-top: 20px;
   width: 100%;
 `;
+
+export const Title = styled.h1`
+  font-size: 22px;
+`;
+
+export const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+  align-items: center;
+  height: 100%;
+`;

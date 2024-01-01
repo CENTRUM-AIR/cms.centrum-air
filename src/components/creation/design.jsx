@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from "react";
-import { useCreationConfig } from "../../utils/creation-config";
+import React, { useState } from "react";
 import {
   ButtonHolder,
   CloseText,
-  FlexContainer,
+  FileHolder,
   MainTitle,
   MainWrapper,
   ModalBackdrop,
@@ -11,93 +10,55 @@ import {
   Wrapper,
 } from "./styled";
 import { ReactComponent as CloseIcon } from "../../icons/close.svg";
-import { StyledButton, StyledInput, StyledTextArea } from "../../shared_styled";
+import {
+  StyledButton,
+  StyledInput,
+  StyledRedButton,
+  StyledTextArea,
+} from "../../shared_styled";
 import { Dropzone } from "../dropzone";
 import SVG from "react-inlinesvg";
 import { LanguageChange } from "../changeLanguage";
-import { useDispatch, useSelector } from "react-redux";
-import { setIsDone as setIsDoneMainpage } from "../../store/create-main-page";
-import { setIsDone as setIsDoneAS } from "../../store/create-additional-service";
-import { setIsDone as setIsDoneDestinations } from "../../store/create-destinations";
-import { setIsDone as setIsDoneCountries } from "../../store/create-countries";
-import { setIsDone as setIsDoneCharters } from "../../store/create-charter";
-import { setIsDone as setIsDoneNews } from "../../store/create-news";
-import { setIsDone as setIsDoneUser } from "../../store/create-user";
-import { setIsDone as setIsDoneFaq } from "../../store/create-faq";
+import { DeletionModal } from "../deletionModal";
+import { ROLES } from "../../constants";
+import { Select } from "../select";
 
 const Design = ({
-  actionType,
   titleText,
+  setText,
+  item,
+  isNew,
   onClose,
-  language,
-  nextLanguage,
-  inputTitle,
-  setInputTitle,
-  shortDescription,
-  setShortDescription,
-  inputPrice,
-  inputColor,
-  setInputPrice,
-  destination,
-  setDestination,
-  description,
-  setDescription,
   image,
+  onDelete,
   setImage,
-  code,
+  canBePublished,
+  handlePublish,
+  setFrom,
+  setTo,
+  setPhoneNumber,
+  isPhoto = true,
+  setUserInfo,
+  setCity,
+  setCountry,
   setCityCode,
-  phoneNumber,
-  setNewPhoneNumber,
-  publishInfo,
-  setColor,
+  setSmallDescription,
+  setDescription,
+  fileType,
+  shortDescTitle,
+  setPrice,
+  setAnswer,
+  setQuestion,
 }) => {
-  const {
-    smallDesc,
-    destination: showDestination,
-    price,
-    isTextArea,
-    fileType,
-    cityCode,
-    countryName,
-    cityName,
-    mainText,
-    isFileNeeded,
-    isPhoneNumber,
-    fromCityName,
-    selector,
-    color,
-  } = useCreationConfig(actionType);
-  const dispatch = useDispatch();
-  const { isDone } = useSelector(selector);
   const [openDropzone, setOpenDropzone] = useState(false);
-  const [isPublishedPressed, setIsPublishedPressed] = useState(false);
-
-  const dispatchAllClosing = () => {
-    dispatch(setIsDoneMainpage(false));
-    dispatch(setIsDoneAS(false));
-    dispatch(setIsDoneDestinations(false));
-    dispatch(setIsDoneCountries(false));
-    dispatch(setIsDoneCharters(false));
-    dispatch(setIsDoneNews(false));
-    dispatch(setIsDoneUser(false));
-    dispatch(setIsDoneFaq(false));
-  };
+  const [isDelete, setIsDelete] = useState(false);
   const isSvg = () => {
-    if (typeof image?.photo === "string")
-      return image?.photo?.includes("svg") ? true : false;
+    if (typeof image === "string") return image?.includes("svg") ? true : false;
     return false;
   };
-  useEffect(() => {
-    if (isPublishedPressed && isDone) {
-      dispatchAllClosing();
-      onClose();
-    }
-  }, [isDone, isPublishedPressed]);
 
-  const actualPublish = () => {
-    setIsPublishedPressed(true);
-    publishInfo();
-  };
+  const [language, setLanguage] = useState("ru");
+  const handleLanguageSwitch = (lang) => setLanguage(lang);
   return (
     <>
       <MainWrapper>
@@ -108,145 +69,267 @@ const Design = ({
               <CloseIcon /> закрыть
             </CloseText>
           </MainTitle>
-          <LanguageChange language={language} changeLang={nextLanguage} />
-          {mainText && (
+          {!setUserInfo && (
+            <LanguageChange
+              language={language}
+              changeLang={handleLanguageSwitch}
+            />
+          )}
+          {setText && (
             <>
               <span>Заголовок</span>
               <StyledTextArea
-                value={inputTitle}
-                onChange={(e) => setInputTitle(e.target.value)}
+                value={item?.title?.[language]}
+                onChange={(e) =>
+                  setText((prev) => ({ ...prev, [language]: e.target.value }))
+                }
                 placeholder="Введите заголовок"
               />
             </>
           )}
-          {smallDesc && (
-            <>
-              <span>Краткое описание</span>
-              <StyledTextArea
-                value={shortDescription}
-                onChange={(e) => setShortDescription(e.target.value)}
-                placeholder="Введите краткое описание"
-              />
-            </>
-          )}
-          {price && (
+          {setPrice && (
             <>
               <span>Цена</span>
               <StyledInput
-                value={inputPrice}
-                onChange={(e) => setInputPrice(e.target.value)}
+                value={item?.price}
+                onChange={(e) => setPrice(e.target.value)}
                 placeholder="Введите цену"
               />
             </>
           )}
-          {color && (
-            <>
-              <span>Цвет</span>
-              <StyledInput
-                value={inputColor}
-                onChange={(e) => setColor(e.target.value)}
-                placeholder="Введите цвет"
-              />
-            </>
-          )}
-          {showDestination && (
-            <FlexContainer>
-              <span>Направление</span>
-              <WarningText>*e.g.: Из Ташкента и обратно</WarningText>
-              <StyledInput
-                placeholder="Введите направление"
-                value={destination}
-                onChange={(e) => setDestination(e.target.value)}
-              />
-            </FlexContainer>
-          )}
-          {isTextArea && (
-            <>
-              <span>содержание</span>
-              <StyledTextArea
-                value={description}
-                placeholder="Введите содержение"
-                onChange={(e) => setDescription(e.target.value)}
-              />
-            </>
-          )}
-          {image?.photo && (
-            <>
-              {isSvg() ? (
-                <SVG src={image.photo} width="100px" height="100px" />
-              ) : (
-                <img
-                  width="200px"
-                  height="100px"
-                  src={image.photo?.preview || image.photo}
-                  alt="expected"
-                />
-              )}
-            </>
-          )}
-          {fromCityName && (
+          {setFrom && (
             <>
               <span>С Какого Города</span>
               <StyledInput
-                value={shortDescription}
-                onChange={(e) => setShortDescription(e.target.value)}
+                value={item?.fromCity?.[language]}
+                onChange={(e) =>
+                  setFrom((prev) => ({ ...prev, [language]: e.target.value }))
+                }
                 placeholder="Введите имя Города"
               />
             </>
           )}
-          {cityName && (
+          {setTo && (
+            <>
+              <span>В Какой Город</span>
+              <StyledInput
+                value={item?.toCity?.[language]}
+                onChange={(e) =>
+                  setTo((prev) => ({ ...prev, [language]: e.target.value }))
+                }
+                placeholder="Введите имя Города"
+              />
+            </>
+          )}
+          {setUserInfo && (
+            <>
+              <span>Логин</span>
+              <StyledInput
+                value={item?.login}
+                placeholder="Введите Логин"
+                onChange={(e) =>
+                  setUserInfo((prev) => ({ ...prev, login: e.target.value }))
+                }
+              />
+            </>
+          )}
+          {setUserInfo && (
+            <>
+              <span>Пароль</span>
+              <StyledInput
+                value={item?.password}
+                placeholder="Введите новый Пароль"
+                onChange={(e) =>
+                  setUserInfo((prev) => ({ ...prev, password: e.target.value }))
+                }
+              />
+            </>
+          )}
+          {setUserInfo && (
+            <>
+              <span>Роль</span>
+              <Select
+                text="Роль"
+                selectedValue={item?.role}
+                onPick={(e) =>
+                  setUserInfo((prev) => ({
+                    ...prev,
+                    role: e,
+                  }))
+                }
+                placeholder="Выберите роль"
+                items={ROLES}
+              />
+            </>
+          )}
+          {setPhoneNumber && (
+            <>
+              <span>Номер Телефона</span>
+              <StyledInput
+                value={item?.phoneNumber}
+                onChange={(e) => setPhoneNumber(e.target.value)}
+                placeholder="Введите номер телефона Города"
+              />
+            </>
+          )}
+          {setCity && (
             <>
               <span>Город</span>
               <StyledInput
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
+                value={item?.city?.[language]}
+                onChange={(e) =>
+                  setCity((prev) => ({ ...prev, [language]: e.target.value }))
+                }
                 placeholder="Введите имя Города"
               />
             </>
           )}
-          {countryName && (
+          {setCountry && (
             <>
               <span>Страна</span>
               <StyledInput
-                value={inputTitle}
-                onChange={(e) => setInputTitle(e.target.value)}
+                value={item?.country?.[language]}
+                onChange={(e) =>
+                  setCountry((prev) => ({
+                    ...prev,
+                    [language]: e.target.value,
+                  }))
+                }
                 placeholder="Введите имя Страны"
               />
             </>
           )}
-          {cityCode && (
+          {setCityCode && (
             <>
               <span>Код Города</span>
               <StyledInput
-                value={code}
+                value={item?.cityCode}
                 onChange={(e) => setCityCode(e.target.value.toUpperCase())}
                 placeholder="Введите код Города"
               />
             </>
           )}
-          {isPhoneNumber && (
+          {setQuestion && (
             <>
-              <span>Номер Телефона</span>
+              <span>Вопрос</span>
               <StyledInput
-                value={phoneNumber}
-                onChange={(e) => setNewPhoneNumber(e.target.value)}
-                placeholder="Введите номер телефона Города"
+                value={item?.question?.[language]}
+                onChange={(e) =>
+                  setQuestion((prev) => ({
+                    ...prev,
+                    [language]: e.target.value,
+                  }))
+                }
+                placeholder="Введите Вопрос"
               />
             </>
           )}
-          {isFileNeeded && (
-            <StyledButton onClick={() => setOpenDropzone(true)}>
-              Загрузить файл обложки или иконку
-            </StyledButton>
+          {setAnswer && (
+            <>
+              <span>Ответ</span>
+              <StyledTextArea
+                value={item?.answer?.[language]}
+                onChange={(e) =>
+                  setAnswer((prev) => ({
+                    ...prev,
+                    [language]: e.target.value,
+                  }))
+                }
+                placeholder="Введите Ответ"
+              />
+            </>
+          )}
+          {setSmallDescription && (
+            <>
+              <span>
+                {shortDescTitle || "Краткое описание"}
+                {shortDescTitle && (
+                  <WarningText>*e.g.: Из Ташкента и обратно</WarningText>
+                )}
+              </span>
+
+              <StyledTextArea
+                value={item?.smallDescription?.[language]}
+                onChange={(e) =>
+                  setSmallDescription((prev) => ({
+                    ...prev,
+                    [language]: e.target.value,
+                  }))
+                }
+                placeholder={`Введите ${
+                  shortDescTitle?.toLowerCase() || "краткое описание"
+                }`}
+              />
+            </>
+          )}
+          {setDescription && (
+            <>
+              <span>Cодержание</span>
+              <StyledTextArea
+                value={item?.description?.[language]}
+                placeholder="Введите содержение"
+                onChange={(e) =>
+                  setDescription((prev) => ({
+                    ...prev,
+                    [language]: e.target.value,
+                  }))
+                }
+              />
+            </>
+          )}
+          {isPhoto && (
+            <>
+              {image ? (
+                <>
+                  {isSvg() ? (
+                    <SVG
+                      onClick={() => setOpenDropzone(true)}
+                      src={image?.preview || image}
+                      width="200px"
+                      height="100px"
+                    />
+                  ) : (
+                    <img
+                      onClick={() => setOpenDropzone(true)}
+                      width="300px"
+                      height="200px"
+                      src={image?.preview || image}
+                      alt="expected"
+                    />
+                  )}
+                </>
+              ) : (
+                <FileHolder onClick={() => setOpenDropzone(true)}>
+                  Добавить файл
+                </FileHolder>
+              )}
+            </>
           )}
           <ButtonHolder>
-            <StyledButton width="138px" onClick={actualPublish}>
+            <StyledButton disabled={!canBePublished} onClick={handlePublish}>
               Опубликовать
             </StyledButton>
-            <StyledButton width="80px" onClick={() => nextLanguage("", true)}>
+            <StyledButton
+              onClick={() =>
+                handleLanguageSwitch(
+                  language === "ru" ? "en" : language === "en" ? "uz" : "ru"
+                )
+              }
+            >
               Далее
             </StyledButton>
           </ButtonHolder>
+          {!isNew && (
+            <StyledRedButton onClick={() => setIsDelete(true)}>
+              Удалить
+            </StyledRedButton>
+          )}
+          {isDelete && (
+            <DeletionModal
+              handleDelete={onDelete}
+              removeDelete={() => setIsDelete(false)}
+            />
+          )}
         </Wrapper>
       </MainWrapper>
       <ModalBackdrop />

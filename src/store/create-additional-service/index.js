@@ -1,50 +1,64 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { fetchServices } from "./fetch";
+import { patchServices } from "./patch";
+import { deleteService } from "./delete";
+import { sendServices } from "./post";
 const initialState = {
-  title_en: "",
-  title_uz: "",
-  title_ru: "",
-  description_en: "",
-  description_uz: "",
-  description_ru: "",
-  small_description_en: "",
-  small_description_uz: "",
-  small_description_ru: "",
-  photo: "",
-  isDone: false,
+  data: [],
+  fetched: false,
+  loading: false,
 };
 
 const createAdditionalServiceSlice = createSlice({
   name: "createService",
   initialState,
-  reducers: {
-    setServiceEnglish: (state, action) => {
-      const { title, description, small_description } = action.payload;
-
-      state.title_en = title;
-      state.description_en = description;
-      state.small_description_en = small_description;
-    },
-    setServiceRussian: (state, action) => {
-      const { title, description, small_description } = action.payload;
-
-      state.title_ru = title;
-      state.description_ru = description;
-      state.small_description_ru = small_description;
-    },
-    setServiceUzbek: (state, action) => {
-      const { title, description, small_description } = action.payload;
-
-      state.title_uz = title;
-      state.description_uz = description;
-      state.small_description_uz = small_description;
-    },
-
-    setServiceIcon: (state, action) => {
-      state.photo = action.payload;
-    },
-    setIsDone: (state, action) => {
-      state.isDone = action.payload;
-    },
+  reducers: {},
+  extraReducers(builder) {
+    builder.addCase(fetchServices.fulfilled, (state, action) => {
+      state.loading = false;
+      state.data = action.payload;
+      state.fetched = true;
+    });
+    builder.addCase(fetchServices.pending, (state, action) => {
+      state.loading = true;
+      state.fetched = false;
+    });
+    builder.addCase(fetchServices.rejected, (state, action) => {
+      state.loading = false;
+      state.fetched = true;
+    });
+    builder.addCase(patchServices.fulfilled, (state, action) => {
+      state.loading = false;
+      const { data, id } = action.payload;
+      const index = state.data.findIndex((item) => item.id === id);
+      state.data[index] = data;
+    });
+    builder.addCase(patchServices.pending, (state, action) => {
+      state.loading = true;
+    });
+    builder.addCase(patchServices.rejected, (state, action) => {
+      state.loading = false;
+    });
+    builder.addCase(deleteService.fulfilled, (state, action) => {
+      state.loading = false;
+      state.data = state.data.filter((item) => item.id !== action.payload);
+    });
+    builder.addCase(deleteService.pending, (state, action) => {
+      state.loading = true;
+    });
+    builder.addCase(deleteService.rejected, (state, action) => {
+      state.loading = false;
+    });
+    builder.addCase(sendServices.fulfilled, (state, action) => {
+      state.loading = false;
+      if (action.payload) state.data.unshift(action.payload);
+    });
+    builder.addCase(sendServices.pending, (state, action) => {
+      state.loading = true;
+    });
+    builder.addCase(sendServices.rejected, (state, action) => {
+      state.loading = false;
+    });
   },
 });
 

@@ -49,6 +49,23 @@ export const StyledButton = styled.button`
   cursor: pointer;
   width: ${({ width }) => width || "100%"};
 `;
+export const StyledRedButton = styled.button`
+  border: none;
+  outline: none;
+  border-radius: 12px;
+  background-color: #d80027;
+  height: ${({ height }) => height || "56px"};
+  padding: 8px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 500;
+  cursor: pointer;
+  width: ${({ width }) => width || "100%"};
+`;
 
 export const StyledSelect = styled.select`
   height: 56px;

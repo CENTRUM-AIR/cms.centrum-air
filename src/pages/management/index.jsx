@@ -1,111 +1,33 @@
-import React, { Fragment, useEffect, useState } from "react";
-import { ManagementHeader } from "../../components/managementHeader";
-import { ReactComponent as Edit } from "../../icons/edit.svg";
-import { ReactComponent as Delete } from "../../icons/delete.svg";
-import { getAllInfo, getUser } from "../../store";
-import { useDispatch, useSelector } from "react-redux";
-import { CreateUser } from "../../components/creation/createUser";
-import { MainWrapperPages, NoInfo, TableWrapper } from "../../shared_styled";
-import { deleteInfo, fetchUsers } from "../../store/get-api-info";
-import createUser, { setNewUser } from "../../store/create-user";
-import api from "../../utils/api";
-import { DeletionModal } from "../../components/deletionModal";
-import { SUPERADMIN, USERS } from "../../constants";
+import React, { useEffect } from "react";
+import { useSelector } from "react-redux";
+import { getUsers } from "../../store";
+import { MainWrapper, Title, Wrapper } from "../charters/styled";
+import { UserComp } from "../../components/user-comp";
+import { fetchUsers } from "../../store/create-user/fetch";
+import { useGetInfo } from "../../hooks/use-get-info";
 import { useNavigate } from "react-router-dom";
-
-const CORRECT_ROLES = [SUPERADMIN];
+import Cookies from "js-cookie";
+import { SUPERADMIN } from "../../constants";
 
 const Management = () => {
-  const dispatch = useDispatch();
+  const { data } = useSelector(getUsers);
+  useGetInfo({ selector: getUsers, fetcher: fetchUsers });
+
   const navigate = useNavigate();
-  const { users, usersFetched } = useSelector(getAllInfo);
-  const [filteredUsers, setFilteredUsers] = useState(users);
-  const [search, setSearch] = useState("");
-  const [deleteModal, setDeleteModal] = useState(false);
-  const { role } = useSelector(getUser);
-  const [openModal, setOpenModal] = useState(false);
-
-  const handleOpenModal = (user) => {
-    dispatch(
-      setNewUser({
-        login: user?.login,
-        role: user?.role,
-        id: user?.id,
-      })
-    );
-    setOpenModal(user?.id);
-  };
-
-  const handleDelete = async (id) => {
-    await api.delete(`/users/delete/${id}`);
-    dispatch(deleteInfo({ id, type: USERS }));
-    setDeleteModal(false);
-  };
-
+  const role = Cookies.get("role");
   useEffect(() => {
-    if (!CORRECT_ROLES.includes(role)) {
-      navigate("/not-found");
-    }
+    if (role?.toLowerCase() !== SUPERADMIN) navigate("/not-found");
   }, [role, navigate]);
-  useEffect(() => {
-    if (!usersFetched && role) dispatch(fetchUsers());
-  }, [dispatch, usersFetched, role]);
 
-  useEffect(() => {
-    if (search) {
-      const filtered = users?.filter((user) =>
-        user?.login?.toLowerCase().includes(search.toLowerCase())
-      );
-      setFilteredUsers(filtered);
-    } else {
-      setFilteredUsers(users);
-    }
-  }, [search, users]);
   return (
-    <MainWrapperPages>
-      <ManagementHeader setSearch={setSearch} search={search} />
-      {filteredUsers && filteredUsers?.length !== 0 ? (
-        <TableWrapper>
-          <thead>
-            <tr>
-              <th>ЛОГИН</th>
-              <th>РОЛЬ</th>
-              <th> </th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredUsers.map((user) => (
-              <Fragment key={user.id}>
-                <tr>
-                  <td>{user.login}</td>
-                  <td>{user.role}</td>
-                  <td style={{ textAlign: "end" }}>
-                    <Edit onClick={() => handleOpenModal(user)} />{" "}
-                    <Delete onClick={() => setDeleteModal(user?.id)} />
-                  </td>
-                </tr>
-                {openModal === user?.id && (
-                  <CreateUser
-                    update={(data) => dispatch(createUser(data))}
-                    userId={user?.id}
-                    onClose={() => setOpenModal(false)}
-                    title="Обновить пользователя"
-                  />
-                )}
-                {deleteModal === user?.id && (
-                  <DeletionModal
-                    handleDelete={() => handleDelete(user?.id)}
-                    removeDelete={() => setDeleteModal(false)}
-                  />
-                )}
-              </Fragment>
-            ))}
-          </tbody>
-        </TableWrapper>
-      ) : (
-        <NoInfo>No users</NoInfo>
-      )}
-    </MainWrapperPages>
+    <MainWrapper>
+      <Title>Пользователи</Title>
+      <Wrapper>
+        <UserComp />
+        {data?.length > 0 &&
+          data?.map((item) => <UserComp key={item?.id} item={item} />)}
+      </Wrapper>
+    </MainWrapper>
   );
 };
 

@@ -11,23 +11,14 @@ import { ReactComponent as CentrumLogo } from "../../icons/centrum.svg";
 import api from "../../utils/api";
 import { useLocation, useNavigate } from "react-router-dom";
 import { sideBarItems } from "./sideBar";
-import { useDispatch, useSelector } from "react-redux";
-import { setUser } from "../../store/auth";
-import { getUser } from "../../store";
+import Cookies from "js-cookie";
 
 export const SideBar = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const { role } = useSelector(getUser);
-  console.log(location.pathname);
   const logOut = () => {
-    dispatch(
-      setUser({
-        login: "",
-        role: "",
-      })
-    );
+    Cookies.remove("login");
+    Cookies.remove("role");
     api.post("/users/logout");
     navigate("/login");
   };
@@ -40,7 +31,7 @@ export const SideBar = () => {
         <MenuItemWrapper>
           {sideBarItems.map((item) => (
             <Fragment key={item.id}>
-              {item?.isCanSee.includes(role) ? (
+              {item?.isCanSee.includes(Cookies.get("role")?.toLowerCase()) ? (
                 <MenuItem
                   isselected={
                     item?.href === location.pathname ? "true" : undefined
