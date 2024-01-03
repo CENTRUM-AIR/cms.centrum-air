@@ -29,6 +29,7 @@ const createCountriesSlice = createSlice({
     });
     builder.addCase(patchCountries.fulfilled, (state, action) => {
       state.loading = false;
+      if (!action.payload) return;
       const { data, id } = action.payload;
       const index = state.data.findIndex((item) => item.id === id);
       state.data[index] = data;
@@ -51,7 +52,7 @@ const createCountriesSlice = createSlice({
     });
     builder.addCase(sendCountries.fulfilled, (state, action) => {
       state.loading = false;
-     if (action.payload) state.data.unshift(action.payload);
+      if (action.payload) state.data.unshift(action.payload);
     });
     builder.addCase(sendCountries.pending, (state, action) => {
       state.loading = true;

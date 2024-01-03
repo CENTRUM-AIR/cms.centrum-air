@@ -20,7 +20,13 @@ export const patchMainPage = createAsyncThunk(
       await formDataApi
         .patch(`/mainpage/${id}`, formDataMainPage)
         .catch((e) => {
-          thunk.dispatch(setError(e?.response?.data?.error));
+          thunk.dispatch(
+            setError(
+              e?.response?.data?.error ||
+                e?.response?.data?.message ||
+                e?.response?.data?.message
+            )
+          );
           throw new Error(e);
         });
       patchData.id = id;

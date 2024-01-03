@@ -7,7 +7,9 @@ export const fetchServices = createAsyncThunk(
   async (data, thunk) => {
     try {
       const response = await api.get("/services").catch((e) => {
-        thunk.dispatch(setError(e?.response?.data?.error));
+        thunk.dispatch(
+          setError(e?.response?.data?.error || e?.response?.data?.message)
+        );
         throw new Error(e);
       });
       return response.data;

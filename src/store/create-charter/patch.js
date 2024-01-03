@@ -19,7 +19,9 @@ export const patchCharters = createAsyncThunk(
       requestBody.phone_number = phoneNumber;
       patchData.phone_number = phoneNumber;
       await api.patch(`/charters/${id}`, requestBody).catch((e) => {
-        thunk.dispatch(setError(e?.response?.data?.error));
+        thunk.dispatch(
+          setError(e?.response?.data?.error || e?.response?.data?.message)
+        );
         throw new Error(e);
       });
       return { data: patchData, id };

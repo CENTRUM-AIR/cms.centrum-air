@@ -22,7 +22,9 @@ export const sendCountries = createAsyncThunk(
         .post("/countries", requestBody)
         .then((res) => res.data)
         .catch((e) => {
-          thunk.dispatch(setError(e?.response?.data?.error));
+          thunk.dispatch(
+            setError(e?.response?.data?.error || e?.response?.data?.message)
+          );
           throw new Error(e);
         });
       patchData.id = id;

@@ -8,7 +8,9 @@ export const deleteCountry = createAsyncThunk(
     try {
       const { id } = data;
       await api.delete(`/countries/${id}`).catch((e) => {
-        thunk.dispatch(setError(e?.response?.data?.error));
+        thunk.dispatch(
+          setError(e?.response?.data?.error || e?.response?.data?.message)
+        );
         throw new Error(e);
       });
       return id;

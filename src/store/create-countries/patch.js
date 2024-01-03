@@ -21,7 +21,9 @@ export const patchCountries = createAsyncThunk(
       patchData.city_code = cityCode;
       patchData.id = id;
       await api.patch(`/countries/${id}`, requestBody).catch((e) => {
-        thunk.dispatch(setError(e?.response?.data?.error));
+        thunk.dispatch(
+          setError(e?.response?.data?.error || e?.response?.data?.message)
+        );
         throw new Error(e);
       });
       return { data: patchData, id };
