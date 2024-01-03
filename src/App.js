@@ -14,6 +14,7 @@ import MainPage from "./pages/main-page";
 import Services from "./pages/services";
 import Directions from "./pages/directions";
 import { TopStatus } from "./components/top-status";
+import Logger from "./pages/logger";
 
 function App() {
   return (
@@ -50,6 +51,14 @@ function App() {
             element={
               <IsAuth path="/vacancies">
                 <Vacancies />
+              </IsAuth>
+            }
+          />
+          <Route
+            path="/logger"
+            element={
+              <IsAuth path="/logger">
+                <Logger />
               </IsAuth>
             }
           />
