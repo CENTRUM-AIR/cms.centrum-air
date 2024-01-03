@@ -15,7 +15,7 @@ export const StyledInput = styled.input`
 `;
 
 export const StyledTextArea = styled.textarea`
-  min-height: 61px;
+  min-height: 200px;
   width: ${({ width }) => width};
   height: ${({ height }) => height};
   outline: none;

@@ -15,15 +15,15 @@ export const patchMainPage = createAsyncThunk(
         formDataMainPage.append(`title_${lang}`, title[lang]);
         patchData[`title_${lang}`] = title[lang];
       });
-      patchData.photo = photo;
-      formDataMainPage.append("file", photo);
+      patchData.photo_url = photo?.preview || photo;
+      photo?.preview && formDataMainPage.append("file", photo);
       await formDataApi
         .patch(`/mainpage/${id}`, formDataMainPage)
         .catch((e) => {
           thunk.dispatch(setError(e?.response?.data?.error));
           throw new Error(e);
         });
-
+      patchData.id = id;
       return { data: patchData, id };
     } catch (e) {
       return null;

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   ButtonHolder,
   CloseText,
@@ -22,6 +22,7 @@ import { LanguageChange } from "../changeLanguage";
 import { DeletionModal } from "../deletionModal";
 import { ROLES } from "../../constants";
 import { Select } from "../select";
+import { TextEditor } from "../textEditor";
 
 const Design = ({
   titleText,
@@ -78,13 +79,27 @@ const Design = ({
           {setText && (
             <>
               <span>Заголовок</span>
-              <StyledTextArea
-                value={item?.title?.[language]}
-                onChange={(e) =>
-                  setText((prev) => ({ ...prev, [language]: e.target.value }))
-                }
-                placeholder="Введите заголовок"
-              />
+              {item?.isTitleInput ? (
+                <StyledInput
+                  value={item?.title?.[language]}
+                  onChange={(e) =>
+                    setText((prev) => ({
+                      ...prev,
+                      [language]: e?.target?.value,
+                    }))
+                  }
+                  placeholder="Введите заголовок"
+                />
+              ) : (
+                <TextEditor
+                  changeStatus={language}
+                  placeholder="Введите заголовок"
+                  value={item?.title?.[language]}
+                  onChange={(e) =>
+                    setText((prev) => ({ ...prev, [language]: e }))
+                  }
+                />
+              )}
             </>
           )}
           {setPrice && (
@@ -227,15 +242,16 @@ const Design = ({
           {setAnswer && (
             <>
               <span>Ответ</span>
-              <StyledTextArea
+              <TextEditor
+                changeStatus={language}
+                placeholder="Введите Ответ"
                 value={item?.answer?.[language]}
                 onChange={(e) =>
                   setAnswer((prev) => ({
                     ...prev,
-                    [language]: e.target.value,
+                    [language]: e,
                   }))
                 }
-                placeholder="Введите Ответ"
               />
             </>
           )}
