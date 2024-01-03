@@ -31,9 +31,10 @@ export const Text = styled.div`
   position: absolute;
   color: white;
   z-index: 1;
-  font-size: 42px;
-  bottom: 100px;
-  left: 100px;
+  font-size: 22px;
+  bottom: 50px;
+  left: 50px;
+  font-weight: 800;
   white-space: pre-line;
 `;
 
