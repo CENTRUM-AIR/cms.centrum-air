@@ -17,6 +17,8 @@ export const TextEditor = ({ placeholder, onChange, changeStatus, value }) => {
         blocksFromHTML.entityMap
       );
       setEditorState(EditorState.createWithContent(state));
+    } else {
+      setEditorState(EditorState.createEmpty());
     }
   }, [changeStatus]);
 

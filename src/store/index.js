@@ -8,6 +8,7 @@ import NewsReducer from "./create-news";
 import usersReducer from "./create-user";
 import FaqReducer from "./create-faq";
 import StatusReducer from "./notifs";
+import LoggerReducer from "./get-actions";
 
 export const store = configureStore({
   reducer: {
@@ -20,6 +21,7 @@ export const store = configureStore({
     users: usersReducer,
     createFaq: FaqReducer,
     status: StatusReducer,
+    actions: LoggerReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
@@ -38,3 +40,4 @@ export const patchAllInfo = (state) => state.patchInfo;
 export const getUsers = (state) => state.users;
 export const getFaq = (state) => state.createFaq;
 export const getStatus = (state) => state.status;
+export const getActions = (state) => state.actions;
