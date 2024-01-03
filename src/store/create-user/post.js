@@ -20,7 +20,9 @@ export const sendUsers = createAsyncThunk("send users", async (data, thunk) => {
       .post("/users/create", requestBody)
       .then((res) => res.data)
       .catch((e) => {
-        thunk.dispatch(setError(e?.response?.data?.error));
+        thunk.dispatch(
+          setError(e?.response?.data?.error || e?.response?.data?.message)
+        );
         throw new Error(e);
       });
 

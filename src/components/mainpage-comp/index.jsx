@@ -57,7 +57,7 @@ export const MainPageComp = ({ item }) => {
         ) : (
           <>
             <Image src={item?.photo_url} />
-            <Text>{item?.title_ru}</Text>
+            <Text dangerouslySetInnerHTML={{ __html: item?.title_ru }} />
           </>
         )}
       </Wrapper>

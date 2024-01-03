@@ -31,7 +31,7 @@ export const LoginPage = () => {
       const data = await api.post("/users/login", { login, password });
       if (data.status === 201 || data.status === 200) {
         Cookie.set("login", login);
-        Cookie.set("role", data?.data, { expires: 4 / 24 });
+        Cookie.set("role", data?.data, { expires: 1 / 48 });
         navigate("/");
       }
     } catch (error) {

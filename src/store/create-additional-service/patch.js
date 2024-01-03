@@ -22,7 +22,9 @@ export const patchServices = createAsyncThunk(
       patchData.icon = icon;
       patchData.id = id;
       await api.patch(`/services/${id}`, requestBody).catch((e) => {
-        thunk.dispatch(setError(e?.response?.data?.error));
+        thunk.dispatch(
+          setError(e?.response?.data?.error || e?.response?.data?.message)
+        );
         throw new Error(e);
       });
       return { data: patchData, id };

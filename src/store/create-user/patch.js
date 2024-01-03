@@ -13,7 +13,9 @@ export const patchUser = createAsyncThunk(
       };
       password && (info.password = password);
       await api.patch(`/users/update/${id}`, info).catch((e) => {
-        thunk.dispatch(setError(e?.response?.data?.error));
+        thunk.dispatch(
+          setError(e?.response?.data?.error || e?.response?.data?.message)
+        );
         throw new Error(e);
       });
       return {

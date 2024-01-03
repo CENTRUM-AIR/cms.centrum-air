@@ -15,7 +15,9 @@ export const patchFaq = createAsyncThunk("patch faq", async (data, thunk) => {
       patchData[`answer_${lang}`] = answer[lang];
     });
     await api.patch(`/faq/${id}`, requestBody).catch((e) => {
-      thunk.dispatch(setError(e?.response?.data?.error));
+      thunk.dispatch(
+        setError(e?.response?.data?.error || e?.response?.data?.message)
+      );
       throw new Error(e);
     });
     patchData.id = id;

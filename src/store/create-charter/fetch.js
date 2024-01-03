@@ -6,7 +6,9 @@ export const fetchCharters = createAsyncThunk(
   "fetch charters",
   async (data, thunk) => {
     const response = await api.get("/charters").catch((e) => {
-      thunk.dispatch(setError(e?.response?.data?.error));
+      thunk.dispatch(
+        setError(e?.response?.data?.error || e?.response?.data?.message)
+      );
       throw new Error(e);
     });
     return response.data;

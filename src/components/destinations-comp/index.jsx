@@ -99,7 +99,13 @@ export const DestinationComp = ({ item }) => {
       {openModal && (
         <Design
           titleText="Актуальные направления"
-          item={{ title, description, smallDescription: destination, price }}
+          item={{
+            title,
+            description,
+            smallDescription: destination,
+            price,
+            isTitleInput: true,
+          }}
           canBePublished={
             areAllKeysNotEmpty(title) &&
             areAllKeysNotEmpty(destination) &&

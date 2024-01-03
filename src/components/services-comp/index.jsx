@@ -89,7 +89,7 @@ export const ServicesComp = ({ item }) => {
       {openModal && (
         <Design
           titleText="Дополнительные сервисы"
-          item={{ title, smallDescription, description }}
+          item={{ title, smallDescription, description, isTitleInput: true }}
           canBePublished={
             areAllKeysNotEmpty(title) &&
             areAllKeysNotEmpty(smallDescription) &&
