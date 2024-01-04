@@ -50,6 +50,7 @@ const Design = ({
   setPrice,
   setAnswer,
   setQuestion,
+  setOrder,
 }) => {
   const [openDropzone, setOpenDropzone] = useState(false);
   const [isDelete, setIsDelete] = useState(false);
@@ -109,6 +110,16 @@ const Design = ({
                 value={item?.price}
                 onChange={(e) => setPrice(e.target.value)}
                 placeholder="Введите цену"
+              />
+            </>
+          )}
+          {setOrder && (
+            <>
+              <span>Номер Порядка</span>
+              <StyledInput
+                value={item?.order}
+                onChange={(e) => setOrder(e.target.value)}
+                placeholder="Введите номер порядка"
               />
             </>
           )}

@@ -7,7 +7,7 @@ export const sendMainPage = createAsyncThunk(
   "send mainpage",
   async (data, thunk) => {
     try {
-      const { photo, title } = data;
+      const { photo, title, order } = data;
       const formDataMainPage = new FormData();
       const patchData = {};
       LANGUAGES.forEach((lang) => {
@@ -15,7 +15,9 @@ export const sendMainPage = createAsyncThunk(
         patchData[`title_${lang}`] = title[lang];
       });
       patchData.photo_url = photo?.preview;
+      patchData.order_number = order;
       formDataMainPage.append("file", photo);
+      formDataMainPage.append("order_number", order);
 
       const id = await formDataApi
         .post("/mainpage", formDataMainPage)
