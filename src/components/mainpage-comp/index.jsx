@@ -16,16 +16,18 @@ export const MainPageComp = ({ item }) => {
     en: item?.title_en || "",
     uz: item?.title_uz || "",
   });
+  const [order, setOrder] = useState(item?.order_number || "");
   const [image, setImage] = useState(item?.photo_url || "");
   const handleClick = (e) => setOpenModal(!openModal);
 
   const handlePublish = () => {
-    if (areAllKeysNotEmpty(text) && image) {
+    if (areAllKeysNotEmpty(text) && image && order) {
       if (item) {
         dispatch(
           patchMainPage({
             title: text,
             photo: image,
+            order,
             id: item?.id,
           })
         );
@@ -34,6 +36,7 @@ export const MainPageComp = ({ item }) => {
           sendMainPage({
             title: text,
             photo: image,
+            order,
           })
         );
       }
@@ -64,13 +67,14 @@ export const MainPageComp = ({ item }) => {
       {openModal && (
         <Design
           titleText="Main Page Component"
-          item={{ title: text }}
-          canBePublished={areAllKeysNotEmpty(text) && image}
+          item={{ title: text, order }}
+          canBePublished={areAllKeysNotEmpty(text) && image && order}
           image={image}
           onClose={handleClick}
           isMainText
           setText={setText}
           setImage={setImage}
+          setOrder={setOrder}
           isFileNeeded
           handlePublish={handlePublish}
           onDelete={handleDelete}
