@@ -112,6 +112,7 @@ export const DestinationComp = ({ item }) => {
             price &&
             photo
           }
+          setImage={setPhoto}
           setSmallDescription={setDestination}
           setDescription={setDescription}
           onClose={handleClick}
