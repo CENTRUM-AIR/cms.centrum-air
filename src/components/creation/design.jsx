@@ -292,16 +292,30 @@ const Design = ({
           {setDescription && (
             <>
               <span>Cодержание</span>
-              <StyledTextArea
-                value={item?.description?.[language]}
-                placeholder="Введите содержение"
-                onChange={(e) =>
-                  setDescription((prev) => ({
-                    ...prev,
-                    [language]: e.target.value,
-                  }))
-                }
-              />
+              {item?.isDescEditor ? (
+                <TextEditor
+                  changeStatus={language}
+                  placeholder="Введите содержение"
+                  value={item?.description?.[language]}
+                  onChange={(e) =>
+                    setDescription((prev) => ({
+                      ...prev,
+                      [language]: e,
+                    }))
+                  }
+                />
+              ) : (
+                <StyledTextArea
+                  value={item?.description?.[language]}
+                  placeholder="Введите содержение"
+                  onChange={(e) =>
+                    setDescription((prev) => ({
+                      ...prev,
+                      [language]: e.target.value,
+                    }))
+                  }
+                />
+              )}
             </>
           )}
           {isPhoto && (

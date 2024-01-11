@@ -71,11 +71,9 @@ export const MainPageComp = ({ item }) => {
           canBePublished={areAllKeysNotEmpty(text) && image && order}
           image={image}
           onClose={handleClick}
-          isMainText
           setText={setText}
           setImage={setImage}
           setOrder={setOrder}
-          isFileNeeded
           handlePublish={handlePublish}
           onDelete={handleDelete}
           isNew={!item}
