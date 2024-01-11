@@ -1,65 +1,66 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { fetchMainPage } from "./fetch";
-import { patchMainPage } from "./patch";
-import { sendMainPage } from "./post";
-import { deleteMainPage } from "./delete";
+import { fetchVacancies } from "./fetch";
+import { sendVacancy } from "./post";
+import { patchVacancy } from "./edit";
+import { deleteVacancy } from "./delete";
+
 const initialState = {
   data: [],
   fetched: false,
   loading: false,
 };
 
-const mainPageSlice = createSlice({
-  name: "mainpage",
+const vacanciesSlice = createSlice({
+  name: "vacancies",
   initialState,
   reducers: {},
   extraReducers(builder) {
-    builder.addCase(fetchMainPage.fulfilled, (state, action) => {
+    builder.addCase(fetchVacancies.fulfilled, (state, action) => {
       state.loading = false;
       state.data = action.payload;
       state.fetched = true;
     });
-    builder.addCase(fetchMainPage.pending, (state, action) => {
+    builder.addCase(fetchVacancies.pending, (state, action) => {
       state.loading = true;
       state.fetched = false;
     });
-    builder.addCase(fetchMainPage.rejected, (state, action) => {
+    builder.addCase(fetchVacancies.rejected, (state, action) => {
       state.loading = false;
       state.fetched = true;
     });
-    builder.addCase(patchMainPage.fulfilled, (state, action) => {
+    builder.addCase(patchVacancy.fulfilled, (state, action) => {
       state.loading = false;
       if (!action.payload) return;
       const { data, id } = action.payload;
       const index = state.data.findIndex((item) => item.id === id);
       state.data[index] = data;
     });
-    builder.addCase(patchMainPage.pending, (state, action) => {
+    builder.addCase(patchVacancy.pending, (state, action) => {
       state.loading = true;
     });
-    builder.addCase(patchMainPage.rejected, (state, action) => {
+    builder.addCase(patchVacancy.rejected, (state, action) => {
       state.loading = false;
     });
-    builder.addCase(deleteMainPage.fulfilled, (state, action) => {
+    builder.addCase(deleteVacancy.fulfilled, (state, action) => {
       state.loading = false;
       state.data = state.data.filter((item) => item.id !== action.payload);
     });
-    builder.addCase(deleteMainPage.pending, (state, action) => {
+    builder.addCase(deleteVacancy.pending, (state, action) => {
       state.loading = true;
     });
-    builder.addCase(deleteMainPage.rejected, (state, action) => {
+    builder.addCase(deleteVacancy.rejected, (state, action) => {
       state.loading = false;
     });
-    builder.addCase(sendMainPage.fulfilled, (state, action) => {
+    builder.addCase(sendVacancy.fulfilled, (state, action) => {
       state.loading = false;
       if (action.payload) state.data.unshift(action.payload);
     });
-    builder.addCase(sendMainPage.pending, (state, action) => {
+    builder.addCase(sendVacancy.pending, (state, action) => {
       state.loading = true;
     });
-    builder.addCase(sendMainPage.rejected, (state, action) => {
+    builder.addCase(sendVacancy.rejected, (state, action) => {
       state.loading = false;
     });
   },
 });
-export default mainPageSlice.reducer;
+export default vacanciesSlice.reducer;
