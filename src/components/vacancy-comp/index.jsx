@@ -81,7 +81,7 @@ export const VacancyComp = ({ item }) => {
           />
         </Wrapper>
       ) : (
-        <EmptyHolder>
+        <EmptyHolder onClick={handleClick}>
           <p>Добавить новое </p>
           <PlusSign />
         </EmptyHolder>
