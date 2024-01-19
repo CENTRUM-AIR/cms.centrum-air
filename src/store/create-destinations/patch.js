@@ -20,8 +20,8 @@ export const patchDestinations = createAsyncThunk(
       });
       formDataDest.append("price", price);
       patchData.price = price;
-      patchData.photo = photo;
-      formDataDest.append("file", photo);
+      patchData.photo = photo?.preview;
+      photo?.preview && formDataDest.append("file", photo);
       await formDataApi.patch(`/offers/${id}`, formDataDest).catch((e) => {
         thunk.dispatch(
           setError(e?.response?.data?.error || e?.response?.data?.message)
