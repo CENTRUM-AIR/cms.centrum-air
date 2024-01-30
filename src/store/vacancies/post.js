@@ -1,31 +1,31 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { LANGUAGES } from "../create-main-page/patch";
-import { formDataApi } from "../../utils/api";
+import api from "../../utils/api";
 import { setError } from "../notifs";
+import { LANGUAGES } from "../create-main-page/patch";
 
 export const sendVacancy = createAsyncThunk(
   "send vacancy",
   async (data, thunk) => {
     try {
-      const { title, description, smallDescription, photo } = data;
-      const formDataVacancy = new FormData();
-
-      const patchData = {};
+      const {
+        vacancy,
+        department,
+        mustKnow,
+        responsibilities,
+        requirements,
+        skills,
+      } = data;
+      const payloadData = {};
       LANGUAGES.forEach((lang) => {
-        formDataVacancy.append(`title_${lang}`, title[lang]);
-        patchData[`title_${lang}`] = title[lang];
-        formDataVacancy.append(`description_${lang}`, description[lang]);
-        patchData[`description_${lang}`] = description[lang];
-        formDataVacancy.append(
-          `small_description_${lang}`,
-          smallDescription[lang]
-        );
-        patchData[`small_description_${lang}`] = smallDescription[lang];
+        payloadData[`vacancy_${lang}`] = vacancy[lang];
+        payloadData[`department_${lang}`] = department[lang];
+        payloadData[`must_know_${lang}`] = mustKnow[lang];
+        payloadData[`responsibilities_${lang}`] = responsibilities[lang];
+        payloadData[`requirements_${lang}`] = requirements[lang];
+        payloadData[`skills_${lang}`] = skills[lang];
       });
-      formDataVacancy.append("file", photo);
-      patchData.photo_url = photo?.preview;
-      const id = await formDataApi
-        .post("/vacancies", formDataVacancy)
+      const id = await api
+        .post("/vacancies", payloadData)
         .then((res) => res.data)
         .catch((e) => {
           thunk.dispatch(
@@ -33,8 +33,11 @@ export const sendVacancy = createAsyncThunk(
           );
           throw new Error(e);
         });
-      patchData.id = id;
-      return patchData;
+
+      return {
+        id,
+        ...payloadData,
+      };
     } catch (e) {
       return null;
     }

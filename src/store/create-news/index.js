@@ -1,56 +1,66 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { fetchNews } from "./fetch";
+import { patchNews } from "./edit";
+import { deleteNews } from "./delete";
+import { sendNews } from "./post";
 const initialState = {
-  title_en: "",
-  title_uz: "",
-  title_ru: "",
-  description_en: "",
-  description_uz: "",
-  description_ru: "",
-  small_description_uz: "",
-  small_description_en: "",
-  small_description_ru: "",
-  photo: "",
-  isDone: false,
+  data: [],
+  fetched: false,
+  loading: false,
 };
 
 const createNewsSlide = createSlice({
   name: "createNews",
   initialState,
-  reducers: {
-    setNewsEnglish: (state, action) => {
-      const { title, description, small_description } = action.payload;
-      state.title_en = title;
-      state.description_en = description;
-      state.small_description_en = small_description;
-    },
-    setNewsRussian: (state, action) => {
-      const { title, description, small_description } = action.payload;
-      state.title_ru = title;
-      state.description_ru = description;
-      state.small_description_ru = small_description;
-    },
-    setNewsUzbek: (state, action) => {
-      const { title, description, small_description } = action.payload;
-      state.title_uz = title;
-      state.description_uz = description;
-      state.small_description_uz = small_description;
-    },
-
-    setNewsPhoto: (state, action) => {
-      state.photo = action.payload;
-    },
-    setIsDone: (state, action) => {
-      state.isDone = action.payload;
-    },
+  reducers: {},
+  extraReducers(builder) {
+    builder.addCase(fetchNews.fulfilled, (state, action) => {
+      state.loading = false;
+      state.data = action.payload;
+      state.fetched = true;
+    });
+    builder.addCase(fetchNews.pending, (state, action) => {
+      state.loading = true;
+      state.fetched = false;
+    });
+    builder.addCase(fetchNews.rejected, (state, action) => {
+      state.loading = false;
+      state.fetched = true;
+    });
+    builder.addCase(patchNews.fulfilled, (state, action) => {
+      state.loading = false;
+      if (!action.payload) return;
+      const { data, id } = action.payload;
+      const index = state.data.findIndex((item) => item.id === id);
+      state.data[index] = data;
+    });
+    builder.addCase(patchNews.pending, (state, action) => {
+      state.loading = true;
+    });
+    builder.addCase(patchNews.rejected, (state, action) => {
+      state.loading = false;
+    });
+    builder.addCase(deleteNews.fulfilled, (state, action) => {
+      state.loading = false;
+      state.data = state.data.filter((item) => item.id !== action.payload);
+    });
+    builder.addCase(deleteNews.pending, (state, action) => {
+      state.loading = true;
+    });
+    builder.addCase(deleteNews.rejected, (state, action) => {
+      state.loading = false;
+    });
+    builder.addCase(sendNews.fulfilled, (state, action) => {
+      state.loading = false;
+      if (action.payload) state.data.unshift(action.payload);
+    });
+    builder.addCase(sendNews.pending, (state, action) => {
+      state.loading = true;
+    });
+    builder.addCase(sendNews.rejected, (state, action) => {
+      state.loading = false;
+    });
   },
 });
-
-export const {
-  setNewsPhoto,
-  setNewsEnglish,
-  setNewsRussian,
-  setNewsUzbek,
-  setIsDone,
-} = createNewsSlide.actions;
 
 export default createNewsSlide.reducer;

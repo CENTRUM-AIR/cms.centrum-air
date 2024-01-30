@@ -51,6 +51,10 @@ const Design = ({
   setAnswer,
   setQuestion,
   setOrder,
+  setMustKnow,
+  setResponsibilities,
+  setRequirements,
+  setSkills,
 }) => {
   const [openDropzone, setOpenDropzone] = useState(false);
   const [isDelete, setIsDelete] = useState(false);
@@ -79,7 +83,7 @@ const Design = ({
           )}
           {setText && (
             <>
-              <span>Заголовок</span>
+              <span>{item?.mainText || "Заголовок"}</span>
               {item?.isTitleInput ? (
                 <StyledInput
                   value={item?.title?.[language]}
@@ -89,7 +93,9 @@ const Design = ({
                       [language]: e?.target?.value,
                     }))
                   }
-                  placeholder="Введите заголовок"
+                  placeholder={`Введите ${
+                    item?.mainText?.toLowerCase() || "заголовок"
+                  }`}
                 />
               ) : (
                 <TextEditor
@@ -269,7 +275,7 @@ const Design = ({
           {setSmallDescription && (
             <>
               <span>
-                {shortDescTitle || "Краткое описание"}
+                {shortDescTitle || item?.shortDesc || "Краткое описание"}
                 {shortDescTitle && (
                   <WarningText>*e.g.: Из Ташкента и обратно</WarningText>
                 )}
@@ -284,7 +290,9 @@ const Design = ({
                   }))
                 }
                 placeholder={`Введите ${
-                  shortDescTitle?.toLowerCase() || "краткое описание"
+                  shortDescTitle?.toLowerCase() ||
+                  item?.shortDesc?.toLowerCase() ||
+                  "краткое описание"
                 }`}
               />
             </>
@@ -316,6 +324,66 @@ const Design = ({
                   }
                 />
               )}
+            </>
+          )}
+          {setMustKnow && (
+            <>
+              <span>Должен знать</span>
+              <TextEditor
+                changeStatus={language}
+                value={item?.mustKnow?.[language]}
+                onChange={(e) =>
+                  setMustKnow((prev) => ({
+                    ...prev,
+                    [language]: e,
+                  }))
+                }
+              />
+            </>
+          )}
+          {setResponsibilities && (
+            <>
+              <span>Обязанности</span>
+              <TextEditor
+                changeStatus={language}
+                value={item?.responsibilities?.[language]}
+                onChange={(e) =>
+                  setResponsibilities((prev) => ({
+                    ...prev,
+                    [language]: e,
+                  }))
+                }
+              />
+            </>
+          )}
+          {setRequirements && (
+            <>
+              <span>Требования</span>
+              <TextEditor
+                changeStatus={language}
+                value={item?.requirements?.[language]}
+                onChange={(e) =>
+                  setRequirements((prev) => ({
+                    ...prev,
+                    [language]: e,
+                  }))
+                }
+              />
+            </>
+          )}
+          {setSkills && (
+            <>
+              <span>Ключевые навыки и качества</span>
+              <TextEditor
+                changeStatus={language}
+                value={item?.skills?.[language]}
+                onChange={(e) =>
+                  setSkills((prev) => ({
+                    ...prev,
+                    [language]: e,
+                  }))
+                }
+              />
             </>
           )}
           {isPhoto && (
