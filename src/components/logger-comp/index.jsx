@@ -11,8 +11,9 @@ export const LoggerComp = ({ item }) => {
       <p>
         Пользователь: <span>{item?.user}</span>
       </p>
-      <p>
-        Объект: <span>{item?.chaging_object}</span>
+      <p style={{ display: "flex" }}>
+        Объект:{" "}
+        <span dangerouslySetInnerHTML={{ __html: item?.chaging_object }} />
       </p>
       <p>
         Время: <span>{format(new Date(item?.created_at), "HH:mm, PP")}</span>

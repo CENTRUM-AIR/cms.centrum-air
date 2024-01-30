@@ -3,14 +3,7 @@ import { useDispatch } from "react-redux";
 import { areAllKeysNotEmpty } from "../../utils/obj-not-empty";
 import Design from "../creation/design";
 import { ReactComponent as PlusSign } from "../../icons/plus-sign.svg";
-import {
-  Description,
-  EmptyHolder,
-  Image,
-  SmallDescription,
-  Title,
-  Wrapper,
-} from "./styled";
+import { EmptyHolder, Title, Wrapper, Department } from "./styled";
 import { sendVacancy } from "../../store/vacancies/post";
 import { patchVacancy } from "../../store/vacancies/edit";
 import { deleteVacancy } from "../../store/vacancies/delete";
@@ -19,46 +12,67 @@ export const VacancyComp = ({ item }) => {
   const [openModal, setOpenModal] = useState(false);
   const handleClick = (e) => setOpenModal(!openModal);
   const dispatch = useDispatch();
-  const [title, setTitle] = useState({
-    uz: item?.title_uz || "",
-    ru: item?.title_ru || "",
-    en: item?.title_en || "",
+  const [vacancyTitle, setVacancyTitle] = useState({
+    uz: item?.vacancy_uz || "",
+    ru: item?.vacancy_ru || "",
+    en: item?.vacancy_en || "",
   });
-  const [smallDescription, setSmallDescription] = useState({
-    uz: item?.small_description_uz || "",
-    ru: item?.small_description_ru || "",
-    en: item?.small_description_en || "",
+  const [department, setDepartment] = useState({
+    uz: item?.department_uz || "",
+    ru: item?.department_ru || "",
+    en: item?.department_en || "",
   });
-  const [description, setDescription] = useState({
-    uz: item?.description_uz || "",
-    ru: item?.description_ru || "",
-    en: item?.description_en || "",
+  const [mustKnow, setMustKnow] = useState({
+    uz: item?.must_know_uz || "",
+    ru: item?.must_know_ru || "",
+    en: item?.must_know_en || "",
   });
-  const [photo, setPhoto] = useState(item?.photo_url || "");
+  const [responsibilities, setResponsibilities] = useState({
+    uz: item?.responsibilities_uz || "",
+    ru: item?.responsibilities_ru || "",
+    en: item?.responsibilities_en || "",
+  });
+  const [requirements, setRequirements] = useState({
+    uz: item?.requirements_uz || "",
+    ru: item?.requirements_ru || "",
+    en: item?.requirements_en || "",
+  });
+  const [skills, setSkills] = useState({
+    uz: item?.skills_uz || "",
+    ru: item?.skills_ru || "",
+    en: item?.skills_en || "",
+  });
+
   const handlePublish = () => {
     if (
-      areAllKeysNotEmpty(title) &&
-      areAllKeysNotEmpty(smallDescription) &&
-      areAllKeysNotEmpty(description) &&
-      photo
+      areAllKeysNotEmpty(vacancyTitle) &&
+      areAllKeysNotEmpty(department) &&
+      areAllKeysNotEmpty(mustKnow) &&
+      areAllKeysNotEmpty(responsibilities) &&
+      areAllKeysNotEmpty(requirements) &&
+      areAllKeysNotEmpty(skills)
     ) {
       if (item) {
         dispatch(
           patchVacancy({
-            title,
-            smallDescription,
-            description,
-            photo,
+            vacancy: vacancyTitle,
+            department,
+            mustKnow,
+            responsibilities,
+            requirements,
+            skills,
             id: item?.id,
           })
         );
       } else {
         dispatch(
           sendVacancy({
-            title,
-            smallDescription,
-            description,
-            photo,
+            vacancy: vacancyTitle,
+            department,
+            mustKnow,
+            responsibilities,
+            requirements,
+            skills,
           })
         );
       }
@@ -73,16 +87,12 @@ export const VacancyComp = ({ item }) => {
     <>
       {item ? (
         <Wrapper onClick={handleClick}>
-          <Image src={item?.photo_url} />
-          <Title>{item?.title_ru}</Title>
-          <SmallDescription>{item?.small_description_ru}</SmallDescription>
-          <Description
-            dangerouslySetInnerHTML={{ __html: item?.description_ru }}
-          />
+          <Department>{item?.department_ru}</Department>
+          <Title>{item?.vacancy_ru}</Title>
         </Wrapper>
       ) : (
         <EmptyHolder onClick={handleClick}>
-          <p>Добавить новое </p>
+          <p>Добавить новое</p>
           <PlusSign />
         </EmptyHolder>
       )}
@@ -90,27 +100,35 @@ export const VacancyComp = ({ item }) => {
         <Design
           titleText="Вакансия"
           item={{
-            title,
-            smallDescription,
-            description,
+            title: vacancyTitle,
+            smallDescription: department,
+            mustKnow,
+            responsibilities,
+            requirements,
+            skills,
             isTitleInput: true,
-            isDescEditor: true,
+            mainText: "Название вакансии",
+            shortDesc: "Отдел",
           }}
           canBePublished={
-            areAllKeysNotEmpty(title) &&
-            areAllKeysNotEmpty(smallDescription) &&
-            areAllKeysNotEmpty(description) &&
-            photo
+            areAllKeysNotEmpty(vacancyTitle) &&
+            areAllKeysNotEmpty(department) &&
+            areAllKeysNotEmpty(mustKnow) &&
+            areAllKeysNotEmpty(responsibilities) &&
+            areAllKeysNotEmpty(requirements) &&
+            areAllKeysNotEmpty(skills)
           }
-          setText={setTitle}
-          setSmallDescription={setSmallDescription}
-          setDescription={setDescription}
-          setImage={setPhoto}
-          image={photo}
+          setText={setVacancyTitle}
+          setSmallDescription={setDepartment}
+          setMustKnow={setMustKnow}
+          setResponsibilities={setResponsibilities}
+          setRequirements={setRequirements}
+          setSkills={setSkills}
           onClose={handleClick}
           handlePublish={handlePublish}
           onDelete={handleDelete}
           isNew={!item}
+          isPhoto={false}
         />
       )}
     </>
