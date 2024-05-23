@@ -78,6 +78,13 @@ export const sideBarItems = [
     isCanSee: [SUPERADMIN, CONTENTMANAGER],
   },
   {
+    id: 11,
+    text: "top-destination",
+    href: "/top-destination",
+    icon: <Additional />,
+    isCanSee: [SUPERADMIN, CONTENTMANAGER],
+  },
+  {
     id: 12,
     text: "Логгер",
     href: "/logger",

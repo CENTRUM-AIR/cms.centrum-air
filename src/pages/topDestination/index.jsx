@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
-import { getDestinations } from "../../store";
+import { getDestinations, getTopDestinations } from "../../store";
 import { useGetInfo } from "../../hooks/use-get-info";
 import { fetchDestinations } from "../../store/create-destinations/fetch";
 import { MainWrapper, Title, Wrapper } from "../charters/styled";
@@ -8,12 +8,14 @@ import { DestinationComp } from "../../components/destinations-comp";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import { CONTENTMANAGER, SUPERADMIN } from "../../constants";
+import { fetchTopDestinations } from "../../store/create-top-destinations/fetch";
+import { TopDestinationComp } from "../../components/topDestinations-comp";
 
 const allowerRoles = [SUPERADMIN, CONTENTMANAGER];
 
-const Directions = () => {
-  const { data } = useSelector(getDestinations);
-  useGetInfo({ selector: getDestinations, fetcher: fetchDestinations });
+const TopDistination = () => {
+  const { data } = useSelector(getTopDestinations);
+  useGetInfo({ selector: getTopDestinations, fetcher: fetchTopDestinations });
 
   const navigate = useNavigate();
   const role = Cookies.get("role");
@@ -23,14 +25,16 @@ const Directions = () => {
 
   return (
     <MainWrapper>
-      <Title>Актуальные Предложения</Title>
+      <Title>top destination</Title>
       <Wrapper>
-        <DestinationComp />
+        <TopDestinationComp />
         {data?.length > 0 &&
-          data?.map((item) => <DestinationComp key={item?.id} item={item} />)}
+          data?.map((item) => (
+            <TopDestinationComp key={item?.id} item={item} />
+          ))}
       </Wrapper>
     </MainWrapper>
   );
 };
 
-export default Directions;
+export default TopDistination;

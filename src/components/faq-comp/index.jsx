@@ -8,7 +8,7 @@ import { sendFaq } from "../../store/create-faq/post";
 import { deleteFaq } from "../../store/create-faq/delete";
 import Design from "../creation/design";
 
-export const FaqComp = ({ item }) => {
+export const FaqComp = ({ item, destination }) => {
   const dispatch = useDispatch();
   const [openModal, setOpenModal] = useState(false);
   const [question, setQuestion] = useState({

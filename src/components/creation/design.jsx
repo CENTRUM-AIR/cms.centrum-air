@@ -16,6 +16,7 @@ import {
   StyledRedButton,
   StyledTextArea,
 } from "../../shared_styled";
+
 import { Dropzone } from "../dropzone";
 import SVG from "react-inlinesvg";
 import { LanguageChange } from "../changeLanguage";
@@ -23,10 +24,14 @@ import { DeletionModal } from "../deletionModal";
 import { ROLES } from "../../constants";
 import { Select } from "../select";
 import { TextEditor } from "../textEditor";
+import { FaqComp } from "../faq-comp";
+import { Modal } from "../Modal";
 
 const Design = ({
   titleText,
   setText,
+  nameText,
+  setName,
   item,
   isNew,
   onClose,
@@ -36,14 +41,20 @@ const Design = ({
   canBePublished,
   handlePublish,
   setFrom,
+  setLat,
+  setLng,
+  setCode,
+  setDepartures,
   setTo,
   setPhoneNumber,
   isPhoto = true,
+  isFAQ,
   setUserInfo,
   setCity,
   setCountry,
   setCityCode,
   setSmallDescription,
+  setSubDescription,
   setDescription,
   fileType,
   shortDescTitle,
@@ -55,9 +66,13 @@ const Design = ({
   setResponsibilities,
   setRequirements,
   setSkills,
+  FaqList,
+  setFaqList,
 }) => {
   const [openDropzone, setOpenDropzone] = useState(false);
+  const [openFaq, setOpenFaq] = useState(false);
   const [isDelete, setIsDelete] = useState(false);
+
   const isSvg = () => {
     if (typeof image === "string") return image?.includes("svg") ? true : false;
     return false;
@@ -109,12 +124,70 @@ const Design = ({
               )}
             </>
           )}
+          {setName && (
+            <>
+              <span>{item?.mainText || "name"}</span>
+              {item?.isTitleInput ? (
+                <StyledInput
+                  value={item?.name?.[language]}
+                  onChange={(e) =>
+                    setName((prev) => ({
+                      ...prev,
+                      [language]: e?.target?.value,
+                    }))
+                  }
+                  placeholder={`Введите ${
+                    item?.mainText?.toLowerCase() || "заголовок"
+                  }`}
+                />
+              ) : (
+                <TextEditor
+                  changeStatus={language}
+                  placeholder="Введите заголовок"
+                  value={item?.name?.[language]}
+                  onChange={(e) =>
+                    setName((prev) => ({ ...prev, [language]: e }))
+                  }
+                />
+              )}
+            </>
+          )}
           {setPrice && (
             <>
               <span>Цена</span>
               <StyledInput
                 value={item?.price}
                 onChange={(e) => setPrice(e.target.value)}
+                placeholder="Введите цену"
+              />
+            </>
+          )}
+          {setLat && (
+            <>
+              <span>lat</span>
+              <StyledInput
+                value={item?.lat}
+                onChange={(e) => setLat(e.target.value)}
+                placeholder="Введите цену"
+              />
+            </>
+          )}
+          {setLng && (
+            <>
+              <span>lng</span>
+              <StyledInput
+                value={item?.lng}
+                onChange={(e) => setLng(e.target.value)}
+                placeholder="Введите цену"
+              />
+            </>
+          )}
+          {setCode && (
+            <>
+              <span>code</span>
+              <StyledInput
+                value={item?.code}
+                onChange={(e) => setCode(e.target.value)}
                 placeholder="Введите цену"
               />
             </>
@@ -241,6 +314,7 @@ const Design = ({
               />
             </>
           )}
+
           {setQuestion && (
             <>
               <span>Вопрос</span>
@@ -318,6 +392,35 @@ const Design = ({
                   placeholder="Введите содержение"
                   onChange={(e) =>
                     setDescription((prev) => ({
+                      ...prev,
+                      [language]: e.target.value,
+                    }))
+                  }
+                />
+              )}
+            </>
+          )}
+          {setSubDescription && (
+            <>
+              <span>sub Description</span>
+              {item?.isDescEditor ? (
+                <TextEditor
+                  changeStatus={language}
+                  placeholder="Введите содержение"
+                  value={item?.subDescription?.[language]}
+                  onChange={(e) =>
+                    setSubDescription((prev) => ({
+                      ...prev,
+                      [language]: e,
+                    }))
+                  }
+                />
+              ) : (
+                <StyledTextArea
+                  value={item?.subDescription?.[language]}
+                  placeholder="Введите содержение"
+                  onChange={(e) =>
+                    setSubDescription((prev) => ({
                       ...prev,
                       [language]: e.target.value,
                     }))
@@ -414,6 +517,45 @@ const Design = ({
               )}
             </>
           )}
+          {isFAQ && (
+            <div>
+              {FaqList.lenght !== 0 &&
+                FaqList.map((item, index) => {
+                  return (
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-around",
+                        border: "1px solid #174abc",
+                        marginBottom: "7px",
+                        borderRadius: "12px",
+                        padding: "4px",
+                        background: "#f3f6fc",
+                        alignItems: "center",
+                      }}
+                    >
+                      <p style={{ marginBottom: "10px" }}>FAQ_{index} </p>
+                      <p>title_{FaqList[index].question.en}</p>
+
+                      <div
+                        onClick={() =>
+                          setFaqList((oldValues) => {
+                            return oldValues.filter((fruit) => fruit !== item);
+                          })
+                        }
+                      >
+                        <CloseIcon />
+                      </div>
+                    </div>
+                  );
+                })}
+
+              <StyledButton onClick={() => isFAQ(true)}>
+                open modal FAQ
+              </StyledButton>
+            </div>
+          )}
+
           <ButtonHolder>
             <StyledButton disabled={!canBePublished} onClick={handlePublish}>
               Опубликовать
@@ -448,6 +590,27 @@ const Design = ({
           setImage={setImage}
           onClose={() => setOpenDropzone(false)}
         />
+      )}
+      {openFaq && (
+        <Modal>
+          <p style={{ marginBottom: "10px" }}>add FAQ</p>
+          <FaqComp />
+        </Modal>
+        // <Dropzone />
+        // <Design
+        //   titleText="Q&A Component"
+        //   // item={{ question, answer }}
+        //   // canBePublished={
+        //   //   areAllKeysNotEmpty(question) && areAllKeysNotEmpty(question)
+        //   // }
+        //   onClose={() => setOpenFaq(false)}
+        //   // handlePublish={handlePublish}
+        //   // onDelete={handleDelete}
+        //   isNew={!item}
+        //   isPhoto={false}
+        //   setQuestion={setQuestion}
+        //   setAnswer={setAnswer}
+        // />
       )}
     </>
   );

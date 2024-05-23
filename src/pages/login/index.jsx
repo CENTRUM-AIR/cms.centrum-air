@@ -29,11 +29,15 @@ export const LoginPage = () => {
         return;
       }
       const data = await api.post("/users/login", { login, password });
+      // if (data.headers["set-cookie"]) {
+      console.log(data.headers["set-cookie"]);
+      // }
       if (data.status === 201 || data.status === 200) {
         Cookie.set("login", login);
         var expire = new Date();
         expire.setHours(expire.getHours() + 2);
-        Cookie.set("role", data?.data, { expires: expire });
+        Cookie.set("role", data?.data.role, { expires: expire });
+        Cookie.set("jwt", data?.data.token, { expires: expire });
         navigate("/");
       }
     } catch (error) {
