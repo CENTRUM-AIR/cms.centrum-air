@@ -35,7 +35,7 @@ export const store = configureStore({
 export const getServices = (state) => state.createService;
 export const getMainPage = (state) => state.mainpage;
 export const getDestinations = (state) => state.createDestinations;
-export const getTopDestinations = (state) => state.createDestinations;
+export const getTopDestinations = (state) => state.createTopDestinations;
 export const getCountries = (state) => state.createCountries;
 export const getCharters = (state) => state.charters;
 export const getNews = (state) => state.createNews;

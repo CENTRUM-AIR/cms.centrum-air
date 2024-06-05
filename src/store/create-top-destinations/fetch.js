@@ -6,7 +6,7 @@ export const fetchTopDestinations = createAsyncThunk(
   "fetch top destinations",
   async (data, thunk) => {
     try {
-      const response = await api.get("/topdestination").catch((e) => {
+      const response = await api.get("/topdestinations").catch((e) => {
         thunk.dispatch(
           setError(e?.response?.data?.error || e?.response?.data?.message)
         );

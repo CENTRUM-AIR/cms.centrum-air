@@ -5,7 +5,8 @@ import { setError } from "../notifs";
 
 export const sendFaq = createAsyncThunk("post faq", async (data, thunk) => {
   try {
-    const { question, answer } = data;
+    const { question, answer, entity, entityId } = data;
+
     const requestBody = {};
     const patchData = {};
     LANGUAGES.forEach((lang) => {
@@ -13,7 +14,12 @@ export const sendFaq = createAsyncThunk("post faq", async (data, thunk) => {
       patchData[`question_${lang}`] = question[lang];
       requestBody[`answer_${lang}`] = answer[lang];
       patchData[`answer_${lang}`] = answer[lang];
+      requestBody[`entity`] = entity;
+      patchData[`entity`] = entity;
+      requestBody[`entity_id`] = parseInt(entityId);
+      patchData[`entity_id`] = parseInt(entityId);
     });
+
     const id = await api
       .post("/faq", requestBody)
       .then((res) => res.data)

@@ -7,7 +7,7 @@ export const deleteTopDestination = createAsyncThunk(
   async (data, thunk) => {
     try {
       const { id } = data;
-      await api.delete(`/topdestination/${id}`).catch((e) => {
+      await api.delete(`/topdestinations/${id}`).catch((e) => {
         thunk.dispatch(
           setError(e?.response?.data?.error || e?.response?.data?.message)
         );

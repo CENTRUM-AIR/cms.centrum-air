@@ -32,6 +32,7 @@ const createTopDestinationsSlice = createSlice({
       state.loading = false;
       if (!action.payload) return;
       const { data, id } = action.payload;
+
       const index = state.data.findIndex((item) => item.id === id);
       state.data[index] = data;
     });

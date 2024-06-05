@@ -32,7 +32,7 @@ export const StyledTextArea = styled.textarea`
 `;
 
 export const StyledButton = styled.button`
-  border: none;
+  border: ${({ secondary }) => (secondary ? "1px solid #174abc" : "none")};
   outline: none;
   border-radius: 12px;
   background-color: ${({ secondary }) => (secondary ? "#fff" : "#174abc")};

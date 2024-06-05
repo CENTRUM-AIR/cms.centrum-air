@@ -21,6 +21,8 @@ export const FaqComp = ({ item, destination }) => {
     en: item?.answer_en || "",
     uz: item?.answer_uz || "",
   });
+  const [entityId, setEntityId] = useState(item?.entity_id || 0);
+  const [entity, setEntity] = useState(item?.entity || "faqs");
   const handleClick = (e) => setOpenModal(!openModal);
 
   const handlePublish = () => {
@@ -31,6 +33,8 @@ export const FaqComp = ({ item, destination }) => {
             question,
             answer,
             id: item?.id,
+            entityId,
+            entity,
           })
         );
       } else {
@@ -38,6 +42,8 @@ export const FaqComp = ({ item, destination }) => {
           sendFaq({
             question,
             answer,
+            entityId,
+            entity,
           })
         );
       }

@@ -10,6 +10,8 @@ import {
   Wrapper,
 } from "./styled";
 import { ReactComponent as CloseIcon } from "../../icons/close.svg";
+import { ReactComponent as PLusSign } from "../../icons/plus-sign.svg";
+import { ReactComponent as EditIcon } from "../../icons/edit.svg";
 import {
   StyledButton,
   StyledInput,
@@ -26,24 +28,31 @@ import { Select } from "../select";
 import { TextEditor } from "../textEditor";
 import { FaqComp } from "../faq-comp";
 import { Modal } from "../Modal";
+import { useDispatch, useSelector } from "react-redux";
+import { deleteFaq } from "../../store/create-faq/delete";
+import api from "../../utils/api";
+import { getFaq, getTopDestinations } from "../../store";
+import { useGetInfo } from "../../hooks/use-get-info";
+import { fetchFaq } from "../../store/create-faq/fetch";
 
 const Design = ({
   titleText,
   setText,
-  nameText,
-  setName,
   item,
   isNew,
   onClose,
   image,
   onDelete,
+  onDeleteFaq,
   setImage,
+  uploadPhoto,
   canBePublished,
   handlePublish,
   setFrom,
   setLat,
   setLng,
   setCode,
+  departures,
   setDepartures,
   setTo,
   setPhoneNumber,
@@ -66,20 +75,26 @@ const Design = ({
   setResponsibilities,
   setRequirements,
   setSkills,
-  FaqList,
+
   setFaqList,
 }) => {
   const [openDropzone, setOpenDropzone] = useState(false);
   const [openFaq, setOpenFaq] = useState(false);
   const [isDelete, setIsDelete] = useState(false);
+  const [isDeleteFaq, setIsDeleteFaq] = useState(false);
+  const dataFaq = useSelector(getFaq);
+
+  useGetInfo({ selector: getFaq, fetcher: fetchFaq });
 
   const isSvg = () => {
     if (typeof image === "string") return image?.includes("svg") ? true : false;
     return false;
   };
+  const dispatch = useDispatch();
 
   const [language, setLanguage] = useState("ru");
   const handleLanguageSwitch = (lang) => setLanguage(lang);
+
   return (
     <>
       <MainWrapper>
@@ -124,34 +139,23 @@ const Design = ({
               )}
             </>
           )}
-          {setName && (
+          {uploadPhoto && (
+            <StyledButton onClick={() => isFAQ(true)}>
+              upload photo
+            </StyledButton>
+          )}
+
+          {setDepartures && (
             <>
-              <span>{item?.mainText || "name"}</span>
-              {item?.isTitleInput ? (
-                <StyledInput
-                  value={item?.name?.[language]}
-                  onChange={(e) =>
-                    setName((prev) => ({
-                      ...prev,
-                      [language]: e?.target?.value,
-                    }))
-                  }
-                  placeholder={`Введите ${
-                    item?.mainText?.toLowerCase() || "заголовок"
-                  }`}
-                />
-              ) : (
-                <TextEditor
-                  changeStatus={language}
-                  placeholder="Введите заголовок"
-                  value={item?.name?.[language]}
-                  onChange={(e) =>
-                    setName((prev) => ({ ...prev, [language]: e }))
-                  }
-                />
-              )}
+              <span>departures</span>
+              <StyledInput
+                value={item?.departures}
+                onChange={(e) => setDepartures(e.target.value)}
+                placeholder="departures"
+              />
             </>
           )}
+
           {setPrice && (
             <>
               <span>Цена</span>
@@ -517,45 +521,82 @@ const Design = ({
               )}
             </>
           )}
+
           {isFAQ && (
             <div>
-              {FaqList.lenght !== 0 &&
-                FaqList.map((item, index) => {
-                  return (
-                    <div
-                      style={{
-                        display: "flex",
-                        justifyContent: "space-around",
-                        border: "1px solid #174abc",
-                        marginBottom: "7px",
-                        borderRadius: "12px",
-                        padding: "4px",
-                        background: "#f3f6fc",
-                        alignItems: "center",
-                      }}
-                    >
-                      <p style={{ marginBottom: "10px" }}>FAQ_{index} </p>
-                      <p>title_{FaqList[index].question.en}</p>
-
+              <div>
+                {dataFaq.data?.length > 0 &&
+                  dataFaq.data?.map((item, index) => (
+                    <>
                       <div
-                        onClick={() =>
-                          setFaqList((oldValues) => {
-                            return oldValues.filter((fruit) => fruit !== item);
-                          })
-                        }
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-around",
+                          border: "1px solid #174abc",
+                          marginBottom: "7px",
+                          borderRadius: "12px",
+                          padding: "4px",
+                          background: "#f3f6fc",
+                          alignItems: "center",
+                        }}
+                        key={index}
                       >
-                        <CloseIcon />
+                        <div
+                          style={{
+                            display: "flex",
+                            justifyContent: "space-between",
+                            width: "70%",
+                          }}
+                        >
+                          <p style={{ marginBottom: "10px" }}>FAQ_{item.id} </p>
+                          <p>title_{item.question_en}</p>
+                        </div>
+                        <div
+                          style={{
+                            display: "flex",
+                            width: "10%",
+                            justifyContent: "space-between",
+                          }}
+                        >
+                          <div
+                            onClick={() => {
+                              setFaqList(item);
+                              isFAQ(true);
+                            }}
+                          >
+                            <EditIcon />
+                          </div>
+                          <div
+                            onClick={() => {
+                              setIsDeleteFaq(true);
+                            }}
+                          >
+                            <CloseIcon />
+                          </div>
+                        </div>
                       </div>
-                    </div>
-                  );
-                })}
-
-              <StyledButton onClick={() => isFAQ(true)}>
-                open modal FAQ
+                      {isDeleteFaq && (
+                        <DeletionModal
+                          handleDelete={() => {
+                            dispatch(deleteFaq({ id: item?.id }));
+                            setIsDeleteFaq(false);
+                          }}
+                        />
+                      )}
+                    </>
+                  ))}
+              </div>
+              <StyledButton
+                secondary={true}
+                onClick={() => {
+                  setFaqList(null);
+                  isFAQ(true);
+                }}
+              >
+                <PLusSign /> New Faq
               </StyledButton>
             </div>
           )}
-
           <ButtonHolder>
             <StyledButton disabled={!canBePublished} onClick={handlePublish}>
               Опубликовать
@@ -596,21 +637,6 @@ const Design = ({
           <p style={{ marginBottom: "10px" }}>add FAQ</p>
           <FaqComp />
         </Modal>
-        // <Dropzone />
-        // <Design
-        //   titleText="Q&A Component"
-        //   // item={{ question, answer }}
-        //   // canBePublished={
-        //   //   areAllKeysNotEmpty(question) && areAllKeysNotEmpty(question)
-        //   // }
-        //   onClose={() => setOpenFaq(false)}
-        //   // handlePublish={handlePublish}
-        //   // onDelete={handleDelete}
-        //   isNew={!item}
-        //   isPhoto={false}
-        //   setQuestion={setQuestion}
-        //   setAnswer={setAnswer}
-        // />
       )}
     </>
   );
