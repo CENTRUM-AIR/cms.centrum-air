@@ -11,12 +11,13 @@ import Design from "../creation/design";
 export const CountryComp = ({ item }) => {
   const dispatch = useDispatch();
   const [openModal, setOpenModal] = useState(false);
-  const handleClick = (e) => setOpenModal(!openModal);
+  const handleClick = () => setOpenModal(!openModal);
   const [city, setCity] = useState({
     uz: item?.city_uz || "",
     ru: item?.city_ru || "",
     en: item?.city_en || "",
   });
+  const [isSearch, setIsSearch] = useState(false);
   const [country, setCountry] = useState({
     uz: item?.country_uz || "",
     ru: item?.country_ru || "",
@@ -31,6 +32,7 @@ export const CountryComp = ({ item }) => {
             cityCode,
             city,
             country,
+            isSearch,
             id: item?.id,
           })
         );
@@ -40,6 +42,7 @@ export const CountryComp = ({ item }) => {
             cityCode,
             city,
             country,
+            isSearch,
           })
         );
       }
@@ -57,6 +60,7 @@ export const CountryComp = ({ item }) => {
           <>
             <p>{item?.country_ru}</p>
             <p>{item?.city_ru}</p>
+            <p>{item?.is_search ? "Да" : "Нет"}</p>
             <span>{item?.city_code}</span>
           </>
         ) : (
@@ -69,13 +73,14 @@ export const CountryComp = ({ item }) => {
       {openModal && (
         <Design
           titleText="Страны и Города"
-          item={{ city, country, cityCode }}
+          item={{ city, country, cityCode, isSearch }}
           canBePublished={
             areAllKeysNotEmpty(city) && areAllKeysNotEmpty(country) && cityCode
           }
           onClose={handleClick}
           setCity={setCity}
           setCountry={setCountry}
+          setIsSearch={setIsSearch}
           setCityCode={setCityCode}
           handlePublish={handlePublish}
           onDelete={handleDelete}

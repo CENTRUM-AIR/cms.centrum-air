@@ -43,6 +43,7 @@ const Design = ({
   setCity,
   setCountry,
   setCityCode,
+  setIsSearch,
   setSmallDescription,
   setDescription,
   fileType,
@@ -241,6 +242,25 @@ const Design = ({
               />
             </>
           )}
+          {setIsSearch && (
+            <>
+              <span>Явлется полетом Centrum-air?</span>
+              <Select
+                text="Полет"
+                selectedValue={
+                  item?.isSearch
+                    ? { label: "Да", value: true }
+                    : { label: "Нет", value: false }
+                }
+                onPick={(e) => setIsSearch(e?.value)}
+                placeholder="Выберите"
+                items={[
+                  { label: "Да", value: true },
+                  { label: "Нет", value: false },
+                ]}
+              />
+            </>
+          )}
           {setQuestion && (
             <>
               <span>Вопрос</span>
@@ -421,7 +441,7 @@ const Design = ({
             <StyledButton
               onClick={() =>
                 handleLanguageSwitch(
-                  language === "ru" ? "en" : language === "en" ? "uz" : "ru"
+                  language === "ru" ? "en" : language === "en" ? "uz" : "ru",
                 )
               }
             >

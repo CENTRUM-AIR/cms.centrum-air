@@ -18,6 +18,8 @@ export const sendCountries = createAsyncThunk(
       });
       requestBody.city_code = cityCode;
       patchData.city_code = cityCode;
+      requestBody.is_search = data.isSearch;
+      patchData.is_search = data.isSearch;
       const id = await api
         .post("/countries", requestBody)
         .then((res) => res.data)
