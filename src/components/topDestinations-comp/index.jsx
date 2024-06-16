@@ -14,7 +14,7 @@ import { areAllKeysNotEmpty } from "../../utils/obj-not-empty";
 import Design from "../creation/design";
 import { patchTopDestinations } from "../../store/create-top-destinations/patch";
 import { sendTopDestination } from "../../store/create-top-destinations/post";
-import { formDataApi } from "../../utils/api";
+import api, { formDataApi } from "../../utils/api";
 import { deleteTopDestination } from "../../store/create-top-destinations/delete";
 import { getFaq } from "../../store";
 import { useGetInfo } from "../../hooks/use-get-info";
@@ -22,8 +22,8 @@ import { fetchFaq } from "../../store/create-faq/fetch";
 import { patchFaq } from "../../store/create-faq/patch";
 import { sendFaq } from "../../store/create-faq/post";
 import { deleteFaq } from "../../store/create-faq/delete";
+import { LANGUAGES } from "../../store/create-main-page/patch";
 export const TopDestinationComp = ({ item }) => {
-  const dataFaq = useSelector(getFaq);
   useGetInfo({ selector: getFaq, fetcher: fetchFaq });
   const dispatch = useDispatch();
   const [openModal, setOpenModal] = useState(false);
@@ -32,17 +32,18 @@ export const TopDestinationComp = ({ item }) => {
   const [openFaqModal, setOpenFaqModal] = useState(false);
   const handleFaqClick = (e) => setOpenFaqModal(!openFaqModal);
   const [FaqList, setFaqList] = useState(null);
+  const [currentFaq, setCurrentFaq] = useState(null);
   const [code, setCode] = useState(item?.code || "");
 
   const [question, setQuestion] = useState({
-    ru: FaqList?.question_ru || "",
-    en: FaqList?.question_en || "",
-    uz: FaqList?.question_uz || "",
+    ru: "",
+    en: "",
+    uz: "",
   });
   const [answer, setAnswer] = useState({
-    ru: FaqList?.answer_ru || "",
-    en: FaqList?.answer_en || "",
-    uz: FaqList?.answer_uz || "",
+    ru: "",
+    en: "",
+    uz: "",
   });
 
   const [title, setTitle] = useState({
@@ -68,8 +69,53 @@ export const TopDestinationComp = ({ item }) => {
 
   const [entityId, setEntityId] = useState(item?.id || 0);
 
-  const [entity, setEntity] = useState(FaqList?.entity || "topdestinations");
+  const [entity, setEntity] = useState("topdestinations");
 
+  const patchSingleFaq = async () => {
+    const requestBody = {};
+    const patchData = {};
+    LANGUAGES.forEach((lang) => {
+      requestBody[`question_${lang}`] = question[lang];
+      patchData[`question_${lang}`] = question[lang];
+      requestBody[`answer_${lang}`] = answer[lang];
+      patchData[`answer_${lang}`] = answer[lang];
+      requestBody[`entity`] = entity;
+      patchData[`entity`] = entity;
+      requestBody[`entity_id`] = parseInt(entityId);
+      patchData[`entity_id`] = parseInt(entityId);
+    });
+    const response = await api
+      .patch(`/faq/${currentFaq.id}`, requestBody)
+      .catch((e) => {
+        throw new Error(e);
+      });
+
+    if (response.status == 200 || response.status == 201) {
+      const FindIndex = FaqList.indexOf(currentFaq);
+      const faqs = [...FaqList];
+      faqs[FindIndex] = requestBody;
+      setFaqList(faqs);
+    }
+  };
+
+  const sendSingleFaq = async () => {
+    const requestBody = {};
+    const patchData = {};
+    LANGUAGES.forEach((lang) => {
+      requestBody[`question_${lang}`] = question[lang];
+      patchData[`question_${lang}`] = question[lang];
+      requestBody[`answer_${lang}`] = answer[lang];
+      patchData[`answer_${lang}`] = answer[lang];
+      requestBody[`entity`] = entity;
+      patchData[`entity`] = entity;
+      requestBody[`entity_id`] = parseInt(entityId);
+      patchData[`entity_id`] = parseInt(entityId);
+    });
+    const response = await api.post("/faq", requestBody).catch((e) => {
+      throw new Error(e);
+    });
+    setFaqList((prev) => [...prev, response.data]);
+  };
   const handleFaqPublish = async () => {
     if (
       areAllKeysNotEmpty(question) &&
@@ -77,29 +123,26 @@ export const TopDestinationComp = ({ item }) => {
       entity &&
       entityId
     ) {
-      if (FaqList) {
-        dispatch(
-          patchFaq({
-            question,
-            answer,
-            id: FaqList.id,
-            entityId: item.id,
-            entity,
-          })
-        );
+      if (currentFaq) {
+        patchSingleFaq();
       } else {
-        dispatch(
-          sendFaq({
-            question,
-            answer,
-            entityId,
-            entity,
-          })
-        );
+        sendSingleFaq();
       }
       setOpenFaqModal(false);
     }
   };
+
+  const fetchSingleTopdestinations = async () => {
+    const response = await api.get(`/topdestinations/${code}`).catch((e) => {
+      throw new Error(e);
+    });
+
+    setFaqList(response.data.faqs);
+  };
+
+  useEffect(() => {
+    openModal && code && fetchSingleTopdestinations();
+  }, [openModal]);
 
   const handlePublish = () => {
     if (
@@ -164,7 +207,9 @@ export const TopDestinationComp = ({ item }) => {
   };
 
   const handleFaqDelete = () => {
-    dispatch(deleteFaq({ id: FaqList?.id }));
+    // TODO
+    dispatch(deleteFaq({ id: currentFaq?.id }));
+    setFaqList(FaqList.filter((item) => item.id !== currentFaq.id));
     setOpenFaqModal(false);
   };
 
@@ -202,6 +247,7 @@ export const TopDestinationComp = ({ item }) => {
             departures,
             isTitleInput: true,
             isDescEditor: true,
+            id: item?.id,
           }}
           canBePublished={
             areAllKeysNotEmpty(title) &&
@@ -225,11 +271,27 @@ export const TopDestinationComp = ({ item }) => {
           onDelete={handleDelete}
           isNew={!item}
           image={photo}
-          isFAQ={setOpenFaqModal}
+          setOpenFaqModal={setOpenFaqModal}
+          openFaqModal={openFaqModal}
+          setCurrentFaq={(faq) => {
+            setCurrentFaq(faq);
+            setAnswer({
+              ru: faq?.answer_ru || "",
+              en: faq?.answer_en || "",
+              uz: faq?.answer_uz || "",
+            });
+            setQuestion({
+              ru: faq?.question_ru || "",
+              en: faq?.question_en || "",
+              uz: faq?.question_uz || "",
+            });
+          }}
           setFaqList={setFaqList}
+          FaqList={FaqList}
           shortDescTitle="Направление"
         />
       )}
+
       {openFaqModal && (
         <Design
           titleText="Q&A Component"
@@ -240,8 +302,9 @@ export const TopDestinationComp = ({ item }) => {
           onClose={handleFaqClick}
           handlePublish={handleFaqPublish}
           onDelete={handleFaqDelete}
-          isNew={!FaqList}
+          isNew={!currentFaq}
           isPhoto={false}
+          topdestinationId={item?.id}
           setQuestion={setQuestion}
           setAnswer={setAnswer}
         />

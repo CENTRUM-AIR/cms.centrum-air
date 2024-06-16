@@ -34,6 +34,7 @@ import api from "../../utils/api";
 import { getFaq, getTopDestinations } from "../../store";
 import { useGetInfo } from "../../hooks/use-get-info";
 import { fetchFaq } from "../../store/create-faq/fetch";
+import { FaQ } from "react-icons/fa6";
 
 const Design = ({
   titleText,
@@ -58,6 +59,7 @@ const Design = ({
   setPhoneNumber,
   isPhoto = true,
   isFAQ,
+  setOpenFaqModal,
   setUserInfo,
   setCity,
   setCountry,
@@ -75,14 +77,14 @@ const Design = ({
   setResponsibilities,
   setRequirements,
   setSkills,
-
+  FaqList,
   setFaqList,
+  setCurrentFaq,
 }) => {
   const [openDropzone, setOpenDropzone] = useState(false);
   const [openFaq, setOpenFaq] = useState(false);
   const [isDelete, setIsDelete] = useState(false);
   const [isDeleteFaq, setIsDeleteFaq] = useState(false);
-  const dataFaq = useSelector(getFaq);
 
   useGetInfo({ selector: getFaq, fetcher: fetchFaq });
 
@@ -522,75 +524,80 @@ const Design = ({
             </>
           )}
 
-          {isFAQ && (
+          {setOpenFaqModal && !isNew && (
             <div>
               <div>
-                {dataFaq.data?.length > 0 &&
-                  dataFaq.data?.map((item, index) => (
-                    <>
-                      <div
-                        style={{
-                          display: "flex",
-                          justifyContent: "space-around",
-                          border: "1px solid #174abc",
-                          marginBottom: "7px",
-                          borderRadius: "12px",
-                          padding: "4px",
-                          background: "#f3f6fc",
-                          alignItems: "center",
-                        }}
-                        key={index}
-                      >
+                {FaqList?.length > 0 &&
+                  FaqList?.map((faq, index) => {
+                    return (
+                      <div key={index}>
                         <div
                           style={{
                             display: "flex",
-                            justifyContent: "space-between",
-                            width: "70%",
-                          }}
-                        >
-                          <p style={{ marginBottom: "10px" }}>FAQ_{item.id} </p>
-                          <p>title_{item.question_en}</p>
-                        </div>
-                        <div
-                          style={{
-                            display: "flex",
-                            width: "10%",
-                            justifyContent: "space-between",
+                            justifyContent: "space-around",
+                            border: "1px solid #174abc",
+                            marginBottom: "7px",
+                            borderRadius: "12px",
+                            padding: "4px",
+                            background: "#f3f6fc",
+                            alignItems: "center",
                           }}
                         >
                           <div
-                            onClick={() => {
-                              setFaqList(item);
-                              isFAQ(true);
+                            style={{
+                              display: "flex",
+                              justifyContent: "space-between",
+                              width: "70%",
                             }}
                           >
-                            <EditIcon />
+                            <p style={{ marginBottom: "10px" }}>{faq?.id}</p>
+                            <p>title_{faq.question_ru}</p>
                           </div>
                           <div
-                            onClick={() => {
-                              setIsDeleteFaq(true);
+                            style={{
+                              display: "flex",
+                              width: "10%",
+                              justifyContent: "space-between",
                             }}
                           >
-                            <CloseIcon />
+                            <div
+                              onClick={() => {
+                                setCurrentFaq(faq);
+                                setOpenFaqModal(true);
+                              }}
+                            >
+                              <EditIcon />
+                            </div>
+                            <div
+                              onClick={() => {
+                                setIsDeleteFaq(true);
+                              }}
+                            >
+                              <CloseIcon />
+                            </div>
                           </div>
                         </div>
+                        {isDeleteFaq && (
+                          <DeletionModal
+                            handleDelete={() => {
+                              dispatch(deleteFaq({ id: faq.id }));
+                              setFaqList(
+                                FaqList.filter((item) => item.id !== faq.id)
+                              );
+                              setIsDeleteFaq(false);
+                            }}
+                            removeDelete={() => setIsDeleteFaq(false)}
+                          />
+                        )}
                       </div>
-                      {isDeleteFaq && (
-                        <DeletionModal
-                          handleDelete={() => {
-                            dispatch(deleteFaq({ id: item?.id }));
-                            setIsDeleteFaq(false);
-                          }}
-                        />
-                      )}
-                    </>
-                  ))}
+                    );
+                  })}
               </div>
               <StyledButton
-                secondary={true}
+                secondary="true"
                 onClick={() => {
-                  setFaqList(null);
-                  isFAQ(true);
+                  setOpenFaqModal(true);
+                  setCurrentFaq(null);
                 }}
               >
                 <PLusSign /> New Faq
