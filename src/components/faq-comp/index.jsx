@@ -54,7 +54,7 @@ export const FaqComp = ({ item }) => {
         {item ? (
           <>
             <Title>{item?.question_ru}</Title>
-            <p>{item?.answer_ru}</p>
+            <p dangerouslySetInnerHTML={{ __html: item?.answer_ru }}/>
           </>
         ) : (
           <EmptyHolder>
