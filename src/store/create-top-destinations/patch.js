@@ -63,7 +63,7 @@ export const patchTopDestinations = createAsyncThunk(
       patchData.departures = departures;
       patchData.photo_url = encodeURI(photoUrl);
 
-      await formDataApi
+      const updateDestination = await formDataApi
         .patch(`/topdestinations/${id}`, patchData)
         .catch((e) => {
           thunk.dispatch(
@@ -71,7 +71,8 @@ export const patchTopDestinations = createAsyncThunk(
           );
           throw new Error(e);
         });
-      return { data: patchData, id };
+      console.log(updateDestination);
+      return { data: { ...patchData, id }, id };
     } catch (e) {
       return null;
     }

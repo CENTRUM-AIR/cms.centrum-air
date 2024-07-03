@@ -126,8 +126,9 @@ const Design = ({
                       [language]: e?.target?.value,
                     }))
                   }
-                  placeholder={`Введите ${item?.mainText?.toLowerCase() || "заголовок"
-                    }`}
+                  placeholder={`Введите ${
+                    item?.mainText?.toLowerCase() || "заголовок"
+                  }`}
                 />
               ) : (
                 <TextEditor
@@ -387,10 +388,11 @@ const Design = ({
                     [language]: e.target.value,
                   }))
                 }
-                placeholder={`Введите ${shortDescTitle?.toLowerCase() ||
+                placeholder={`Введите ${
+                  shortDescTitle?.toLowerCase() ||
                   item?.shortDesc?.toLowerCase() ||
                   "краткое описание"
-                  }`}
+                }`}
               />
             </>
           )}
@@ -628,7 +630,7 @@ const Design = ({
             <StyledButton
               onClick={() =>
                 handleLanguageSwitch(
-                  language === "ru" ? "en" : language === "en" ? "uz" : "ru",
+                  language === "ru" ? "en" : language === "en" ? "uz" : "ru"
                 )
               }
             >

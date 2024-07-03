@@ -52,12 +52,12 @@ export const TopDestinationComp = ({ item }) => {
     en: item?.title_en || "",
   });
   const [departures, setDepartures] = useState(item?.departures || "");
-  const [subDscription, setSubDscription] = useState({
+  const [subDescription, setSubDescription] = useState({
     uz: item?.sub_description_uz || "",
     ru: item?.sub_description_ru || "",
     en: item?.sub_description_en || "",
   });
-  const [dscription, setDscription] = useState({
+  const [description, setDescription] = useState({
     uz: item?.description_uz || "",
     ru: item?.description_ru || "",
     en: item?.description_en || "",
@@ -147,8 +147,8 @@ export const TopDestinationComp = ({ item }) => {
   const handlePublish = () => {
     if (
       areAllKeysNotEmpty(title) &&
-      areAllKeysNotEmpty(subDscription) &&
-      areAllKeysNotEmpty(dscription) &&
+      areAllKeysNotEmpty(subDescription) &&
+      areAllKeysNotEmpty(description) &&
       lat &&
       lng &&
       code &&
@@ -159,8 +159,8 @@ export const TopDestinationComp = ({ item }) => {
         dispatch(
           patchTopDestinations({
             title,
-            subDscription,
-            dscription,
+            subDescription,
+            description,
             lat,
             lng,
             code,
@@ -173,8 +173,8 @@ export const TopDestinationComp = ({ item }) => {
         dispatch(
           sendTopDestination({
             title,
-            subDscription,
-            dscription,
+            subDescription,
+            description,
             lat,
             lng,
             code,
@@ -200,8 +200,9 @@ export const TopDestinationComp = ({ item }) => {
         throw new Error(e);
       });
   }, [photo]);
-
+  console.log(item);
   const handleDelete = () => {
+    console.log(item);
     dispatch(deleteTopDestination({ id: item?.id }));
     setOpenModal(false);
   };
@@ -239,8 +240,8 @@ export const TopDestinationComp = ({ item }) => {
           titleText="Актуальные направления"
           item={{
             title,
-            subDscription,
-            smallDescription: dscription,
+            subDescription,
+            description,
             lat,
             lng,
             code,
@@ -251,16 +252,16 @@ export const TopDestinationComp = ({ item }) => {
           }}
           canBePublished={
             areAllKeysNotEmpty(title) &&
-            areAllKeysNotEmpty(subDscription) &&
-            areAllKeysNotEmpty(dscription) &&
+            areAllKeysNotEmpty(subDescription) &&
+            areAllKeysNotEmpty(description) &&
             lat &&
             lng &&
             code &&
             departures
           }
           setImage={setPhoto}
-          setDescription={setDscription}
-          setSubDescription={setSubDscription}
+          setDescription={setDescription}
+          setSubDescription={setSubDescription}
           onClose={handleClick}
           setText={setTitle}
           setLat={setLat}

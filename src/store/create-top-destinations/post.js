@@ -43,7 +43,7 @@ export const sendTopDestination = createAsyncThunk(
       patchData.departures = departures;
       patchData.photo_url = encodeURI(photoUrl);
 
-      const id = await formDataApi
+      const { topDestination } = await formDataApi
         .post("/topdestinations", patchData)
         .then((res) => res.data)
         .catch((e) => {
@@ -52,8 +52,9 @@ export const sendTopDestination = createAsyncThunk(
           );
           throw new Error(e);
         });
-      patchData.id = id;
-      return patchData;
+      // patchData.id = id;
+      console.log(topDestination);
+      return topDestination;
     } catch (e) {
       return null;
     }
