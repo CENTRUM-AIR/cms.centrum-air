@@ -1,5 +1,5 @@
-
 {
+  "proxy": "http://localhost:13000",
   "name": "centrum-cms",
   "version": "0.1.0",
   "private": true,

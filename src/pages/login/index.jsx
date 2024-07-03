@@ -29,9 +29,6 @@ export const LoginPage = () => {
         return;
       }
       const data = await api.post("/users/login", { login, password });
-      // if (data.headers["set-cookie"]) {
-      console.log(data.headers["set-cookie"]);
-      // }
       if (data.status === 201 || data.status === 200) {
         Cookie.set("login", login);
         var expire = new Date();
