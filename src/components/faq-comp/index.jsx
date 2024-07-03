@@ -8,7 +8,7 @@ import { sendFaq } from "../../store/create-faq/post";
 import { deleteFaq } from "../../store/create-faq/delete";
 import Design from "../creation/design";
 
-export const FaqComp = ({ item }) => {
+export const FaqComp = ({ item, destination }) => {
   const dispatch = useDispatch();
   const [openModal, setOpenModal] = useState(false);
   const [question, setQuestion] = useState({
@@ -21,6 +21,8 @@ export const FaqComp = ({ item }) => {
     en: item?.answer_en || "",
     uz: item?.answer_uz || "",
   });
+  const [entityId, setEntityId] = useState(item?.entity_id || 0);
+  const [entity, setEntity] = useState(item?.entity || "faqs");
   const handleClick = (e) => setOpenModal(!openModal);
 
   const handlePublish = () => {
@@ -31,6 +33,8 @@ export const FaqComp = ({ item }) => {
             question,
             answer,
             id: item?.id,
+            entityId,
+            entity,
           })
         );
       } else {
@@ -38,6 +42,8 @@ export const FaqComp = ({ item }) => {
           sendFaq({
             question,
             answer,
+            entityId,
+            entity,
           })
         );
       }

@@ -16,6 +16,7 @@ export const Dropzone = ({ onClose, setImage, fileType }) => {
     }
     if (fileType === ".svg") {
       const reader = new FileReader();
+
       reader.onloadend = async () => {
         const svgString = reader.result;
         const newIcon = svgString.replace(/"/g, "'").replace(/\n/g, "");

@@ -5,7 +5,8 @@ import { setError } from "../notifs";
 
 export const patchFaq = createAsyncThunk("patch faq", async (data, thunk) => {
   try {
-    const { question, answer, id } = data;
+    const { question, answer, id, entity, entityId } = data;
+
     const requestBody = {};
     const patchData = {};
     LANGUAGES.forEach((lang) => {
@@ -13,6 +14,10 @@ export const patchFaq = createAsyncThunk("patch faq", async (data, thunk) => {
       patchData[`question_${lang}`] = question[lang];
       requestBody[`answer_${lang}`] = answer[lang];
       patchData[`answer_${lang}`] = answer[lang];
+      requestBody[`entity`] = entity;
+      patchData[`entity`] = entity;
+      requestBody[`entity_id`] = parseInt(entityId);
+      patchData[`entity_id`] = parseInt(entityId);
     });
     await api.patch(`/faq/${id}`, requestBody).catch((e) => {
       thunk.dispatch(

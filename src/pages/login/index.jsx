@@ -33,7 +33,8 @@ export const LoginPage = () => {
         Cookie.set("login", login);
         var expire = new Date();
         expire.setHours(expire.getHours() + 2);
-        Cookie.set("role", data?.data, { expires: expire });
+        Cookie.set("role", data?.data.role, { expires: expire });
+        Cookie.set("jwt", data?.data.token, { expires: expire });
         navigate("/");
       }
     } catch (error) {

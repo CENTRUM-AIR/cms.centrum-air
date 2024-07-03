@@ -36,6 +36,7 @@ export const DestinationComp = ({ item }) => {
     ru: item?.description_ru || "",
     en: item?.description_en || "",
   });
+
   const [price, setPrice] = useState(item?.price || "");
   const [photo, setPhoto] = useState(item?.photo_url || "");
   const handlePublish = () => {
