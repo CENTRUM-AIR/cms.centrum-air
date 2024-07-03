@@ -1,4 +1,7 @@
-import React from "react";
+import Cookies from "js-cookie";
+import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { ROLES_TEXT } from "../../constants";
 import {
   InsideWrapper,
   MainWrapper,
@@ -7,6 +10,15 @@ import {
 } from "./styled";
 
 const NotFound = () => {
+  const role = Cookies.get("role");
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!ROLES_TEXT?.includes(role?.toLowerCase())) {
+      Cookies.remove("role");
+      navigate("/login");
+    }
+  }, [role, navigate]);
   return (
     <MainWrapper>
       <InsideWrapper>

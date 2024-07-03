@@ -14,6 +14,8 @@ export const HR = "hr";
 export const CONTENTMANAGER = "contentmanager";
 export const PRESSCENTER = "presscenter";
 
+export const ROLES_TEXT = [SUPERADMIN, HR, CONTENTMANAGER, PRESSCENTER];
+
 export const ROLES = [
   { label: "Press Center", value: "pressCenter" },
   { label: "Super Admin", value: "superAdmin" },

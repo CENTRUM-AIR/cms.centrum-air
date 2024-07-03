@@ -7,7 +7,7 @@ import { MainPageComp } from "../../components/mainpage-comp";
 import { MainWrapper, Title, Wrapper } from "../charters/styled";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
-import { CONTENTMANAGER, SUPERADMIN } from "../../constants";
+import { CONTENTMANAGER, ROLES_TEXT, SUPERADMIN } from "../../constants";
 
 const allowerRoles = [SUPERADMIN, CONTENTMANAGER];
 
@@ -18,7 +18,11 @@ const MainPage = () => {
   const navigate = useNavigate();
   const role = Cookies.get("role");
   useEffect(() => {
-    if (!allowerRoles?.includes(role?.toLowerCase())) navigate("/not-found");
+    if (!ROLES_TEXT?.includes(role?.toLowerCase())) {
+      Cookies.remove("role");
+      navigate("/login");
+    } else if (!allowerRoles?.includes(role?.toLowerCase()))
+      navigate("/not-found");
   }, [role, navigate]);
 
   return (
