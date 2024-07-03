@@ -71,7 +71,6 @@ export const patchTopDestinations = createAsyncThunk(
           );
           throw new Error(e);
         });
-      console.log(updateDestination);
       return { data: { ...patchData, id }, id };
     } catch (e) {
       return null;

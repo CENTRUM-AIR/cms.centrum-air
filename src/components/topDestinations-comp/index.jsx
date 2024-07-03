@@ -200,9 +200,8 @@ export const TopDestinationComp = ({ item }) => {
         throw new Error(e);
       });
   }, [photo]);
-  console.log(item);
+
   const handleDelete = () => {
-    console.log(item);
     dispatch(deleteTopDestination({ id: item?.id }));
     setOpenModal(false);
   };

@@ -53,7 +53,6 @@ export const sendTopDestination = createAsyncThunk(
           throw new Error(e);
         });
       // patchData.id = id;
-      console.log(topDestination);
       return topDestination;
     } catch (e) {
       return null;
