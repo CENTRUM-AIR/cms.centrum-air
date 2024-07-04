@@ -9,8 +9,8 @@ export const patchTopDestinations = createAsyncThunk(
     try {
       const {
         title,
-        subDscription,
-        dscription,
+        subDescription,
+        description,
         lat,
         lng,
         code,
@@ -45,10 +45,10 @@ export const patchTopDestinations = createAsyncThunk(
 
         formDataDest.append(`title_${lang}`, title[lang]);
         patchData[`title_${lang}`] = title[lang];
-        formDataDest.append(`sub_description_${lang}`, subDscription[lang]);
-        patchData[`sub_description_${lang}`] = subDscription[lang];
-        formDataDest.append(`description_${lang}`, dscription[lang]);
-        patchData[`description_${lang}`] = dscription[lang];
+        formDataDest.append(`sub_description_${lang}`, subDescription[lang]);
+        patchData[`sub_description_${lang}`] = subDescription[lang];
+        formDataDest.append(`description_${lang}`, description[lang]);
+        patchData[`description_${lang}`] = description[lang];
       });
 
       formDataDest.append("lat", lat);
