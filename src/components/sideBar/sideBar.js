@@ -15,6 +15,13 @@ export const sideBarItems = [
     isCanSee: [SUPERADMIN, PRESSCENTER],
   },
   {
+    id: 14,
+    text: "Журналы",
+    href: "/journals",
+    icon: <News />,
+    isCanSee: [SUPERADMIN, CONTENTMANAGER],
+  },
+  {
     id: 2,
     text: "Заявки",
     href: "/applications",
@@ -78,14 +85,14 @@ export const sideBarItems = [
     isCanSee: [SUPERADMIN, CONTENTMANAGER],
   },
   {
-    id: 11,
+    id: 12,
     text: "top-destination",
     href: "/top-destination",
     icon: <Additional />,
     isCanSee: [SUPERADMIN, CONTENTMANAGER],
   },
   {
-    id: 12,
+    id: 13,
     text: "Логгер",
     href: "/logger",
     icon: <Additional />,

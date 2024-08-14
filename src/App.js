@@ -16,6 +16,7 @@ import Directions from "./pages/directions";
 import { TopStatus } from "./components/top-status";
 import Logger from "./pages/logger";
 import TopDistination from "./pages/topDestination";
+import Journals from "./pages/journals";
 
 function App() {
   return (
@@ -124,6 +125,14 @@ function App() {
             element={
               <IsAuth path="/top-destination">
                 <TopDistination />
+              </IsAuth>
+            }
+          />
+          <Route
+            path="/journals"
+            element={
+              <IsAuth path="/journals">
+                <Journals />
               </IsAuth>
             }
           />

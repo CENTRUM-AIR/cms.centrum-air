@@ -8,6 +8,7 @@ export const NEWS = "news";
 export const RULES = "rules";
 export const CONTACTS = "contacts";
 export const FAQ = "faq";
+export const JOURNALS = "journals";
 
 export const SUPERADMIN = "superadmin";
 export const HR = "hr";
