@@ -549,11 +549,13 @@ const Design = ({
           )}
           {setFile && (
             <>
-              <PdfFileHolder href={file?.preview || file} target="_blank">
-                <PdfIcon height="60px" width="60px" />
-                <FileName>{file?.name}</FileName>
-                <p>Кликните, чтобы скачать</p>
-              </PdfFileHolder>
+              {file && (
+                <PdfFileHolder href={file?.preview || file} target="_blank">
+                  <PdfIcon height="60px" width="60px" />
+                  <FileName>{file?.name}</FileName>
+                  <p>Кликните, чтобы скачать</p>
+                </PdfFileHolder>
+              )}
               <FileHolder onClick={() => setOpenDropzone(true)}>
                 Добавить файл
               </FileHolder>
