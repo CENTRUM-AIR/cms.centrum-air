@@ -93,3 +93,22 @@ export const FlexContainer = styled.div`
   flex-direction: column;
   width: 100%;
 `;
+
+export const PdfFileHolder = styled.a`
+  border: 1px solid #174abc;
+  border-radius: 15px;
+  color: #174abc;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  cursor: pointer;
+  &:hover {
+    box-shadow: 2px 2px 2px gray;
+  }
+`;
+
+export const FileName = styled.p`
+  color: black;
+  text-decoration: none;
+`;

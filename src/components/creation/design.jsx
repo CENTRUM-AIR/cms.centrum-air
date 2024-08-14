@@ -3,15 +3,18 @@ import {
   ButtonHolder,
   CloseText,
   FileHolder,
+  FileName,
   MainTitle,
   MainWrapper,
   ModalBackdrop,
+  PdfFileHolder,
   WarningText,
   Wrapper,
 } from "./styled";
 import { ReactComponent as CloseIcon } from "../../icons/close.svg";
 import { ReactComponent as PLusSign } from "../../icons/plus-sign.svg";
 import { ReactComponent as EditIcon } from "../../icons/edit.svg";
+import { ReactComponent as PdfIcon } from "../../icons/pdf.svg";
 import {
   StyledButton,
   StyledInput,
@@ -81,6 +84,8 @@ const Design = ({
   FaqList,
   setFaqList,
   setCurrentFaq,
+  file,
+  setFile,
 }) => {
   const [openDropzone, setOpenDropzone] = useState(false);
   const [openFaq, setOpenFaq] = useState(false);
@@ -542,6 +547,18 @@ const Design = ({
               )}
             </>
           )}
+          {setFile && (
+            <>
+              <PdfFileHolder href={file?.preview || file} target="_blank">
+                <PdfIcon height="60px" width="60px" />
+                <FileName>{file?.name}</FileName>
+                <p>Кликните, чтобы скачать</p>
+              </PdfFileHolder>
+              <FileHolder onClick={() => setOpenDropzone(true)}>
+                Добавить файл
+              </FileHolder>
+            </>
+          )}
 
           {setOpenFaqModal && !isNew && (
             <div>
@@ -601,7 +618,7 @@ const Design = ({
                             handleDelete={() => {
                               dispatch(deleteFaq({ id: faq.id }));
                               setFaqList(
-                                FaqList.filter((item) => item.id !== faq.id)
+                                FaqList.filter((item) => item.id !== faq.id),
                               );
                               setIsDeleteFaq(false);
                             }}
@@ -630,7 +647,7 @@ const Design = ({
             <StyledButton
               onClick={() =>
                 handleLanguageSwitch(
-                  language === "ru" ? "en" : language === "en" ? "uz" : "ru"
+                  language === "ru" ? "en" : language === "en" ? "uz" : "ru",
                 )
               }
             >
@@ -654,7 +671,8 @@ const Design = ({
       {openDropzone && (
         <Dropzone
           fileType={fileType}
-          setImage={setImage}
+          setImage={setImage || setFile}
+          isPdf={!!setFile}
           onClose={() => setOpenDropzone(false)}
         />
       )}

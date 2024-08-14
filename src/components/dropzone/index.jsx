@@ -3,7 +3,7 @@ import { ModalBackdrop } from "../creation/styled";
 import { MainWrapper, Wrapper } from "./styled";
 import { useDropzone } from "react-dropzone";
 
-export const Dropzone = ({ onClose, setImage, fileType }) => {
+export const Dropzone = ({ onClose, setImage, fileType, isPdf }) => {
   const [fileError, setFileError] = useState(false);
 
   const onDrop = useCallback((acceptedFiles) => {
@@ -39,7 +39,18 @@ export const Dropzone = ({ onClose, setImage, fileType }) => {
     }
     setFileError(false);
   }, [fileError, fileType]);
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    onDrop,
+    accept: isPdf ? {
+      "application/pdf": [],
+    } :{
+      "image/jpeg": [],
+      "image/png": [],
+      "image/jpg": [],
+      "image/gif": [],
+      "image/svg+xml": [],
+    },
+  });
 
   return (
     <MainWrapper>

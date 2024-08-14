@@ -5,12 +5,14 @@ import DestinationsReducer from "./create-destinations";
 import CountriesReducer from "./create-countries";
 import ChartersReducer from "./create-charter";
 import NewsReducer from "./create-news";
-import usersReducer from "./create-user";
+import UsersReducer from "./create-user";
 import FaqReducer from "./create-faq";
 import StatusReducer from "./notifs";
 import LoggerReducer from "./get-actions";
 import VacanciesReducer from "./vacancies";
 import TopDestinationsReducer from "./create-top-destinations";
+import JournalsReducer from "./journals";
+
 export const store = configureStore({
   reducer: {
     createService: AdditionalServiceReducer,
@@ -20,11 +22,12 @@ export const store = configureStore({
     createCountries: CountriesReducer,
     charters: ChartersReducer,
     createNews: NewsReducer,
-    users: usersReducer,
+    users: UsersReducer,
     createFaq: FaqReducer,
     status: StatusReducer,
     actions: LoggerReducer,
     vacancies: VacanciesReducer,
+    journals: JournalsReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
@@ -46,3 +49,4 @@ export const getFaq = (state) => state.createFaq;
 export const getStatus = (state) => state.status;
 export const getActions = (state) => state.actions;
 export const getVacancies = (state) => state.vacancies;
+export const getJournals = (state) => state.journals;
