@@ -14,7 +14,7 @@ export const sendJournal = createAsyncThunk(
         formDataJournal.append(`details_${lang}`, details[lang]);
         patchData[`details_${lang}`] = details[lang];
       });
-      patchData.journal = journal;
+      patchData.journal = journal?.preview;
       formDataJournal.append("file", journal);
 
       const id = await formDataApi
