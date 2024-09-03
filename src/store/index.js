@@ -12,7 +12,7 @@ import LoggerReducer from "./get-actions";
 import VacanciesReducer from "./vacancies";
 import TopDestinationsReducer from "./create-top-destinations";
 import JournalsReducer from "./journals";
-
+import SettingReducer from "./create-setting";
 export const store = configureStore({
   reducer: {
     createService: AdditionalServiceReducer,
@@ -28,6 +28,7 @@ export const store = configureStore({
     actions: LoggerReducer,
     vacancies: VacanciesReducer,
     journals: JournalsReducer,
+    createSetting: SettingReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
@@ -39,6 +40,7 @@ export const getServices = (state) => state.createService;
 export const getMainPage = (state) => state.mainpage;
 export const getDestinations = (state) => state.createDestinations;
 export const getTopDestinations = (state) => state.createTopDestinations;
+export const getSetting = (state) => state.createSetting;
 export const getCountries = (state) => state.createCountries;
 export const getCharters = (state) => state.charters;
 export const getNews = (state) => state.createNews;

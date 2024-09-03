@@ -98,4 +98,11 @@ export const sideBarItems = [
     icon: <Additional />,
     isCanSee: [SUPERADMIN],
   },
+  {
+    id: 14,
+    text: "setting",
+    href: "/setting",
+    icon: <Additional />,
+    isCanSee: [SUPERADMIN, CONTENTMANAGER],
+  },
 ];

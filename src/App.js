@@ -129,6 +129,14 @@ function App() {
             }
           />
           <Route
+            path="/setting"
+            element={
+              <IsAuth path="/setting">
+                <TopDistination />
+              </IsAuth>
+            }
+          />
+          <Route
             path="/journals"
             element={
               <IsAuth path="/journals">
