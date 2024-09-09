@@ -8,6 +8,8 @@ export const Wrapper = styled.div`
   display: flex;
   padding: 20px;
   gap: 15px;
+  flex-direction: column;
+  justify-content: center;
   cursor: pointer;
 `;
 
@@ -21,6 +23,18 @@ export const Image = styled.img`
 export const Text = styled.h3`
   margin: 0;
   font-weight: 700;
+`;
+export const RowDetail = styled.div`
+  display: flex;
+  gap: 10px;
+`;
+
+export const RowCheckBox = styled.div`
+  label {
+    display: flex;
+    font-size: 12px;
+    font-weight: 700;
+  }
 `;
 
 export const Destination = styled.p`
