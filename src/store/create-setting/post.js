@@ -1,50 +1,27 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { LANGUAGES } from "../create-main-page/patch";
-import { formDataApi } from "../../utils/api";
+import api from "../../utils/api";
 import { setError } from "../notifs";
 
 export const sendSetting = createAsyncThunk(
-  "post setting",
+  "post Setting",
   async (data, thunk) => {
     try {
-      const {
-        title,
-        subDescription,
-        description,
-        lat,
-        lng,
-        code,
-        FaqList,
-        photoUrl,
-        departures,
-        photo,
-      } = data;
-
-      const formDataDest = new FormData();
+      const { key, value } = data;
+      const items = [];
+      const requestBody = {};
       const patchData = {};
       LANGUAGES.forEach((lang) => {
-        formDataDest.append(`title_${lang}`, title[lang]);
-        patchData[`title_${lang}`] = title[lang];
-        formDataDest.append(`sub_description_${lang}`, subDescription[lang]);
-        patchData[`sub_description_${lang}`] = subDescription[lang];
-        formDataDest.append(`description_${lang}`, description[lang]);
-        patchData[`description_${lang}`] = description[lang];
+        requestBody[`key`] = key;
+        patchData[`key`] = key;
+        requestBody[`value`] = value;
+        patchData[`value`] = value;
       });
+      items.splice(items.length - 1, 0, requestBody);
 
-      formDataDest.append("lat", lat);
-      patchData.lat = parseFloat(lat);
-      formDataDest.append("lng", lng);
-      patchData.lng = parseFloat(lng);
-      formDataDest.append("code", code);
-      patchData.code = code;
-      // formDataDest.append("faqs", FaqList);
-      // patchData.faqs = FaqList;
-      formDataDest.append("departures", departures);
-      patchData.departures = departures;
-      patchData.photo_url = encodeURI(photoUrl);
-
-      const { topDestination } = await formDataApi
-        .post("/topdestinations", patchData)
+      console.log(items, "item");
+      const id = await api
+        .post("/setting", { items: items })
         .then((res) => res.data)
         .catch((e) => {
           thunk.dispatch(
@@ -52,8 +29,8 @@ export const sendSetting = createAsyncThunk(
           );
           throw new Error(e);
         });
-      // patchData.id = id;
-      return topDestination;
+      patchData.id = id;
+      return patchData;
     } catch (e) {
       return null;
     }

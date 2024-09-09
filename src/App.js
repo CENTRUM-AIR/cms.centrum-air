@@ -17,6 +17,7 @@ import { TopStatus } from "./components/top-status";
 import Logger from "./pages/logger";
 import TopDistination from "./pages/topDestination";
 import Journals from "./pages/journals";
+import Setting from "./pages/setting";
 
 function App() {
   return (
@@ -132,7 +133,7 @@ function App() {
             path="/setting"
             element={
               <IsAuth path="/setting">
-                <TopDistination />
+                <Setting />
               </IsAuth>
             }
           />

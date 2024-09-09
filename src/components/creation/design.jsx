@@ -86,6 +86,9 @@ const Design = ({
   setCurrentFaq,
   file,
   setFile,
+  setSetting,
+  setKey,
+  setValue,
 }) => {
   const [openDropzone, setOpenDropzone] = useState(false);
   const [openFaq, setOpenFaq] = useState(false);
@@ -113,7 +116,7 @@ const Design = ({
               <CloseIcon /> закрыть
             </CloseText>
           </MainTitle>
-          {!setUserInfo && (
+          {!setUserInfo && !setSetting && (
             <LanguageChange
               language={language}
               changeLang={handleLanguageSwitch}
@@ -226,6 +229,7 @@ const Design = ({
               />
             </>
           )}
+
           {setTo && (
             <>
               <span>В Какой Город</span>
@@ -276,6 +280,29 @@ const Design = ({
                 }
                 placeholder="Выберите роль"
                 items={ROLES}
+              />
+            </>
+          )}
+
+          {setSetting && (
+            <>
+              <span>Пароль</span>
+              <StyledInput
+                value={item?.key}
+                placeholder="Введите новый Пароль"
+                onChange={(e) => setKey(e.target.value)}
+              />
+            </>
+          )}
+          {setSetting && (
+            <>
+              <span>Cодержание</span>
+
+              <TextEditor
+                changeStatus={language}
+                placeholder="Введите содержение"
+                value={item?.value}
+                onChange={(e) => setValue((prev) => e)}
               />
             </>
           )}
@@ -620,7 +647,7 @@ const Design = ({
                             handleDelete={() => {
                               dispatch(deleteFaq({ id: faq.id }));
                               setFaqList(
-                                FaqList.filter((item) => item.id !== faq.id),
+                                FaqList.filter((item) => item.id !== faq.id)
                               );
                               setIsDeleteFaq(false);
                             }}
@@ -649,7 +676,7 @@ const Design = ({
             <StyledButton
               onClick={() =>
                 handleLanguageSwitch(
-                  language === "ru" ? "en" : language === "en" ? "uz" : "ru",
+                  language === "ru" ? "en" : language === "en" ? "uz" : "ru"
                 )
               }
             >

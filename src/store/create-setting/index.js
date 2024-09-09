@@ -1,8 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { fetchSetting } from "./fetch";
-import { patchSetting } from "./patch";
+// import { patchSetting } from "./patch";
 import { deleteSetting } from "./delete";
 import { sendSetting } from "./post";
+import { patchSetting } from "./patch";
 
 const initialState = {
   data: [],
@@ -11,7 +12,7 @@ const initialState = {
 };
 
 const createSettingSlice = createSlice({
-  name: "topdestinations",
+  name: "setting",
   initialState,
   reducers: {},
   extraReducers(builder) {
@@ -31,10 +32,18 @@ const createSettingSlice = createSlice({
     builder.addCase(patchSetting.fulfilled, (state, action) => {
       state.loading = false;
       if (!action.payload) return;
-      const { data, id } = action.payload;
+      const { key, value, id } = action.payload;
+      console.log(action.payload);
 
-      const index = state.data.findIndex((item) => item.id === id);
-      state.data[index] = data;
+      const keyFind = id.data.find((item) => item.key == action.payload.key);
+      console.log(action.payload, keyFind);
+      const index = state.data.findIndex((item) => item.id === id.data[0].id);
+      // if (action.payload) state.data.push(action.payload);
+      const items = {};
+      items.key = key;
+      items.value = value;
+      state.data[index] = items;
+      // if (action.payload) state.data.unshift(action.payload);
     });
     builder.addCase(patchSetting.pending, (state, action) => {
       state.loading = true;
@@ -54,6 +63,7 @@ const createSettingSlice = createSlice({
     });
     builder.addCase(sendSetting.fulfilled, (state, action) => {
       state.loading = false;
+
       if (action.payload) state.data.unshift(action.payload);
     });
     builder.addCase(sendSetting.pending, (state, action) => {

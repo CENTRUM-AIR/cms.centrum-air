@@ -2,97 +2,26 @@ import React, { useState } from "react";
 import { EmptyHolder, Title, Wrapper } from "./styled";
 import { ReactComponent as PlusSign } from "../../icons/plus-sign.svg";
 import { useDispatch } from "react-redux";
-import { areAllKeysNotEmpty } from "../../utils/obj-not-empty";
 import Design from "../creation/design";
-import { patchSetting } from "../../store/create-setting/patch";
+// import { patchSetting } from "../../store/create-setting/patch";
 import { sendSetting } from "../../store/create-setting/post";
-import { deleteSetting } from "../../store/create-setting/delete";
+import { patchSetting } from "../../store/create-setting/patch";
+import { useGetInfo } from "../../hooks/use-get-info";
+import { getSetting } from "../../store";
+import { fetchSetting } from "../../store/create-setting/fetch";
+// import { deleteSetting } from "../../store/create-setting/delete";
 export const SettingComp = ({ item }) => {
   const dispatch = useDispatch();
+  const [unlanguage, setUnlanguage] = useState(true);
   const [openModal, setOpenModal] = useState(false);
   const handleClick = (e) => setOpenModal(!openModal);
+  console.log(item);
 
-  const [key, setKey] = useState({
-    ru: item?.key_ru || "",
-    en: item?.key_en || "",
-    uz: item?.key_uz || "",
-  });
-  const [value, setValue] = useState({
-    ru: item?.value_ru || "",
-    en: item?.value_en || "",
-    uz: item?.value_uz || "",
-  });
-
-  // const patchSingleFaq = async () => {
-  //   const requestBody = {};
-  //   const patchData = {};
-  //   LANGUAGES.forEach((lang) => {
-  //     requestBody[`question_${lang}`] = question[lang];
-  //     patchData[`question_${lang}`] = question[lang];
-  //     requestBody[`answer_${lang}`] = answer[lang];
-  //     patchData[`answer_${lang}`] = answer[lang];
-  //   });
-  //   const response = await api
-  //     .patch(`/faq/${currentFaq.id}`, requestBody)
-  //     .catch((e) => {
-  //       throw new Error(e);
-  //     });
-
-  //   if (response.status == 200 || response.status == 201) {
-  //     const FindIndex = FaqList.indexOf(currentFaq);
-  //     const faqs = [...FaqList];
-  //     faqs[FindIndex] = requestBody;
-  //     setFaqList(faqs);
-  //   }
-  // };
-
-  // const sendSingleFaq = async () => {
-  //   const requestBody = {};
-  //   const patchData = {};
-  //   LANGUAGES.forEach((lang) => {
-  //     requestBody[`question_${lang}`] = question[lang];
-  //     patchData[`question_${lang}`] = question[lang];
-  //     requestBody[`answer_${lang}`] = answer[lang];
-  //     patchData[`answer_${lang}`] = answer[lang];
-  //     requestBody[`entity`] = entity;
-  //     patchData[`entity`] = entity;
-  //     requestBody[`entity_id`] = parseInt(entityId);
-  //     patchData[`entity_id`] = parseInt(entityId);
-  //   });
-  //   const response = await api.post("/faq", requestBody).catch((e) => {
-  //     throw new Error(e);
-  //   });
-  //   setFaqList((prev) => [...prev, response.data]);
-  // };
-  // const handleFaqPublish = async () => {
-  //   if (
-  //     areAllKeysNotEmpty(question) &&
-  //     areAllKeysNotEmpty(answer)
-
-  //   ) {
-  //     if (currentFaq) {
-  //       patchSingleFaq();
-  //     } else {
-  //       sendSingleFaq();
-  //     }
-  //     setOpenFaqModal(false);
-  //   }
-  // };
-
-  // const fetchSingleTopdestinations = async () => {
-  //   const response = await api.get(`/topdestinations/${code}`).catch((e) => {
-  //     throw new Error(e);
-  //   });
-
-  //   // setFaqList(response.data.faqs);
-  // };
-
-  // useEffect(() => {
-  //   openModal  && fetchSingleTopdestinations();
-  // }, [openModal]);
-
+  const [key, setKey] = useState(item?.key || "");
+  const [value, setValue] = useState(item?.value || "");
+  useGetInfo({ selector: getSetting, fetcher: fetchSetting });
   const handlePublish = () => {
-    if (areAllKeysNotEmpty(key) && areAllKeysNotEmpty(value)) {
+    if (key && value) {
       if (item) {
         dispatch(
           patchSetting({
@@ -102,6 +31,8 @@ export const SettingComp = ({ item }) => {
           })
         );
       } else {
+        console.log(key, value);
+
         dispatch(
           sendSetting({
             key,
@@ -113,28 +44,9 @@ export const SettingComp = ({ item }) => {
     setOpenModal(false);
   };
 
-  // useEffect(() => {
-  //   if (!photo) return;
-  //   const formDataDest = new FormData();
-  //   photo?.preview && formDataDest.append("file", photo);
-  //   formDataApi
-  //     .post("/topdestinations/photo", formDataDest)
-  //     .then((res) => setPhotoUrl(res.data.data.url))
-  //     .catch((e) => {
-  //       throw new Error(e);
-  //     });
-  // }, [photo]);
-
-  const handleDelete = () => {
-    dispatch(deleteSetting({ id: item?.id }));
-    setOpenModal(false);
-  };
-
-  // const handleFaqDelete = () => {
-  //   // TODO
-  //   dispatch(deleteFaq({ id: currentFaq?.id }));
-  //   setFaqList(FaqList.filter((item) => item.id !== currentFaq.id));
-  //   setOpenFaqModal(false);
+  // const handleDelete = () => {
+  //   dispatch(deleteSetting({ id: item?.id }));
+  //   setOpenModal(false);
   // };
 
   return (
@@ -142,8 +54,8 @@ export const SettingComp = ({ item }) => {
       <Wrapper onClick={handleClick}>
         {item ? (
           <>
-            <Title>{item?.question_ru}</Title>
-            <p dangerouslySetInnerHTML={{ __html: item?.answer_ru }} />
+            <Title>{item?.key}:</Title>
+            <p dangerouslySetInnerHTML={{ __html: item?.value }} />
           </>
         ) : (
           <EmptyHolder>
@@ -155,15 +67,17 @@ export const SettingComp = ({ item }) => {
       {openModal && (
         <Design
           titleText="Setting component"
-          item={{ key, value }}
-          canBePublished={areAllKeysNotEmpty(key) && areAllKeysNotEmpty(value)}
+          item={{ key, value, isTitleInput: true }}
+          canBePublished={key && value}
           onClose={handleClick}
-          setText={setKey}
-          setDescription={setValue}
+          setKey={setKey}
+          setValue={setValue}
           handlePublish={handlePublish}
-          onDelete={handleDelete}
+          // onDelete={handleDelete}
           isNew={!item}
+          isPhoto={false}
           shortDescTitle="Направление"
+          setSetting={unlanguage}
         />
       )}
     </>
