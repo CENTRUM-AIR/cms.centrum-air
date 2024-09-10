@@ -74,7 +74,6 @@ export const TopDestinationComp = ({ item }) => {
   const [entity, setEntity] = useState("topdestinations");
   const [checked, setChecked] = useState(item?.status === "ACTIVE");
   const handleChange = async (e) => {
-    console.log(e.target.checked);
     setChecked(e.target.checked);
 
     const response = await api
@@ -87,6 +86,8 @@ export const TopDestinationComp = ({ item }) => {
 
     if (response.status == 200 || response.status == 201) {
       setChecked(e.target.checked);
+    } else {
+      setChecked(!e.target.checked);
     }
   };
   const patchSingleFaq = async () => {
