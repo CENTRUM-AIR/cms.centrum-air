@@ -5,7 +5,7 @@ import { StyledWrapper } from "./styled";
 import { customInlineStyleFn, myBlockStyleFn, styleMap } from "./constants";
 import draftToHtml from "draftjs-to-html";
 import htmlToDraft from "html-to-draftjs";
-
+import "./styles.css";
 export const TextEditor = ({ placeholder, onChange, changeStatus, value }) => {
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
 

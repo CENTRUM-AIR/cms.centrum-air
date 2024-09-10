@@ -26,17 +26,25 @@ export const styleMap = {
 };
 export const myBlockStyleFn = (contentBlock) => {
   const type = contentBlock.getType();
+  console.log(type);
+
   switch (type) {
     case "blockQuote":
       return "superFancyBlockquote";
-    case "leftAlign":
-      return "leftAlign";
-    case "rightAlign":
-      return "rightAlign";
+    // case "leftAlign":
+    //   return "leftAlign";
+    // case "rightAlign":
+    //   return "rightAlign";
     case "centerAlign":
       return "centerAlign";
     case "justifyAlign":
       return "justifyAlign";
+    case "align-left":
+      return "align-left";
+    case "align-right":
+      return "align-right";
+    case "align-center":
+      return "align-center";
     default:
       break;
   }
