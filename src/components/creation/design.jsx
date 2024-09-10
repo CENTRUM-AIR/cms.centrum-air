@@ -134,9 +134,8 @@ const Design = ({
                       [language]: e?.target?.value,
                     }))
                   }
-                  placeholder={`Введите ${
-                    item?.mainText?.toLowerCase() || "заголовок"
-                  }`}
+                  placeholder={`Введите ${item?.mainText?.toLowerCase() || "заголовок"
+                    }`}
                 />
               ) : (
                 <TextEditor
@@ -297,12 +296,10 @@ const Design = ({
           {setSetting && (
             <>
               <span>Cодержание</span>
-
-              <TextEditor
-                changeStatus={language}
-                placeholder="Введите содержение"
+              <StyledInput
                 value={item?.value}
-                onChange={(e) => setValue((prev) => e)}
+                placeholder="Введите содержение"
+                onChange={(e) => setValue(e.target.value)}
               />
             </>
           )}
@@ -420,11 +417,10 @@ const Design = ({
                     [language]: e.target.value,
                   }))
                 }
-                placeholder={`Введите ${
-                  shortDescTitle?.toLowerCase() ||
+                placeholder={`Введите ${shortDescTitle?.toLowerCase() ||
                   item?.shortDesc?.toLowerCase() ||
                   "краткое описание"
-                }`}
+                  }`}
               />
             </>
           )}
