@@ -3,6 +3,8 @@ import {
   Destination,
   EmptyHolder,
   Image,
+  RowCheckBox,
+  RowDetail,
   Text,
   TextHolder,
   Wrapper,
@@ -70,7 +72,23 @@ export const TopDestinationComp = ({ item }) => {
   const [entityId, setEntityId] = useState(item?.id || 0);
 
   const [entity, setEntity] = useState("topdestinations");
+  const [checked, setChecked] = useState(item?.status === "ACTIVE");
+  const handleChange = async (e) => {
+    console.log(e.target.checked);
+    setChecked(e.target.checked);
 
+    const response = await api
+      .patch(`/topdestinations/${item?.id}/status`, {
+        status: e.target.checked ? "ACTIVE" : "DEACTIVE",
+      })
+      .catch((e) => {
+        throw new Error(e);
+      });
+
+    if (response.status == 200 || response.status == 201) {
+      setChecked(e.target.checked);
+    }
+  };
   const patchSingleFaq = async () => {
     const requestBody = {};
     const patchData = {};
@@ -215,25 +233,41 @@ export const TopDestinationComp = ({ item }) => {
 
   return (
     <>
-      <Wrapper onClick={handleClick}>
+      <>
         {item ? (
           <>
-            <Image src={item?.photo_url} />
-            <TextHolder>
-              <Text>{item?.title_ru}</Text>
-              <Destination>
-                <Plane />
-                {item?.destination_ru}
-              </Destination>
-            </TextHolder>
+            <Wrapper>
+              <RowDetail onClick={handleClick}>
+                <Image src={item?.photo_url} />
+                <TextHolder>
+                  <Text>{item?.title_ru}</Text>
+                  <Destination>
+                    <Plane />
+                    {item?.destination_ru}
+                  </Destination>
+                </TextHolder>
+              </RowDetail>
+              <RowCheckBox>
+                <label>
+                  <input
+                    checked={checked}
+                    type="checkbox"
+                    onChange={handleChange}
+                  />
+                  change status
+                </label>
+              </RowCheckBox>
+            </Wrapper>
           </>
         ) : (
-          <EmptyHolder>
-            <p>Добавить новое</p>
-            <PlusSign />
-          </EmptyHolder>
+          <Wrapper onClick={handleClick}>
+            <EmptyHolder>
+              <p>Добавить новое</p>
+              <PlusSign />
+            </EmptyHolder>
+          </Wrapper>
         )}
-      </Wrapper>
+      </>
       {openModal && (
         <Design
           titleText="Актуальные направления"
