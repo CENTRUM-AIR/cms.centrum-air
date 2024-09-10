@@ -12,6 +12,10 @@ import { FaCode } from "react-icons/fa6";
 import { GoListUnordered } from "react-icons/go";
 import { GoListOrdered } from "react-icons/go";
 import { GrMonospace } from "react-icons/gr";
+import { AiOutlineAlignRight } from "react-icons/ai";
+import { AiOutlineAlignLeft } from "react-icons/ai";
+import { AiOutlineAlignCenter } from "react-icons/ai";
+
 // import { CiTextAlignCenter } from "react-icons/ci";
 // import { CiTextAlignRight } from "react-icons/ci";
 import { IoIosColorPalette } from "react-icons/io";
@@ -82,24 +86,24 @@ const Toolbar = ({ editorState, setEditorState, onChange }) => {
       icon: <FaCode />,
       method: "inline",
     },
-    // {
-    //   label: "Left",
-    //   style: "leftAlign",
-    //   icon: <CiTextAlignLeft />,
-    //   method: "block",
-    // },
-    // {
-    //   label: "Center",
-    //   style: "centerAlign",
-    //   icon: <CiTextAlignCenter />,
-    //   method: "block",
-    // },
-    // {
-    //   label: "Right",
-    //   style: "rightAlign",
-    //   icon: <CiTextAlignRight />,
-    //   method: "block",
-    // },
+    {
+      label: "Left",
+      style: "align-left",
+      icon: <AiOutlineAlignLeft />,
+      method: "block",
+    },
+    {
+      label: "Center",
+      style: "align-center",
+      icon: <AiOutlineAlignCenter />,
+      method: "block",
+    },
+    {
+      label: "Right",
+      style: "align-right",
+      icon: <AiOutlineAlignRight />,
+      method: "block",
+    },
     // { label: "H1", style: "header-one", method: "block" },
     // { label: "H2", style: "header-two", method: "block" },
     // { label: "H3", style: "header-three", method: "block" },
@@ -111,7 +115,6 @@ const Toolbar = ({ editorState, setEditorState, onChange }) => {
   const [currentColor, setCurrentColor] = useState("#000");
 
   const handleColorPicker = () => setOpenColorPicker(!openColorPicker);
-
   const handleChangeComplete = (color, e) => {
     setCurrentColor(color.hex);
     e.preventDefault();
@@ -162,19 +165,20 @@ const Toolbar = ({ editorState, setEditorState, onChange }) => {
             {item.icon || item.label}
           </StyledButton>
         ))}
+
         <PickerWrapper>
-        <StyledButton
-          onMouseDown={(e) => e.preventDefault()}
-          onClick={handleColorPicker}
-        >
-          <IoIosColorPalette />
-        </StyledButton>
-        {openColorPicker && (
-          <BlockPicker
-            color={currentColor}
-            onChangeComplete={handleChangeComplete}
-          />
-        )}
+          <StyledButton
+            onMouseDown={(e) => e.preventDefault()}
+            onClick={handleColorPicker}
+          >
+            <IoIosColorPalette />
+          </StyledButton>
+          {openColorPicker && (
+            <BlockPicker
+              color={currentColor}
+              onChangeComplete={handleChangeComplete}
+            />
+          )}
         </PickerWrapper>
       </div>
     </>

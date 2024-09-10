@@ -255,7 +255,7 @@ export const TopDestinationComp = ({ item }) => {
                     type="checkbox"
                     onChange={handleChange}
                   />
-                  change status
+                  Active Status
                 </label>
               </RowCheckBox>
             </Wrapper>

@@ -28,7 +28,25 @@ button {
   border-left: 2px solid #999;
   padding-left: 10px;
 }
+.align-left-text {
+  display: flex !important;
+  align-items: flex-start !important;
+}
 
+.align-right-text {
+  display: flex !important;
+  align-items: flex-end !important;
+}
+.align-left {
+  text-align: left !important;
+}
+
+.align-right {
+  text-align: right !important;
+}
+.align-center {
+  text-align: center !important;
+}
 .codeBlock {
   font-family: fira-code, monospace;
   font-size: inherit;
@@ -42,10 +60,12 @@ button {
 }
 
 .leftAlign {
-  text-align: left;
+  display: flex;
+  align-items: end;
 }
 .rightAlign {
-  text-align: right;
+  display: flex;
+  align-items: start;
 }
 .centerAlign {
   text-align: center;

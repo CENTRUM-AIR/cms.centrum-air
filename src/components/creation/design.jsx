@@ -673,15 +673,19 @@ const Design = ({
             <StyledButton disabled={!canBePublished} onClick={handlePublish}>
               Опубликовать
             </StyledButton>
-            <StyledButton
-              onClick={() =>
-                handleLanguageSwitch(
-                  language === "ru" ? "en" : language === "en" ? "uz" : "ru"
-                )
-              }
-            >
-              Далее
-            </StyledButton>
+            {setSetting ? (
+              <div></div>
+            ) : (
+              <StyledButton
+                onClick={() =>
+                  handleLanguageSwitch(
+                    language === "ru" ? "en" : language === "en" ? "uz" : "ru"
+                  )
+                }
+              >
+                Далее
+              </StyledButton>
+            )}
           </ButtonHolder>
           {!isNew && (
             <StyledRedButton onClick={() => setIsDelete(true)}>
