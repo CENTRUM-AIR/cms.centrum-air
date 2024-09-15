@@ -39,6 +39,10 @@ export const PickerWrapper = styled.div`
   width: 200px;
   flex-direction: column;
   gap: 15px;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
+`;
+export const StylesLink = styled.a`
+  color: #3b5998;
+  text-decoration: underline !important;
 `;

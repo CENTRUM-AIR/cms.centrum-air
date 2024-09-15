@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   MdFormatBold,
   MdFormatItalic,
@@ -8,23 +8,28 @@ import {
   MdOutlineSubscript,
 } from "react-icons/md";
 import { FaCode } from "react-icons/fa6";
-// import { CiTextAlignLeft } from "react-icons/ci";
 import { GoListUnordered } from "react-icons/go";
 import { GoListOrdered } from "react-icons/go";
 import { GrMonospace } from "react-icons/gr";
-import { AiOutlineAlignRight } from "react-icons/ai";
+import { AiOutlineAlignRight, AiOutlineLink } from "react-icons/ai";
 import { AiOutlineAlignLeft } from "react-icons/ai";
 import { AiOutlineAlignCenter } from "react-icons/ai";
-
-// import { CiTextAlignCenter } from "react-icons/ci";
-// import { CiTextAlignRight } from "react-icons/ci";
 import { IoIosColorPalette } from "react-icons/io";
 import { RichUtils, convertToRaw } from "draft-js";
 import { PickerWrapper, StyledButton } from "./styled";
 import { BlockPicker } from "react-color";
 import draftToHtml from "draftjs-to-html";
 
-const Toolbar = ({ editorState, setEditorState, onChange }) => {
+const Toolbar = ({
+  editorState,
+  setEditorState,
+  onChange,
+  openLinkModal,
+  setOpenLinkModal,
+  urlRef,
+  setUrlValue,
+  setShowURLInput,
+}) => {
   const tools = [
     {
       label: "bold",
@@ -104,16 +109,15 @@ const Toolbar = ({ editorState, setEditorState, onChange }) => {
       icon: <AiOutlineAlignRight />,
       method: "block",
     },
-    // { label: "H1", style: "header-one", method: "block" },
-    // { label: "H2", style: "header-two", method: "block" },
-    // { label: "H3", style: "header-three", method: "block" },
-    // { label: "H4", style: "header-four", method: "block" },
-    // { label: "H5", style: "header-five", method: "block" },
-    // { label: "H6", style: "header-six", method: "block" },
+    { label: "H1", style: "header-one", method: "block" },
+    { label: "H2", style: "header-two", method: "block" },
+    { label: "H3", style: "header-three", method: "block" },
+    { label: "H4", style: "header-four", method: "block" },
+    { label: "H5", style: "header-five", method: "block" },
+    { label: "H6", style: "header-six", method: "block" },
   ];
   const [openColorPicker, setOpenColorPicker] = useState(false);
   const [currentColor, setCurrentColor] = useState("#000");
-
   const handleColorPicker = () => setOpenColorPicker(!openColorPicker);
   const handleChangeComplete = (color, e) => {
     setCurrentColor(color.hex);
@@ -150,7 +154,37 @@ const Toolbar = ({ editorState, setEditorState, onChange }) => {
       return currentStyle.has(style);
     }
   };
+  const promptForLink = (e) => {
+    const selection = editorState.getSelection();
+    console.log("1111", selection.isCollapsed());
 
+    if (!selection.isCollapsed()) {
+      console.log("2222");
+      const contentState = editorState.getCurrentContent();
+      const startKey = selection.getStartKey();
+      const startOffset = selection.getStartOffset();
+      const blockWithLinkAtBeginning = contentState.getBlockForKey(startKey);
+      const linkKey = blockWithLinkAtBeginning.getEntityAt(startOffset);
+      console.log("3333");
+      let url = "";
+      if (linkKey) {
+        console.log("4444");
+
+        const linkInstance = contentState.getEntity(linkKey);
+        url = linkInstance.getData().url;
+      }
+      console.log("5555");
+      setShowURLInput(true);
+      setUrlValue(url);
+      setTimeout(() => urlRef.current.focus(), 0);
+    }
+  };
+
+  useEffect(() => {
+    if (openLinkModal) {
+      promptForLink(); // اجرا شدن فانکشن بعد از باز شدن مودال
+    }
+  }, [openLinkModal]);
   return (
     <>
       <div style={{ display: "flex", gap: "4px", flexWrap: "wrap" }}>
@@ -165,7 +199,16 @@ const Toolbar = ({ editorState, setEditorState, onChange }) => {
             {item.icon || item.label}
           </StyledButton>
         ))}
-
+        <div>
+          <StyledButton
+            onClick={() => {
+              !editorState.getSelection().isCollapsed() &&
+                setOpenLinkModal(true);
+            }}
+          >
+            <AiOutlineLink />
+          </StyledButton>
+        </div>
         <PickerWrapper>
           <StyledButton
             onMouseDown={(e) => e.preventDefault()}
