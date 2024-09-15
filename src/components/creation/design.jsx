@@ -134,8 +134,9 @@ const Design = ({
                       [language]: e?.target?.value,
                     }))
                   }
-                  placeholder={`Введите ${item?.mainText?.toLowerCase() || "заголовок"
-                    }`}
+                  placeholder={`Введите ${
+                    item?.mainText?.toLowerCase() || "заголовок"
+                  }`}
                 />
               ) : (
                 <TextEditor
@@ -417,10 +418,11 @@ const Design = ({
                     [language]: e.target.value,
                   }))
                 }
-                placeholder={`Введите ${shortDescTitle?.toLowerCase() ||
+                placeholder={`Введите ${
+                  shortDescTitle?.toLowerCase() ||
                   item?.shortDesc?.toLowerCase() ||
                   "краткое описание"
-                  }`}
+                }`}
               />
             </>
           )}
@@ -666,7 +668,7 @@ const Design = ({
             </div>
           )}
           <ButtonHolder>
-            <StyledButton disabled={!canBePublished} onClick={handlePublish}>
+            <StyledButton disabled={canBePublished} onClick={handlePublish}>
               Опубликовать
             </StyledButton>
             {setSetting ? (

@@ -25,6 +25,7 @@ export const NewsComp = ({ item }) => {
   const [image, setImage] = useState(item?.photo_url || "");
 
   const handlePublish = () => {
+    return;
     if (areAllKeysNotEmpty(title) && areAllKeysNotEmpty(description) && image) {
       if (item) {
         dispatch(

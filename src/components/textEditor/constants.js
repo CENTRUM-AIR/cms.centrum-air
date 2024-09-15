@@ -31,6 +31,8 @@ export const myBlockStyleFn = (contentBlock) => {
   switch (type) {
     case "blockQuote":
       return "superFancyBlockquote";
+    case "LINK":
+      return "LINK";
     // case "leftAlign":
     //   return "leftAlign";
     // case "rightAlign":
