@@ -70,7 +70,7 @@ export const LinkModal = ({
   }
 
   return (
-    <Modal>
+    <Modal onClose={() => setOpenLinkModal(false)}>
       <Wrapper>
         <Title>Create Link</Title>
         {urlInput}
