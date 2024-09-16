@@ -21,6 +21,7 @@ export const LinkModal = ({
   setEditorState,
   editor,
 }) => {
+
   const confirmLink = (e) => {
     e.preventDefault();
     const contentState = editorState.getCurrentContent();
