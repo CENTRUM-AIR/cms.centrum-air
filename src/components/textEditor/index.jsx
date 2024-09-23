@@ -36,7 +36,7 @@ export const TextEditor = ({ placeholder, onChange, changeStatus, value }) => {
     } else {
       setEditorState(EditorState.createEmpty(decorator));
     }
-  }, [changeStatus, value]);
+  }, [changeStatus]);
 
   const handleChange = (newState) => {
     setEditorState(newState);

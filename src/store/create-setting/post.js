@@ -19,7 +19,6 @@ export const sendSetting = createAsyncThunk(
       });
       items.splice(items.length - 1, 0, requestBody);
 
-      console.log(items, "item");
       const id = await api
         .post("/setting", { items: items })
         .then((res) => res.data)

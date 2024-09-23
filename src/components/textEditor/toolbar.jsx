@@ -156,24 +156,20 @@ const Toolbar = ({
   };
   const promptForLink = (e) => {
     const selection = editorState.getSelection();
-    console.log("1111", selection.isCollapsed());
 
     if (!selection.isCollapsed()) {
-      console.log("2222");
       const contentState = editorState.getCurrentContent();
       const startKey = selection.getStartKey();
       const startOffset = selection.getStartOffset();
       const blockWithLinkAtBeginning = contentState.getBlockForKey(startKey);
       const linkKey = blockWithLinkAtBeginning.getEntityAt(startOffset);
-      console.log("3333");
+
       let url = "";
       if (linkKey) {
-        console.log("4444");
-
         const linkInstance = contentState.getEntity(linkKey);
         url = linkInstance.getData().url;
       }
-      console.log("5555");
+
       setShowURLInput(true);
       setUrlValue(url);
       setTimeout(() => urlRef.current.focus(), 0);

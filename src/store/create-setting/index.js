@@ -33,10 +33,7 @@ const createSettingSlice = createSlice({
       state.loading = false;
       if (!action.payload) return;
       const { key, value, id } = action.payload;
-      console.log(action.payload);
 
-      const keyFind = id.data.find((item) => item.key == action.payload.key);
-      console.log(action.payload, keyFind);
       const index = state.data.findIndex((item) => item.id === id.data[0].id);
       // if (action.payload) state.data.push(action.payload);
       const items = {};

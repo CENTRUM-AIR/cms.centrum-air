@@ -26,7 +26,6 @@ export const styleMap = {
 };
 export const myBlockStyleFn = (contentBlock) => {
   const type = contentBlock.getType();
-  console.log(type);
 
   switch (type) {
     case "blockQuote":

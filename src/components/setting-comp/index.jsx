@@ -15,7 +15,6 @@ export const SettingComp = ({ item }) => {
   const [unlanguage, setUnlanguage] = useState(true);
   const [openModal, setOpenModal] = useState(false);
   const handleClick = (e) => setOpenModal(!openModal);
-  console.log(item);
 
   const [key, setKey] = useState(item?.key || "");
   const [value, setValue] = useState(item?.value || "");
