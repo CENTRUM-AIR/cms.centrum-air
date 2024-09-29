@@ -4,15 +4,17 @@ import {
   ContentState,
   Editor,
   EditorState,
+  RichUtils,
   convertToRaw,
 } from "draft-js";
 import Toolbar from "./toolbar";
-import { StyledWrapper, StylesLink } from "./styled";
+import { StyledWrapper, StylesLink, WrapperPinker } from "./styled";
 import { customInlineStyleFn, myBlockStyleFn, styleMap } from "./constants";
 import draftToHtml from "draftjs-to-html";
 import htmlToDraft from "html-to-draftjs";
 import "./styles.css";
 import { LinkModal } from "../addLink";
+import { BlockPicker } from "react-color";
 
 export const TextEditor = ({ placeholder, onChange, changeStatus, value }) => {
   const createEditorState = (contentState) => {
@@ -45,10 +47,39 @@ export const TextEditor = ({ placeholder, onChange, changeStatus, value }) => {
 
   const urlRef = React.useRef(null);
   const editor = React.useRef(null);
+  const [openColorPicker, setOpenColorPicker] = useState(false);
+  const [currentColor, setCurrentColor] = useState("#000");
 
   const focusEditor = () => editor.current.focus();
   const [openLinkModal, setOpenLinkModal] = useState(false);
 
+  const [modalPosition, setModalPosition] = useState({ top: 0, left: 0 });
+  const buttonRef = React.useRef(null);
+
+  const handleButtonClick = () => {
+    const rect = buttonRef.current.getBoundingClientRect();
+    setModalPosition({
+      top: rect.bottom,
+      left: rect.left,
+    });
+    setOpenColorPicker(!openColorPicker);
+  };
+  console.log(modalPosition);
+
+  const handleChangeComplete = (color, e) => {
+    setCurrentColor(color.hex);
+    e.preventDefault();
+    const currentStyles = editorState.getCurrentInlineStyle().toJS();
+    const nextEditorState = [...currentStyles, "color-" + color.hex].reduce(
+      (state, style) =>
+        style.startsWith("color-")
+          ? RichUtils.toggleInlineStyle(state, style)
+          : state,
+      editorState
+    );
+    onChange(draftToHtml(convertToRaw(nextEditorState.getCurrentContent())));
+    setEditorState(nextEditorState);
+  };
   return (
     <>
       <StyledWrapper onClick={focusEditor}>
@@ -64,6 +95,12 @@ export const TextEditor = ({ placeholder, onChange, changeStatus, value }) => {
           editor={editor}
           openLinkModal={openLinkModal}
           setOpenLinkModal={setOpenLinkModal}
+          setOpenColorPicker={setOpenColorPicker}
+          openColorPicker={openColorPicker}
+          setCurrentColor={setCurrentColor}
+          currentColor={currentColor}
+          buttonRef={buttonRef}
+          handleButtonClick={handleButtonClick}
         />
 
         <Editor
@@ -76,6 +113,18 @@ export const TextEditor = ({ placeholder, onChange, changeStatus, value }) => {
           onChange={handleChange}
         />
       </StyledWrapper>
+      {openColorPicker && (
+        <WrapperPinker
+          style={{
+            top: `${modalPosition.top}px`,
+          }}
+        >
+          <BlockPicker
+            color={currentColor}
+            onChangeComplete={handleChangeComplete}
+          />
+        </WrapperPinker>
+      )}
       {openLinkModal && (
         <LinkModal
           urlRef={urlRef}
