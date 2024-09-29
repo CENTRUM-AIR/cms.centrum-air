@@ -67,13 +67,14 @@ export const SettingComp = ({ item }) => {
       {openModal && (
         <Design
           titleText="Setting component"
-          item={{ key, value, isTitleInput: true }}
+          item={{ key, value, isTitleInput: true, isDescEditor: true }}
           canBePublished={key && value}
           onClose={handleClick}
           setKey={setKey}
           setValue={setValue}
           handlePublish={handlePublish}
           // onDelete={handleDelete}
+
           isNew={!item}
           isPhoto={false}
           shortDescTitle="Направление"
