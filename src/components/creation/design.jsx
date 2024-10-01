@@ -134,9 +134,8 @@ const Design = ({
                       [language]: e?.target?.value,
                     }))
                   }
-                  placeholder={`Введите ${
-                    item?.mainText?.toLowerCase() || "заголовок"
-                  }`}
+                  placeholder={`Введите ${item?.mainText?.toLowerCase() || "заголовок"
+                    }`}
                 />
               ) : (
                 <TextEditor
@@ -295,31 +294,14 @@ const Design = ({
             </>
           )}
           {setSetting && (
-            // <>
-            //   <span>Cодержание</span>
-            //   <StyledInput
-            //     value={item?.value}
-            //     placeholder="Введите содержение"
-            //     onChange={(e) => setValue(e.target.value)}
-            //   />
-            // </>
-
             <>
-              <span>value</span>
-              {item?.isDescEditor ? (
-                <TextEditor
-                  // changeStatus={language}
-                  placeholder="Введите содержение"
-                  value={item?.value}
-                  onChange={(e) => setValue(e)}
-                />
-              ) : (
-                <StyledTextArea
-                  value={item?.value}
-                  placeholder="Введите содержение"
-                  onChange={(e) => setValue(e.target.value)}
-                />
-              )}
+              <span>Value</span>
+              <TextEditor
+                // changeStatus={language}
+                placeholder="Введите содержение"
+                value={item?.value}
+                onChange={(e) => setValue(e)}
+              />
             </>
           )}
 
@@ -437,11 +419,10 @@ const Design = ({
                     [language]: e.target.value,
                   }))
                 }
-                placeholder={`Введите ${
-                  shortDescTitle?.toLowerCase() ||
+                placeholder={`Введите ${shortDescTitle?.toLowerCase() ||
                   item?.shortDesc?.toLowerCase() ||
                   "краткое описание"
-                }`}
+                  }`}
               />
             </>
           )}
