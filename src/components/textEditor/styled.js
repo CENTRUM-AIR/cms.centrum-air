@@ -46,3 +46,7 @@ export const StylesLink = styled.a`
   color: #3b5998;
   text-decoration: underline !important;
 `;
+export const WrapperPinker = styled.div`
+  position: absolute;
+  z-index: 1000;
+`;

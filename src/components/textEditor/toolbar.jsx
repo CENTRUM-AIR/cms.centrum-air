@@ -14,7 +14,7 @@ import { GrMonospace } from "react-icons/gr";
 import { BiAlignJustify } from "react-icons/bi";
 import { AiOutlineLink } from "react-icons/ai";
 import { IoIosColorPalette } from "react-icons/io";
-import { RichUtils, convertToRaw } from "draft-js";
+import { RichUtils } from "draft-js";
 import { PickerWrapper, StyledButton } from "./styled";
 import { BlockPicker } from "react-color";
 import draftToHtml from "draftjs-to-html";
@@ -31,6 +31,10 @@ const Toolbar = ({
   urlRef,
   setUrlValue,
   setShowURLInput,
+  openColorPicker,
+  setOpenColorPicker,
+  handleButtonClick,
+  buttonRef,
 }) => {
   const tools = [
     {
@@ -124,23 +128,6 @@ const Toolbar = ({
     { label: "H5", style: "header-five", method: "block" },
     { label: "H6", style: "header-six", method: "block" },
   ];
-  const [openColorPicker, setOpenColorPicker] = useState(false);
-  const [currentColor, setCurrentColor] = useState("#000");
-  const handleColorPicker = () => setOpenColorPicker(!openColorPicker);
-  const handleChangeComplete = (color, e) => {
-    setCurrentColor(color.hex);
-    e.preventDefault();
-    const currentStyles = editorState.getCurrentInlineStyle().toJS();
-    const nextEditorState = [...currentStyles, "color-" + color.hex].reduce(
-      (state, style) =>
-        style.startsWith("color-")
-          ? RichUtils.toggleInlineStyle(state, style)
-          : state,
-      editorState
-    );
-    onChange(draftToHtml(convertToRaw(nextEditorState.getCurrentContent())));
-    setEditorState(nextEditorState);
-  };
 
   const applyStyle = (e, style, method) => {
     e.preventDefault();
@@ -190,7 +177,7 @@ const Toolbar = ({
 
   useEffect(() => {
     if (openLinkModal) {
-      promptForLink(); // اجرا شدن فانکشن بعد از باز شدن مودال
+      promptForLink();
     }
   }, [openLinkModal]);
   return (
@@ -220,16 +207,17 @@ const Toolbar = ({
         <PickerWrapper>
           <StyledButton
             onMouseDown={(e) => e.preventDefault()}
-            onClick={handleColorPicker}
+            ref={buttonRef}
+            onClick={handleButtonClick}
           >
             <IoIosColorPalette />
           </StyledButton>
-          {openColorPicker && (
+          {/* {openColorPicker && (
             <BlockPicker
               color={currentColor}
               onChangeComplete={handleChangeComplete}
             />
-          )}
+          )} */}
         </PickerWrapper>
       </div>
     </>
