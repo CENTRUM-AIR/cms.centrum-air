@@ -15,7 +15,6 @@ export const SettingComp = ({ item }) => {
   const [unlanguage, setUnlanguage] = useState(true);
   const [openModal, setOpenModal] = useState(false);
   const handleClick = (e) => setOpenModal(!openModal);
-  console.log(item);
 
   const [key, setKey] = useState(item?.key || "");
   const [value, setValue] = useState(item?.value || "");
@@ -31,8 +30,6 @@ export const SettingComp = ({ item }) => {
           })
         );
       } else {
-        console.log(key, value);
-
         dispatch(
           sendSetting({
             key,
@@ -67,7 +64,7 @@ export const SettingComp = ({ item }) => {
       {openModal && (
         <Design
           titleText="Setting component"
-          item={{ key, value, isTitleInput: true, isDescEditor: true }}
+          item={{ key, value, isTitleInput: true }}
           canBePublished={key && value}
           onClose={handleClick}
           setKey={setKey}
