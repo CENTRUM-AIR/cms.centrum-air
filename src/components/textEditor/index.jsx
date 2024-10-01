@@ -64,7 +64,6 @@ export const TextEditor = ({ placeholder, onChange, changeStatus, value }) => {
     });
     setOpenColorPicker(!openColorPicker);
   };
-  console.log(modalPosition);
 
   const handleChangeComplete = (color, e) => {
     setCurrentColor(color.hex);
