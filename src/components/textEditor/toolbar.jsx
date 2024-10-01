@@ -11,14 +11,16 @@ import { FaCode } from "react-icons/fa6";
 import { GoListUnordered } from "react-icons/go";
 import { GoListOrdered } from "react-icons/go";
 import { GrMonospace } from "react-icons/gr";
-import { AiOutlineAlignRight, AiOutlineLink } from "react-icons/ai";
-import { AiOutlineAlignLeft } from "react-icons/ai";
-import { AiOutlineAlignCenter } from "react-icons/ai";
+import { BiAlignJustify } from "react-icons/bi";
+import { AiOutlineLink } from "react-icons/ai";
 import { IoIosColorPalette } from "react-icons/io";
 import { RichUtils, convertToRaw } from "draft-js";
 import { PickerWrapper, StyledButton } from "./styled";
 import { BlockPicker } from "react-color";
 import draftToHtml from "draftjs-to-html";
+import { BiAlignRight } from "react-icons/bi";
+import { BiAlignMiddle } from "react-icons/bi";
+import { BiAlignLeft } from "react-icons/bi";
 
 const Toolbar = ({
   editorState,
@@ -94,19 +96,25 @@ const Toolbar = ({
     {
       label: "Left",
       style: "align-left",
-      icon: <AiOutlineAlignLeft />,
+      icon: <BiAlignLeft />,
       method: "block",
     },
     {
       label: "Center",
       style: "align-center",
-      icon: <AiOutlineAlignCenter />,
+      icon: <BiAlignMiddle />,
       method: "block",
     },
     {
       label: "Right",
       style: "align-right",
-      icon: <AiOutlineAlignRight />,
+      icon: <BiAlignRight />,
+      method: "block",
+    },
+    {
+      label: "Justify",
+      style: "align-justify",
+      icon: <BiAlignJustify />,
       method: "block",
     },
     { label: "H1", style: "header-one", method: "block" },

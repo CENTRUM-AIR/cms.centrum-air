@@ -43,6 +43,8 @@ export const myBlockStyleFn = (contentBlock) => {
       return "align-left";
     case "align-right":
       return "align-right";
+    case "align-justify":
+      return "align-justify";
     case "align-center":
       return "align-center";
     default:
