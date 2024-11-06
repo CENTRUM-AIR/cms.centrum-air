@@ -28,6 +28,7 @@ export const LoginPage = () => {
         setError(true);
         return;
       }
+
       const data = await api.post("/users/login", { login, password });
       if (data.status === 201 || data.status === 200) {
         Cookie.set("login", login);
@@ -35,7 +36,11 @@ export const LoginPage = () => {
         expire.setHours(expire.getHours() + 2);
         Cookie.set("role", data?.data.role, { expires: expire });
         Cookie.set("jwt", data?.data.token, { expires: expire });
-        navigate("/");
+        if (data?.data.role.toLowerCase() == "hr".toLowerCase()) {
+          navigate("/vacancies");
+        } else {
+          navigate("/");
+        }
       }
     } catch (error) {
       console.log(error);
