@@ -41,15 +41,18 @@ export const Dropzone = ({ onClose, setImage, fileType, isPdf }) => {
   }, [fileError, fileType]);
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
-    accept: isPdf ? {
-      "application/pdf": [],
-    } :{
-      "image/jpeg": [],
-      "image/png": [],
-      "image/jpg": [],
-      "image/gif": [],
-      "image/svg+xml": [],
-    },
+    accept: isPdf
+      ? {
+          "application/pdf": [],
+        }
+      : {
+          "image/jpeg": [],
+          "image/webp": [],
+          "image/png": [],
+          "image/jpg": [],
+          "image/gif": [],
+          "image/svg+xml": [],
+        },
   });
 
   return (
